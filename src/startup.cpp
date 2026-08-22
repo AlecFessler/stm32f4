@@ -58,7 +58,7 @@ extern "C" void Reset_Handler(void) {
 	main();
 
 	// trap if main ever exits
-	while (1);
+	while (true);
 }
 
 extern "C" void Default_Handler(void) {
