@@ -1,0 +1,9 @@
+using "platforms/cpus/stm32f429.repl"
+led1_green: Miscellaneous.LED @ gpioPortB
+led2_blue: Miscellaneous.LED @ gpioPortB
+led3_red: Miscellaneous.LED @ gpioPortB
+
+gpioPortB:
+    0 -> led1_green@0
+    7 -> led2_blue@0
+    14 -> led3_red@0

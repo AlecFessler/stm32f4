@@ -1,0 +1,10 @@
+using sysbus
+
+mach create "nucleo_f439zi"
+machine LoadPlatformDescription @renode/nucleo_f439zi.repl
+
+macro reset
+"""
+    sysbus LoadELF @build/firmware.elf
+"""
+runMacro $reset
