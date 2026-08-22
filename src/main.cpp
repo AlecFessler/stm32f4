@@ -1,15 +1,21 @@
+#include <gpio.hpp>
 #include <startup.hpp>
 
-// User LD1: a green user LED is connected to the STM32 I/O PB0 (SB120 ON and SB119 OFF) or PA5 (SB119 ON and SB120 OFF) corresponding to the ST Zia D13
-// User LD2: a blue user LED is connected to PB7
-// User LD3: a red user LED is connected to PB14
-
-// RCC AHB1 perhipheral clock register (RCC_AHB1ENR) RM0090 p180
-
-// GPIO port mode register (GPIOx_MODER) RM0090 p281
-// GPIO output data register (GPIOx_ODR) RM0090 p283
-// GPIO bit set/reset register (GPIOx_BSSR) RM0090 p284
+constexpr uint32_t LED1_GREEN = 0; // PB0
+constexpr uint32_t LED2_BLUE = 7; // PB7
+constexpr uint32_t LED3_RED = 14; // PB14
 
 int main() {
-	return 0;
+    modify_reg(rcc().ahb1enr, fieldw1(AHB1ENR_GPIOB_ENABLE), 1);
+    modify_reg(gpiob().moder, fieldw2(LED1_GREEN), 0b01);
+    write_reg(gpiob().bsrr, bsrr_set(LED1_GREEN));
+
+    modify_reg(gpiob().moder, fieldw2(LED2_BLUE), 0b01);
+    write_reg(gpiob().bsrr, bsrr_set(LED2_BLUE));
+
+    modify_reg(gpiob().moder, fieldw2(LED3_RED), 0b01);
+    write_reg(gpiob().bsrr, bsrr_set(LED3_RED));
+
+    while (true);
+    return 0;
 }
