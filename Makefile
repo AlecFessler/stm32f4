@@ -14,7 +14,7 @@ CXXFLAGS := $(CPU) -std=c++17 -Os -g \
             -ffreestanding -fno-exceptions -fno-rtti \
             -fno-threadsafe-statics -fno-use-cxa-atexit \
             -ffunction-sections -fdata-sections \
-            -Wall -Wextra -I$(SRCDIR) -MMD -MP
+            -Wall -Wextra -I$(SRCDIR) -I$(SRCDIR)/do-not-edit -MMD -MP
 
 LDFLAGS := $(CPU) -nostdlib -T linker.ld -Wl,--gc-sections,-Map=$(BUILD)/$(TARGET).map
 
@@ -25,7 +25,7 @@ DEPS := $(OBJS:.o=.d)
 ELF := $(BUILD)/$(TARGET).elf
 BIN := $(BUILD)/$(TARGET).bin
 
-.PHONY: all clean size disasm flash openocd renode renode-gdb gdb
+.PHONY: all clean size disasm flash openocd renode renode-gdb gdb regen regen-check
 
 all: $(BIN) size
 
@@ -49,6 +49,12 @@ disasm: $(ELF)
 
 disasm-wsrc: $(ELF)
 	$(CROSS)objdump -dS $(ELF) | less
+
+regen:
+	python3 tools/svdgen.py
+
+regen-check: regen
+	git diff --exit-code -- $(SRCDIR)/do-not-edit
 
 clean:
 	rm -rf $(BUILD)

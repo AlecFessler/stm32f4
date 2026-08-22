@@ -1,20 +1,19 @@
-#include <gpio.hpp>
+#include <mmio.hpp>
 #include <startup.hpp>
 
-constexpr uint32_t LED1_GREEN = 0; // PB0
-constexpr uint32_t LED2_BLUE = 7; // PB7
-constexpr uint32_t LED3_RED = 14; // PB14
+#include <gpiob.hpp>
+#include <rcc.hpp>
 
 int main() {
-    modify_reg(rcc().ahb1enr, fieldw1(AHB1ENR_GPIOB_ENABLE), 1);
-    modify_reg(gpiob().moder, fieldw2(LED1_GREEN), 0b01);
-    write_reg(gpiob().bsrr, bsrr_set(LED1_GREEN));
+    modify_reg(rcc().ahb1enr, rcc_ahb1enr_gpioben, 1);
+    modify_reg(gpiob().moder, gpiob_moder_moder0, 0b01);
+    write_reg(gpiob().bsrr, gpiob_bsrr_bs0.mask);
 
-    modify_reg(gpiob().moder, fieldw2(LED2_BLUE), 0b01);
-    write_reg(gpiob().bsrr, bsrr_set(LED2_BLUE));
+    modify_reg(gpiob().moder, gpiob_moder_moder7, 0b01);
+    write_reg(gpiob().bsrr, gpiob_bsrr_bs7.mask);
 
-    modify_reg(gpiob().moder, fieldw2(LED3_RED), 0b01);
-    write_reg(gpiob().bsrr, bsrr_set(LED3_RED));
+    modify_reg(gpiob().moder, gpiob_moder_moder14, 0b01);
+    write_reg(gpiob().bsrr, gpiob_bsrr_bs14.mask);
 
     while (true);
     return 0;
