@@ -28,7 +28,7 @@ SECTIONS
   .text : {
     KEEP(*(.startup))
     *(.text*)
-    KEEP(*(.rodata*))
+    *(.rodata*)
     . = ALIGN(4);
     __constructors_start__ = .;
     KEEP(*(SORT_BY_INIT_PRIORITY(.init_array.*)))
