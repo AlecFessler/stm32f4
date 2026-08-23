@@ -16,7 +16,6 @@ struct WwdgRegs {
     volatile uint32_t cfr; // Configuration register
     volatile uint32_t sr; // Status register
 };
-
 static_assert(offsetof(WwdgRegs, cr) == 0);
 static_assert(offsetof(WwdgRegs, cfr) == 4);
 static_assert(offsetof(WwdgRegs, sr) == 8);

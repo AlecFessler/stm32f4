@@ -19,7 +19,6 @@ struct ExtiRegs {
     volatile uint32_t swier; // Software interrupt event register (EXTI_SWIER)
     volatile uint32_t pr; // Pending register (EXTI_PR)
 };
-
 static_assert(offsetof(ExtiRegs, imr) == 0);
 static_assert(offsetof(ExtiRegs, emr) == 4);
 static_assert(offsetof(ExtiRegs, rtsr) == 8);

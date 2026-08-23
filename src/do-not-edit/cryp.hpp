@@ -49,7 +49,6 @@ struct CrypRegs {
     volatile uint32_t csgcm6r; // context swap register
     volatile uint32_t csgcm7r; // context swap register
 };
-
 static_assert(offsetof(CrypRegs, cr) == 0);
 static_assert(offsetof(CrypRegs, sr) == 4);
 static_assert(offsetof(CrypRegs, din) == 8);

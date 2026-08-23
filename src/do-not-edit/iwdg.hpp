@@ -17,7 +17,6 @@ struct IwdgRegs {
     volatile uint32_t rlr; // Reload register
     volatile uint32_t sr; // Status register
 };
-
 static_assert(offsetof(IwdgRegs, kr) == 0);
 static_assert(offsetof(IwdgRegs, pr) == 4);
 static_assert(offsetof(IwdgRegs, rlr) == 8);

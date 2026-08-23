@@ -33,7 +33,6 @@ struct SdioRegs {
     uint32_t _reserved1[13];
     volatile uint32_t fifo; // data FIFO register
 };
-
 static_assert(offsetof(SdioRegs, power) == 0);
 static_assert(offsetof(SdioRegs, clkcr) == 4);
 static_assert(offsetof(SdioRegs, arg) == 8);

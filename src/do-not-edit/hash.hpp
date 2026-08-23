@@ -87,7 +87,6 @@ struct HashRegs {
     volatile uint32_t hash_hr6; // read-only
     volatile uint32_t hash_hr7; // read-only
 };
-
 static_assert(offsetof(HashRegs, cr) == 0);
 static_assert(offsetof(HashRegs, din) == 4);
 static_assert(offsetof(HashRegs, str) == 8);

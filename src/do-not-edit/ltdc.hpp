@@ -60,7 +60,6 @@ struct LtdcRegs {
     uint32_t _reserved9[3];
     volatile uint32_t l2clutwr; // Layerx CLUT Write Register
 };
-
 static_assert(offsetof(LtdcRegs, sscr) == 8);
 static_assert(offsetof(LtdcRegs, bpcr) == 12);
 static_assert(offsetof(LtdcRegs, awcr) == 16);

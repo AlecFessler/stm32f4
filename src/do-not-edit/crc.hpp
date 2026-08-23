@@ -16,7 +16,6 @@ struct CrcRegs {
     volatile uint32_t idr; // Independent Data register
     volatile uint32_t cr; // Control register
 };
-
 static_assert(offsetof(CrcRegs, dr) == 0);
 static_assert(offsetof(CrcRegs, idr) == 4);
 static_assert(offsetof(CrcRegs, cr) == 8);

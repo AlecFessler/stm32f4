@@ -30,7 +30,6 @@ struct SaiRegs {
     volatile uint32_t bclrfr; // BClear flag register
     volatile uint32_t bdr; // BData register
 };
-
 static_assert(offsetof(SaiRegs, acr1) == 4);
 static_assert(offsetof(SaiRegs, acr2) == 8);
 static_assert(offsetof(SaiRegs, afrcr) == 12);

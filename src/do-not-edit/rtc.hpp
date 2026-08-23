@@ -53,7 +53,6 @@ struct RtcRegs {
     volatile uint32_t bkp18r; // backup register
     volatile uint32_t bkp19r; // backup register
 };
-
 static_assert(offsetof(RtcRegs, tr) == 0);
 static_assert(offsetof(RtcRegs, dr) == 4);
 static_assert(offsetof(RtcRegs, cr) == 8);

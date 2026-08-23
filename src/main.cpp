@@ -1,5 +1,5 @@
 #include "board.hpp"
-#include "gpiob.hpp"
+#include "gpio.hpp"
 #include "mmio.hpp"
 #include "rcc.hpp"
 #include "startup.hpp"

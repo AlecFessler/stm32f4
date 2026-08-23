@@ -21,7 +21,6 @@ struct SyscfgRegs {
     uint32_t _reserved0[2];
     volatile uint32_t cmpcr; // Compensation cell control register
 };
-
 static_assert(offsetof(SyscfgRegs, memrm) == 0);
 static_assert(offsetof(SyscfgRegs, pmc) == 4);
 static_assert(offsetof(SyscfgRegs, exticr1) == 8);

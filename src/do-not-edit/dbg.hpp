@@ -17,7 +17,6 @@ struct DbgRegs {
     volatile uint32_t dbgmcu_apb1_fz; // Debug MCU APB1 Freeze registe
     volatile uint32_t dbgmcu_apb2_fz; // Debug MCU APB2 Freeze registe
 };
-
 static_assert(offsetof(DbgRegs, dbgmcu_idcode) == 0);
 static_assert(offsetof(DbgRegs, dbgmcu_cr) == 4);
 static_assert(offsetof(DbgRegs, dbgmcu_apb1_fz) == 8);

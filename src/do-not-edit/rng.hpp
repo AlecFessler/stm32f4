@@ -16,7 +16,6 @@ struct RngRegs {
     volatile uint32_t sr; // status register
     volatile uint32_t dr; // data register
 };
-
 static_assert(offsetof(RngRegs, cr) == 0);
 static_assert(offsetof(RngRegs, sr) == 4);
 static_assert(offsetof(RngRegs, dr) == 8);

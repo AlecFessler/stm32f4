@@ -18,7 +18,6 @@ struct MpuRegs {
     volatile uint32_t mpu_rbar; // MPU region base address register
     volatile uint32_t mpu_rasr; // MPU region attribute and size register
 };
-
 static_assert(offsetof(MpuRegs, mpu_typer) == 0);
 static_assert(offsetof(MpuRegs, mpu_ctrl) == 4);
 static_assert(offsetof(MpuRegs, mpu_rnr) == 8);

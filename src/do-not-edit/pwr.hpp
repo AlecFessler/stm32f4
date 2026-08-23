@@ -15,7 +15,6 @@ struct PwrRegs {
     volatile uint32_t cr; // power control register
     volatile uint32_t csr; // power control/status register
 };
-
 static_assert(offsetof(PwrRegs, cr) == 0);
 static_assert(offsetof(PwrRegs, csr) == 4);
 

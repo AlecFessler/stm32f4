@@ -17,7 +17,6 @@ struct StkRegs {
     volatile uint32_t val; // SysTick current value register
     volatile uint32_t calib; // SysTick calibration value register
 };
-
 static_assert(offsetof(StkRegs, ctrl) == 0);
 static_assert(offsetof(StkRegs, load) == 4);
 static_assert(offsetof(StkRegs, val) == 8);

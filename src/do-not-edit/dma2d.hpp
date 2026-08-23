@@ -37,7 +37,6 @@ struct Dma2dRegs {
     uint32_t _reserved1[255];
     volatile uint32_t bgclut; // BGCLUT
 };
-
 static_assert(offsetof(Dma2dRegs, cr) == 0);
 static_assert(offsetof(Dma2dRegs, isr) == 4);
 static_assert(offsetof(Dma2dRegs, ifcr) == 8);

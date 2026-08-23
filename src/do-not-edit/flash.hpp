@@ -20,7 +20,6 @@ struct FlashRegs {
     volatile uint32_t optcr; // Flash option control register
     volatile uint32_t optcr1; // Flash option control register 1
 };
-
 static_assert(offsetof(FlashRegs, acr) == 0);
 static_assert(offsetof(FlashRegs, keyr) == 4);
 static_assert(offsetof(FlashRegs, optkeyr) == 8);

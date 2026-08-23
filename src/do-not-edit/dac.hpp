@@ -27,7 +27,6 @@ struct DacRegs {
     volatile uint32_t dor2; // channel2 data output register
     volatile uint32_t sr; // status register
 };
-
 static_assert(offsetof(DacRegs, cr) == 0);
 static_assert(offsetof(DacRegs, swtrigr) == 4);
 static_assert(offsetof(DacRegs, dhr12r1) == 8);

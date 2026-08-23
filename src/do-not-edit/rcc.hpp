@@ -45,7 +45,6 @@ struct RccRegs {
     volatile uint32_t pllsaicfgr; // RCC PLL configuration register
     volatile uint32_t dckcfgr; // RCC Dedicated Clock Configuration Register
 };
-
 static_assert(offsetof(RccRegs, cr) == 0);
 static_assert(offsetof(RccRegs, pllcfgr) == 4);
 static_assert(offsetof(RccRegs, cfgr) == 8);

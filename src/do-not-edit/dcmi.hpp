@@ -24,7 +24,6 @@ struct DcmiRegs {
     volatile uint32_t cwsize; // crop window size
     volatile uint32_t dr; // data register
 };
-
 static_assert(offsetof(DcmiRegs, cr) == 0);
 static_assert(offsetof(DcmiRegs, sr) == 4);
 static_assert(offsetof(DcmiRegs, ris) == 8);
