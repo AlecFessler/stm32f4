@@ -9,6 +9,119 @@
 
 #include "mmio.hpp"
 
+namespace ltdc {
+enum class Bf1 : uint32_t {
+    constant = 4,
+    pixel = 6,
+};
+enum class Bf2 : uint32_t {
+    constant = 5,
+    pixel = 7,
+};
+enum class Cluten : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Colken : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Den : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Depol : uint32_t {
+    activelow = 0,
+    activehigh = 1,
+};
+enum class Fuie : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Fuif : uint32_t {
+    nounderrun = 0,
+    underrun = 1,
+};
+enum class Hdes : uint32_t {
+    notactive = 0,
+    active = 1,
+};
+enum class Hspol : uint32_t {
+    activelow = 0,
+    activehigh = 1,
+};
+enum class Hsyncs : uint32_t {
+    notactive = 0,
+    active = 1,
+};
+enum class Imr : uint32_t {
+    noeffect = 0,
+    reload = 1,
+};
+enum class Len : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Lie : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Lif : uint32_t {
+    notreached = 0,
+    reached = 1,
+};
+enum class Ltdcen : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Pcpol : uint32_t {
+    risingedge = 0,
+    fallingedge = 1,
+};
+enum class Pf : uint32_t {
+    argb8888 = 0,
+    rgb888 = 1,
+    rgb565 = 2,
+    argb1555 = 3,
+    argb4444 = 4,
+    l8 = 5,
+    al44 = 6,
+    al88 = 7,
+};
+enum class Rrie : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Rrif : uint32_t {
+    noreload = 0,
+    reload = 1,
+};
+enum class Terrie : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Terrif : uint32_t {
+    noerror = 0,
+    error = 1,
+};
+enum class Vbr : uint32_t {
+    noeffect = 0,
+    reload = 1,
+};
+enum class Vdes : uint32_t {
+    notactive = 0,
+    active = 1,
+};
+enum class Vspol : uint32_t {
+    activelow = 0,
+    activehigh = 1,
+};
+enum class Vsyncs : uint32_t {
+    notactive = 0,
+    active = 1,
+};
+} // namespace ltdc
+
 // The BASE and Regs struct are defined entirely for debug utility.
 constexpr uintptr_t LTDC_BASE = 0x40016800;
 struct LtdcRegs {
@@ -106,26 +219,26 @@ constexpr Field<Access::RW> ltdc_awcr_aav{0x40016810u, 0x03FF0000u, 16};
 constexpr Field<Access::RW> ltdc_awcr_aah{0x40016810u, 0x000007FFu, 0};
 constexpr Field<Access::RW> ltdc_twcr_totalw{0x40016814u, 0x03FF0000u, 16};
 constexpr Field<Access::RW> ltdc_twcr_totalh{0x40016814u, 0x000007FFu, 0};
-constexpr Field<Access::RW> ltdc_gcr_hspol{0x40016818u, 0x80000000u, 31};
-constexpr Field<Access::RW> ltdc_gcr_vspol{0x40016818u, 0x40000000u, 30};
-constexpr Field<Access::RW> ltdc_gcr_depol{0x40016818u, 0x20000000u, 29};
-constexpr Field<Access::RW> ltdc_gcr_pcpol{0x40016818u, 0x10000000u, 28};
-constexpr Field<Access::RW> ltdc_gcr_den{0x40016818u, 0x00010000u, 16};
+constexpr Field<Access::RW, ltdc::Hspol> ltdc_gcr_hspol{0x40016818u, 0x80000000u, 31};
+constexpr Field<Access::RW, ltdc::Vspol> ltdc_gcr_vspol{0x40016818u, 0x40000000u, 30};
+constexpr Field<Access::RW, ltdc::Depol> ltdc_gcr_depol{0x40016818u, 0x20000000u, 29};
+constexpr Field<Access::RW, ltdc::Pcpol> ltdc_gcr_pcpol{0x40016818u, 0x10000000u, 28};
+constexpr Field<Access::RW, ltdc::Den> ltdc_gcr_den{0x40016818u, 0x00010000u, 16};
 constexpr Field<Access::RO> ltdc_gcr_drw{0x40016818u, 0x00007000u, 12};
 constexpr Field<Access::RO> ltdc_gcr_dgw{0x40016818u, 0x00000700u, 8};
 constexpr Field<Access::RO> ltdc_gcr_dbw{0x40016818u, 0x00000070u, 4};
-constexpr Field<Access::RW> ltdc_gcr_ltdcen{0x40016818u, 0x00000001u, 0};
-constexpr Field<Access::RW> ltdc_srcr_vbr{0x40016824u, 0x00000002u, 1};
-constexpr Field<Access::RW> ltdc_srcr_imr{0x40016824u, 0x00000001u, 0};
+constexpr Field<Access::RW, ltdc::Ltdcen> ltdc_gcr_ltdcen{0x40016818u, 0x00000001u, 0};
+constexpr Field<Access::RW, ltdc::Vbr> ltdc_srcr_vbr{0x40016824u, 0x00000002u, 1};
+constexpr Field<Access::RW, ltdc::Imr> ltdc_srcr_imr{0x40016824u, 0x00000001u, 0};
 constexpr Field<Access::RW> ltdc_bccr_bc{0x4001682Cu, 0x00FFFFFFu, 0};
-constexpr Field<Access::RW> ltdc_ier_rrie{0x40016834u, 0x00000008u, 3};
-constexpr Field<Access::RW> ltdc_ier_terrie{0x40016834u, 0x00000004u, 2};
-constexpr Field<Access::RW> ltdc_ier_fuie{0x40016834u, 0x00000002u, 1};
-constexpr Field<Access::RW> ltdc_ier_lie{0x40016834u, 0x00000001u, 0};
-constexpr Field<Access::RO> ltdc_isr_rrif{0x40016838u, 0x00000008u, 3};
-constexpr Field<Access::RO> ltdc_isr_terrif{0x40016838u, 0x00000004u, 2};
-constexpr Field<Access::RO> ltdc_isr_fuif{0x40016838u, 0x00000002u, 1};
-constexpr Field<Access::RO> ltdc_isr_lif{0x40016838u, 0x00000001u, 0};
+constexpr Field<Access::RW, ltdc::Rrie> ltdc_ier_rrie{0x40016834u, 0x00000008u, 3};
+constexpr Field<Access::RW, ltdc::Terrie> ltdc_ier_terrie{0x40016834u, 0x00000004u, 2};
+constexpr Field<Access::RW, ltdc::Fuie> ltdc_ier_fuie{0x40016834u, 0x00000002u, 1};
+constexpr Field<Access::RW, ltdc::Lie> ltdc_ier_lie{0x40016834u, 0x00000001u, 0};
+constexpr Field<Access::RO, ltdc::Rrif> ltdc_isr_rrif{0x40016838u, 0x00000008u, 3};
+constexpr Field<Access::RO, ltdc::Terrif> ltdc_isr_terrif{0x40016838u, 0x00000004u, 2};
+constexpr Field<Access::RO, ltdc::Fuif> ltdc_isr_fuif{0x40016838u, 0x00000002u, 1};
+constexpr Field<Access::RO, ltdc::Lif> ltdc_isr_lif{0x40016838u, 0x00000001u, 0};
 constexpr Field<Access::WO> ltdc_icr_crrif{0x4001683Cu, 0x00000008u, 3};
 constexpr Field<Access::WO> ltdc_icr_cterrif{0x4001683Cu, 0x00000004u, 2};
 constexpr Field<Access::WO> ltdc_icr_cfuif{0x4001683Cu, 0x00000002u, 1};
@@ -133,13 +246,13 @@ constexpr Field<Access::WO> ltdc_icr_clif{0x4001683Cu, 0x00000001u, 0};
 constexpr Field<Access::RW> ltdc_lipcr_lipos{0x40016840u, 0x000007FFu, 0};
 constexpr Field<Access::RO> ltdc_cpsr_cxpos{0x40016844u, 0xFFFF0000u, 16};
 constexpr Field<Access::RO> ltdc_cpsr_cypos{0x40016844u, 0x0000FFFFu, 0};
-constexpr Field<Access::RO> ltdc_cdsr_hsyncs{0x40016848u, 0x00000008u, 3};
-constexpr Field<Access::RO> ltdc_cdsr_vsyncs{0x40016848u, 0x00000004u, 2};
-constexpr Field<Access::RO> ltdc_cdsr_hdes{0x40016848u, 0x00000002u, 1};
-constexpr Field<Access::RO> ltdc_cdsr_vdes{0x40016848u, 0x00000001u, 0};
-constexpr Field<Access::RW> ltdc_l1cr_cluten{0x40016884u, 0x00000010u, 4};
-constexpr Field<Access::RW> ltdc_l1cr_colken{0x40016884u, 0x00000002u, 1};
-constexpr Field<Access::RW> ltdc_l1cr_len{0x40016884u, 0x00000001u, 0};
+constexpr Field<Access::RO, ltdc::Hsyncs> ltdc_cdsr_hsyncs{0x40016848u, 0x00000008u, 3};
+constexpr Field<Access::RO, ltdc::Vsyncs> ltdc_cdsr_vsyncs{0x40016848u, 0x00000004u, 2};
+constexpr Field<Access::RO, ltdc::Hdes> ltdc_cdsr_hdes{0x40016848u, 0x00000002u, 1};
+constexpr Field<Access::RO, ltdc::Vdes> ltdc_cdsr_vdes{0x40016848u, 0x00000001u, 0};
+constexpr Field<Access::RW, ltdc::Cluten> ltdc_l1cr_cluten{0x40016884u, 0x00000010u, 4};
+constexpr Field<Access::RW, ltdc::Colken> ltdc_l1cr_colken{0x40016884u, 0x00000002u, 1};
+constexpr Field<Access::RW, ltdc::Len> ltdc_l1cr_len{0x40016884u, 0x00000001u, 0};
 constexpr Field<Access::RW> ltdc_l1whpcr_whsppos{0x40016888u, 0x0FFF0000u, 16};
 constexpr Field<Access::RW> ltdc_l1whpcr_whstpos{0x40016888u, 0x00000FFFu, 0};
 constexpr Field<Access::RW> ltdc_l1wvpcr_wvsppos{0x4001688Cu, 0x07FF0000u, 16};
@@ -147,14 +260,14 @@ constexpr Field<Access::RW> ltdc_l1wvpcr_wvstpos{0x4001688Cu, 0x000007FFu, 0};
 constexpr Field<Access::RW> ltdc_l1ckcr_ckred{0x40016890u, 0x00FF0000u, 16};
 constexpr Field<Access::RW> ltdc_l1ckcr_ckgreen{0x40016890u, 0x0000FF00u, 8};
 constexpr Field<Access::RW> ltdc_l1ckcr_ckblue{0x40016890u, 0x000000FFu, 0};
-constexpr Field<Access::RW> ltdc_l1pfcr_pf{0x40016894u, 0x00000007u, 0};
+constexpr Field<Access::RW, ltdc::Pf> ltdc_l1pfcr_pf{0x40016894u, 0x00000007u, 0};
 constexpr Field<Access::RW> ltdc_l1cacr_consta{0x40016898u, 0x000000FFu, 0};
 constexpr Field<Access::RW> ltdc_l1dccr_dcalpha{0x4001689Cu, 0xFF000000u, 24};
 constexpr Field<Access::RW> ltdc_l1dccr_dcred{0x4001689Cu, 0x00FF0000u, 16};
 constexpr Field<Access::RW> ltdc_l1dccr_dcgreen{0x4001689Cu, 0x0000FF00u, 8};
 constexpr Field<Access::RW> ltdc_l1dccr_dcblue{0x4001689Cu, 0x000000FFu, 0};
-constexpr Field<Access::RW> ltdc_l1bfcr_bf1{0x400168A0u, 0x00000700u, 8};
-constexpr Field<Access::RW> ltdc_l1bfcr_bf2{0x400168A0u, 0x00000007u, 0};
+constexpr Field<Access::RW, ltdc::Bf1> ltdc_l1bfcr_bf1{0x400168A0u, 0x00000700u, 8};
+constexpr Field<Access::RW, ltdc::Bf2> ltdc_l1bfcr_bf2{0x400168A0u, 0x00000007u, 0};
 constexpr Field<Access::RW> ltdc_l1cfbar_cfbadd{0x400168ACu, 0xFFFFFFFFu, 0};
 constexpr Field<Access::RW> ltdc_l1cfblr_cfbp{0x400168B0u, 0x1FFF0000u, 16};
 constexpr Field<Access::RW> ltdc_l1cfblr_cfbll{0x400168B0u, 0x00001FFFu, 0};
@@ -163,9 +276,9 @@ constexpr Field<Access::WO> ltdc_l1clutwr_clutadd{0x400168C4u, 0xFF000000u, 24};
 constexpr Field<Access::WO> ltdc_l1clutwr_red{0x400168C4u, 0x00FF0000u, 16};
 constexpr Field<Access::WO> ltdc_l1clutwr_green{0x400168C4u, 0x0000FF00u, 8};
 constexpr Field<Access::WO> ltdc_l1clutwr_blue{0x400168C4u, 0x000000FFu, 0};
-constexpr Field<Access::RW> ltdc_l2cr_cluten{0x40016904u, 0x00000010u, 4};
-constexpr Field<Access::RW> ltdc_l2cr_colken{0x40016904u, 0x00000002u, 1};
-constexpr Field<Access::RW> ltdc_l2cr_len{0x40016904u, 0x00000001u, 0};
+constexpr Field<Access::RW, ltdc::Cluten> ltdc_l2cr_cluten{0x40016904u, 0x00000010u, 4};
+constexpr Field<Access::RW, ltdc::Colken> ltdc_l2cr_colken{0x40016904u, 0x00000002u, 1};
+constexpr Field<Access::RW, ltdc::Len> ltdc_l2cr_len{0x40016904u, 0x00000001u, 0};
 constexpr Field<Access::RW> ltdc_l2whpcr_whsppos{0x40016908u, 0x0FFF0000u, 16};
 constexpr Field<Access::RW> ltdc_l2whpcr_whstpos{0x40016908u, 0x00000FFFu, 0};
 constexpr Field<Access::RW> ltdc_l2wvpcr_wvsppos{0x4001690Cu, 0x07FF0000u, 16};
@@ -173,14 +286,14 @@ constexpr Field<Access::RW> ltdc_l2wvpcr_wvstpos{0x4001690Cu, 0x000007FFu, 0};
 constexpr Field<Access::RW> ltdc_l2ckcr_ckred{0x40016910u, 0x00FF8000u, 15};
 constexpr Field<Access::RW> ltdc_l2ckcr_ckgreen{0x40016910u, 0x00007F00u, 8};
 constexpr Field<Access::RW> ltdc_l2ckcr_ckblue{0x40016910u, 0x000000FFu, 0};
-constexpr Field<Access::RW> ltdc_l2pfcr_pf{0x40016914u, 0x00000007u, 0};
+constexpr Field<Access::RW, ltdc::Pf> ltdc_l2pfcr_pf{0x40016914u, 0x00000007u, 0};
 constexpr Field<Access::RW> ltdc_l2cacr_consta{0x40016918u, 0x000000FFu, 0};
 constexpr Field<Access::RW> ltdc_l2dccr_dcalpha{0x4001691Cu, 0xFF000000u, 24};
 constexpr Field<Access::RW> ltdc_l2dccr_dcred{0x4001691Cu, 0x00FF0000u, 16};
 constexpr Field<Access::RW> ltdc_l2dccr_dcgreen{0x4001691Cu, 0x0000FF00u, 8};
 constexpr Field<Access::RW> ltdc_l2dccr_dcblue{0x4001691Cu, 0x000000FFu, 0};
-constexpr Field<Access::RW> ltdc_l2bfcr_bf1{0x40016920u, 0x00000700u, 8};
-constexpr Field<Access::RW> ltdc_l2bfcr_bf2{0x40016920u, 0x00000007u, 0};
+constexpr Field<Access::RW, ltdc::Bf1> ltdc_l2bfcr_bf1{0x40016920u, 0x00000700u, 8};
+constexpr Field<Access::RW, ltdc::Bf2> ltdc_l2bfcr_bf2{0x40016920u, 0x00000007u, 0};
 constexpr Field<Access::RW> ltdc_l2cfbar_cfbadd{0x4001692Cu, 0xFFFFFFFFu, 0};
 constexpr Field<Access::RW> ltdc_l2cfblr_cfbp{0x40016930u, 0x1FFF0000u, 16};
 constexpr Field<Access::RW> ltdc_l2cfblr_cfbll{0x40016930u, 0x00001FFFu, 0};
@@ -189,116 +302,5 @@ constexpr Field<Access::WO> ltdc_l2clutwr_clutadd{0x40016944u, 0xFF000000u, 24};
 constexpr Field<Access::WO> ltdc_l2clutwr_red{0x40016944u, 0x00FF0000u, 16};
 constexpr Field<Access::WO> ltdc_l2clutwr_green{0x40016944u, 0x0000FF00u, 8};
 constexpr Field<Access::WO> ltdc_l2clutwr_blue{0x40016944u, 0x000000FFu, 0};
-
-namespace ltdc::bf1 {
-    constexpr uint32_t constant = 4;
-    constexpr uint32_t pixel = 6;
-}
-namespace ltdc::bf2 {
-    constexpr uint32_t constant = 5;
-    constexpr uint32_t pixel = 7;
-}
-namespace ltdc::cluten {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace ltdc::colken {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace ltdc::den {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace ltdc::depol {
-    constexpr uint32_t activelow = 0;
-    constexpr uint32_t activehigh = 1;
-}
-namespace ltdc::fuie {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace ltdc::fuif {
-    constexpr uint32_t nounderrun = 0;
-    constexpr uint32_t underrun = 1;
-}
-namespace ltdc::hdes {
-    constexpr uint32_t notactive = 0;
-    constexpr uint32_t active = 1;
-}
-namespace ltdc::hspol {
-    constexpr uint32_t activelow = 0;
-    constexpr uint32_t activehigh = 1;
-}
-namespace ltdc::hsyncs {
-    constexpr uint32_t notactive = 0;
-    constexpr uint32_t active = 1;
-}
-namespace ltdc::imr {
-    constexpr uint32_t noeffect = 0;
-    constexpr uint32_t reload = 1;
-}
-namespace ltdc::len {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace ltdc::lie {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace ltdc::lif {
-    constexpr uint32_t notreached = 0;
-    constexpr uint32_t reached = 1;
-}
-namespace ltdc::ltdcen {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace ltdc::pcpol {
-    constexpr uint32_t risingedge = 0;
-    constexpr uint32_t fallingedge = 1;
-}
-namespace ltdc::pf {
-    constexpr uint32_t argb8888 = 0;
-    constexpr uint32_t rgb888 = 1;
-    constexpr uint32_t rgb565 = 2;
-    constexpr uint32_t argb1555 = 3;
-    constexpr uint32_t argb4444 = 4;
-    constexpr uint32_t l8 = 5;
-    constexpr uint32_t al44 = 6;
-    constexpr uint32_t al88 = 7;
-}
-namespace ltdc::rrie {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace ltdc::rrif {
-    constexpr uint32_t noreload = 0;
-    constexpr uint32_t reload = 1;
-}
-namespace ltdc::terrie {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace ltdc::terrif {
-    constexpr uint32_t noerror = 0;
-    constexpr uint32_t error = 1;
-}
-namespace ltdc::vbr {
-    constexpr uint32_t noeffect = 0;
-    constexpr uint32_t reload = 1;
-}
-namespace ltdc::vdes {
-    constexpr uint32_t notactive = 0;
-    constexpr uint32_t active = 1;
-}
-namespace ltdc::vspol {
-    constexpr uint32_t activelow = 0;
-    constexpr uint32_t activehigh = 1;
-}
-namespace ltdc::vsyncs {
-    constexpr uint32_t notactive = 0;
-    constexpr uint32_t active = 1;
-}
 
 #endif // STM32_LTDC_HPP

@@ -9,6 +9,49 @@
 
 #include "mmio.hpp"
 
+namespace tim6 {
+enum class Arpe : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Cen : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Mms : uint32_t {
+    reset = 0,
+    enable = 1,
+    update = 2,
+};
+enum class Opm : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Ude : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Udis : uint32_t {
+    enabled = 0,
+    disabled = 1,
+};
+enum class Ug : uint32_t {
+    update = 1,
+};
+enum class Uie : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Uif : uint32_t {
+    noupdateoccurred = 0,
+    updatepending = 1,
+};
+enum class Urs : uint32_t {
+    anyevent = 0,
+    counteronly = 1,
+};
+} // namespace tim6
+
 // The BASE and Regs struct are defined entirely for debug utility.
 constexpr uintptr_t TIM6_BASE = 0x40001000;
 struct Tim6Regs {
@@ -32,59 +75,18 @@ static_assert(offsetof(Tim6Regs, cnt) == 36);
 static_assert(offsetof(Tim6Regs, psc) == 40);
 static_assert(offsetof(Tim6Regs, arr) == 44);
 
-constexpr Field<Access::RW> tim6_cr1_arpe{0x40001000u, 0x00000080u, 7};
-constexpr Field<Access::RW> tim6_cr1_opm{0x40001000u, 0x00000008u, 3};
-constexpr Field<Access::RW> tim6_cr1_urs{0x40001000u, 0x00000004u, 2};
-constexpr Field<Access::RW> tim6_cr1_udis{0x40001000u, 0x00000002u, 1};
-constexpr Field<Access::RW> tim6_cr1_cen{0x40001000u, 0x00000001u, 0};
-constexpr Field<Access::RW> tim6_cr2_mms{0x40001004u, 0x00000070u, 4};
-constexpr Field<Access::RW> tim6_dier_ude{0x4000100Cu, 0x00000100u, 8};
-constexpr Field<Access::RW> tim6_dier_uie{0x4000100Cu, 0x00000001u, 0};
-constexpr Field<Access::RW> tim6_sr_uif{0x40001010u, 0x00000001u, 0};
-constexpr Field<Access::WO> tim6_egr_ug{0x40001014u, 0x00000001u, 0};
+constexpr Field<Access::RW, tim6::Arpe> tim6_cr1_arpe{0x40001000u, 0x00000080u, 7};
+constexpr Field<Access::RW, tim6::Opm> tim6_cr1_opm{0x40001000u, 0x00000008u, 3};
+constexpr Field<Access::RW, tim6::Urs> tim6_cr1_urs{0x40001000u, 0x00000004u, 2};
+constexpr Field<Access::RW, tim6::Udis> tim6_cr1_udis{0x40001000u, 0x00000002u, 1};
+constexpr Field<Access::RW, tim6::Cen> tim6_cr1_cen{0x40001000u, 0x00000001u, 0};
+constexpr Field<Access::RW, tim6::Mms> tim6_cr2_mms{0x40001004u, 0x00000070u, 4};
+constexpr Field<Access::RW, tim6::Ude> tim6_dier_ude{0x4000100Cu, 0x00000100u, 8};
+constexpr Field<Access::RW, tim6::Uie> tim6_dier_uie{0x4000100Cu, 0x00000001u, 0};
+constexpr Field<Access::RW, tim6::Uif> tim6_sr_uif{0x40001010u, 0x00000001u, 0};
+constexpr Field<Access::WO, tim6::Ug> tim6_egr_ug{0x40001014u, 0x00000001u, 0};
 constexpr Field<Access::RW> tim6_cnt_cnt{0x40001024u, 0x0000FFFFu, 0};
 constexpr Field<Access::RW> tim6_psc_psc{0x40001028u, 0x0000FFFFu, 0};
 constexpr Field<Access::RW> tim6_arr_arr{0x4000102Cu, 0x0000FFFFu, 0};
-
-namespace tim6::arpe {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace tim6::cen {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace tim6::mms {
-    constexpr uint32_t reset = 0;
-    constexpr uint32_t enable = 1;
-    constexpr uint32_t update = 2;
-}
-namespace tim6::opm {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace tim6::ude {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace tim6::udis {
-    constexpr uint32_t enabled = 0;
-    constexpr uint32_t disabled = 1;
-}
-namespace tim6::ug {
-    constexpr uint32_t update = 1;
-}
-namespace tim6::uie {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace tim6::uif {
-    constexpr uint32_t noupdateoccurred = 0;
-    constexpr uint32_t updatepending = 1;
-}
-namespace tim6::urs {
-    constexpr uint32_t anyevent = 0;
-    constexpr uint32_t counteronly = 1;
-}
 
 #endif // STM32_TIM6_HPP

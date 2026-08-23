@@ -9,6 +9,195 @@
 
 #include "mmio.hpp"
 
+namespace usart6 {
+enum class Clken : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Cpha : uint32_t {
+    first = 0,
+    second = 1,
+};
+enum class Cpol : uint32_t {
+    low = 0,
+    high = 1,
+};
+enum class Cts : uint32_t {
+    notchanged = 0,
+    changed = 1,
+};
+enum class Ctse : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Ctsie : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Dmar : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Dmat : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Eie : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Fe : uint32_t {
+    noerror = 0,
+    error = 1,
+};
+enum class Hdsel : uint32_t {
+    fullduplex = 0,
+    halfduplex = 1,
+};
+enum class Idle : uint32_t {
+    noidle = 0,
+    idle = 1,
+};
+enum class Idleie : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Iren : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Irlp : uint32_t {
+    normal = 0,
+    lowpower = 1,
+};
+enum class Lbcl : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Lbd : uint32_t {
+    notdetected = 0,
+    detected = 1,
+};
+enum class Lbdie : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Lbdl : uint32_t {
+    lbdl10 = 0,
+    lbdl11 = 1,
+};
+enum class Linen : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class M : uint32_t {
+    m8 = 0,
+    m9 = 1,
+};
+enum class Nack : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Ne : uint32_t {
+    nonoise = 0,
+    noise = 1,
+};
+enum class Nf : uint32_t {
+    nonoise = 0,
+    noise = 1,
+};
+enum class Onebit : uint32_t {
+    sample3 = 0,
+    sample1 = 1,
+};
+enum class Ore : uint32_t {
+    nooverrun = 0,
+    overrun = 1,
+};
+enum class Over8 : uint32_t {
+    oversample16 = 0,
+    oversample8 = 1,
+};
+enum class Pce : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Pe : uint32_t {
+    noerror = 0,
+    error = 1,
+};
+enum class Peie : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Ps : uint32_t {
+    even = 0,
+    odd = 1,
+};
+enum class Re : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Rtse : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Rwu : uint32_t {
+    active = 0,
+    mute = 1,
+};
+enum class Rxne : uint32_t {
+    nodata = 0,
+    dataready = 1,
+};
+enum class Rxneie : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Sbk : uint32_t {
+    nobreak = 0,
+    break_ = 1,
+};
+enum class Scen : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Stop : uint32_t {
+    stop1 = 0,
+    stop0p5 = 1,
+    stop2 = 2,
+    stop1p5 = 3,
+};
+enum class Tc : uint32_t {
+    txnotcomplete = 0,
+    txcomplete = 1,
+};
+enum class Tcie : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Te : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Txe : uint32_t {
+    txnotempty = 0,
+    txempty = 1,
+};
+enum class Txeie : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Ue : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Wake : uint32_t {
+    idleline = 0,
+    addressmark = 1,
+};
+} // namespace usart6
+
 // The BASE and Regs struct are defined entirely for debug utility.
 constexpr uintptr_t USART6_BASE = 0x40011400;
 struct Usart6Regs {
@@ -28,243 +217,56 @@ static_assert(offsetof(Usart6Regs, cr2) == 16);
 static_assert(offsetof(Usart6Regs, cr3) == 20);
 static_assert(offsetof(Usart6Regs, gtpr) == 24);
 
-constexpr Field<Access::RW> usart6_sr_cts{0x40011400u, 0x00000200u, 9};
-constexpr Field<Access::RW> usart6_sr_lbd{0x40011400u, 0x00000100u, 8};
-constexpr Field<Access::RO> usart6_sr_txe{0x40011400u, 0x00000080u, 7};
-constexpr Field<Access::RW> usart6_sr_tc{0x40011400u, 0x00000040u, 6};
-constexpr Field<Access::RW> usart6_sr_rxne{0x40011400u, 0x00000020u, 5};
-constexpr Field<Access::RO> usart6_sr_idle{0x40011400u, 0x00000010u, 4};
-constexpr Field<Access::RO> usart6_sr_ore{0x40011400u, 0x00000008u, 3};
-constexpr Field<Access::RO> usart6_sr_nf{0x40011400u, 0x00000004u, 2};
-constexpr Field<Access::RO> usart6_sr_fe{0x40011400u, 0x00000002u, 1};
-constexpr Field<Access::RO> usart6_sr_pe{0x40011400u, 0x00000001u, 0};
+constexpr Field<Access::RW, usart6::Cts> usart6_sr_cts{0x40011400u, 0x00000200u, 9};
+constexpr Field<Access::RW, usart6::Lbd> usart6_sr_lbd{0x40011400u, 0x00000100u, 8};
+constexpr Field<Access::RO, usart6::Txe> usart6_sr_txe{0x40011400u, 0x00000080u, 7};
+constexpr Field<Access::RW, usart6::Tc> usart6_sr_tc{0x40011400u, 0x00000040u, 6};
+constexpr Field<Access::RW, usart6::Rxne> usart6_sr_rxne{0x40011400u, 0x00000020u, 5};
+constexpr Field<Access::RO, usart6::Idle> usart6_sr_idle{0x40011400u, 0x00000010u, 4};
+constexpr Field<Access::RO, usart6::Ore> usart6_sr_ore{0x40011400u, 0x00000008u, 3};
+constexpr Field<Access::RO, usart6::Ne> usart6_sr_nf{0x40011400u, 0x00000004u, 2};
+constexpr Field<Access::RO, usart6::Fe> usart6_sr_fe{0x40011400u, 0x00000002u, 1};
+constexpr Field<Access::RO, usart6::Pe> usart6_sr_pe{0x40011400u, 0x00000001u, 0};
 constexpr Field<Access::RW> usart6_dr_dr{0x40011404u, 0x000001FFu, 0};
 constexpr Field<Access::RW> usart6_brr_div_mantissa{0x40011408u, 0x0000FFF0u, 4};
 constexpr Field<Access::RW> usart6_brr_div_fraction{0x40011408u, 0x0000000Fu, 0};
-constexpr Field<Access::RW> usart6_cr1_ue{0x4001140Cu, 0x00002000u, 13};
-constexpr Field<Access::RW> usart6_cr1_m{0x4001140Cu, 0x00001000u, 12};
-constexpr Field<Access::RW> usart6_cr1_wake{0x4001140Cu, 0x00000800u, 11};
-constexpr Field<Access::RW> usart6_cr1_pce{0x4001140Cu, 0x00000400u, 10};
-constexpr Field<Access::RW> usart6_cr1_ps{0x4001140Cu, 0x00000200u, 9};
-constexpr Field<Access::RW> usart6_cr1_peie{0x4001140Cu, 0x00000100u, 8};
-constexpr Field<Access::RW> usart6_cr1_txeie{0x4001140Cu, 0x00000080u, 7};
-constexpr Field<Access::RW> usart6_cr1_tcie{0x4001140Cu, 0x00000040u, 6};
-constexpr Field<Access::RW> usart6_cr1_rxneie{0x4001140Cu, 0x00000020u, 5};
-constexpr Field<Access::RW> usart6_cr1_idleie{0x4001140Cu, 0x00000010u, 4};
-constexpr Field<Access::RW> usart6_cr1_te{0x4001140Cu, 0x00000008u, 3};
-constexpr Field<Access::RW> usart6_cr1_re{0x4001140Cu, 0x00000004u, 2};
-constexpr Field<Access::RW> usart6_cr1_rwu{0x4001140Cu, 0x00000002u, 1};
-constexpr Field<Access::RW> usart6_cr1_sbk{0x4001140Cu, 0x00000001u, 0};
-constexpr Field<Access::RW> usart6_cr1_over8{0x4001140Cu, 0x00008000u, 15};
-constexpr Field<Access::RW> usart6_cr2_linen{0x40011410u, 0x00004000u, 14};
-constexpr Field<Access::RW> usart6_cr2_stop{0x40011410u, 0x00003000u, 12};
-constexpr Field<Access::RW> usart6_cr2_clken{0x40011410u, 0x00000800u, 11};
-constexpr Field<Access::RW> usart6_cr2_cpol{0x40011410u, 0x00000400u, 10};
-constexpr Field<Access::RW> usart6_cr2_cpha{0x40011410u, 0x00000200u, 9};
-constexpr Field<Access::RW> usart6_cr2_lbcl{0x40011410u, 0x00000100u, 8};
-constexpr Field<Access::RW> usart6_cr2_lbdie{0x40011410u, 0x00000040u, 6};
-constexpr Field<Access::RW> usart6_cr2_lbdl{0x40011410u, 0x00000020u, 5};
+constexpr Field<Access::RW, usart6::Ue> usart6_cr1_ue{0x4001140Cu, 0x00002000u, 13};
+constexpr Field<Access::RW, usart6::M> usart6_cr1_m{0x4001140Cu, 0x00001000u, 12};
+constexpr Field<Access::RW, usart6::Wake> usart6_cr1_wake{0x4001140Cu, 0x00000800u, 11};
+constexpr Field<Access::RW, usart6::Pce> usart6_cr1_pce{0x4001140Cu, 0x00000400u, 10};
+constexpr Field<Access::RW, usart6::Ps> usart6_cr1_ps{0x4001140Cu, 0x00000200u, 9};
+constexpr Field<Access::RW, usart6::Peie> usart6_cr1_peie{0x4001140Cu, 0x00000100u, 8};
+constexpr Field<Access::RW, usart6::Txeie> usart6_cr1_txeie{0x4001140Cu, 0x00000080u, 7};
+constexpr Field<Access::RW, usart6::Tcie> usart6_cr1_tcie{0x4001140Cu, 0x00000040u, 6};
+constexpr Field<Access::RW, usart6::Rxneie> usart6_cr1_rxneie{0x4001140Cu, 0x00000020u, 5};
+constexpr Field<Access::RW, usart6::Idleie> usart6_cr1_idleie{0x4001140Cu, 0x00000010u, 4};
+constexpr Field<Access::RW, usart6::Te> usart6_cr1_te{0x4001140Cu, 0x00000008u, 3};
+constexpr Field<Access::RW, usart6::Re> usart6_cr1_re{0x4001140Cu, 0x00000004u, 2};
+constexpr Field<Access::RW, usart6::Rwu> usart6_cr1_rwu{0x4001140Cu, 0x00000002u, 1};
+constexpr Field<Access::RW, usart6::Sbk> usart6_cr1_sbk{0x4001140Cu, 0x00000001u, 0};
+constexpr Field<Access::RW, usart6::Over8> usart6_cr1_over8{0x4001140Cu, 0x00008000u, 15};
+constexpr Field<Access::RW, usart6::Linen> usart6_cr2_linen{0x40011410u, 0x00004000u, 14};
+constexpr Field<Access::RW, usart6::Stop> usart6_cr2_stop{0x40011410u, 0x00003000u, 12};
+constexpr Field<Access::RW, usart6::Clken> usart6_cr2_clken{0x40011410u, 0x00000800u, 11};
+constexpr Field<Access::RW, usart6::Cpol> usart6_cr2_cpol{0x40011410u, 0x00000400u, 10};
+constexpr Field<Access::RW, usart6::Cpha> usart6_cr2_cpha{0x40011410u, 0x00000200u, 9};
+constexpr Field<Access::RW, usart6::Lbcl> usart6_cr2_lbcl{0x40011410u, 0x00000100u, 8};
+constexpr Field<Access::RW, usart6::Lbdie> usart6_cr2_lbdie{0x40011410u, 0x00000040u, 6};
+constexpr Field<Access::RW, usart6::Lbdl> usart6_cr2_lbdl{0x40011410u, 0x00000020u, 5};
 constexpr Field<Access::RW> usart6_cr2_add{0x40011410u, 0x0000000Fu, 0};
-constexpr Field<Access::RW> usart6_cr3_onebit{0x40011414u, 0x00000800u, 11};
-constexpr Field<Access::RW> usart6_cr3_ctsie{0x40011414u, 0x00000400u, 10};
-constexpr Field<Access::RW> usart6_cr3_ctse{0x40011414u, 0x00000200u, 9};
-constexpr Field<Access::RW> usart6_cr3_rtse{0x40011414u, 0x00000100u, 8};
-constexpr Field<Access::RW> usart6_cr3_dmat{0x40011414u, 0x00000080u, 7};
-constexpr Field<Access::RW> usart6_cr3_dmar{0x40011414u, 0x00000040u, 6};
-constexpr Field<Access::RW> usart6_cr3_scen{0x40011414u, 0x00000020u, 5};
-constexpr Field<Access::RW> usart6_cr3_nack{0x40011414u, 0x00000010u, 4};
-constexpr Field<Access::RW> usart6_cr3_hdsel{0x40011414u, 0x00000008u, 3};
-constexpr Field<Access::RW> usart6_cr3_irlp{0x40011414u, 0x00000004u, 2};
-constexpr Field<Access::RW> usart6_cr3_iren{0x40011414u, 0x00000002u, 1};
-constexpr Field<Access::RW> usart6_cr3_eie{0x40011414u, 0x00000001u, 0};
+constexpr Field<Access::RW, usart6::Onebit> usart6_cr3_onebit{0x40011414u, 0x00000800u, 11};
+constexpr Field<Access::RW, usart6::Ctsie> usart6_cr3_ctsie{0x40011414u, 0x00000400u, 10};
+constexpr Field<Access::RW, usart6::Ctse> usart6_cr3_ctse{0x40011414u, 0x00000200u, 9};
+constexpr Field<Access::RW, usart6::Rtse> usart6_cr3_rtse{0x40011414u, 0x00000100u, 8};
+constexpr Field<Access::RW, usart6::Dmat> usart6_cr3_dmat{0x40011414u, 0x00000080u, 7};
+constexpr Field<Access::RW, usart6::Dmar> usart6_cr3_dmar{0x40011414u, 0x00000040u, 6};
+constexpr Field<Access::RW, usart6::Scen> usart6_cr3_scen{0x40011414u, 0x00000020u, 5};
+constexpr Field<Access::RW, usart6::Nack> usart6_cr3_nack{0x40011414u, 0x00000010u, 4};
+constexpr Field<Access::RW, usart6::Hdsel> usart6_cr3_hdsel{0x40011414u, 0x00000008u, 3};
+constexpr Field<Access::RW, usart6::Irlp> usart6_cr3_irlp{0x40011414u, 0x00000004u, 2};
+constexpr Field<Access::RW, usart6::Iren> usart6_cr3_iren{0x40011414u, 0x00000002u, 1};
+constexpr Field<Access::RW, usart6::Eie> usart6_cr3_eie{0x40011414u, 0x00000001u, 0};
 constexpr Field<Access::RW> usart6_gtpr_gt{0x40011418u, 0x0000FF00u, 8};
 constexpr Field<Access::RW> usart6_gtpr_psc{0x40011418u, 0x000000FFu, 0};
-
-namespace usart6::clken {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace usart6::cpha {
-    constexpr uint32_t first = 0;
-    constexpr uint32_t second = 1;
-}
-namespace usart6::cpol {
-    constexpr uint32_t low = 0;
-    constexpr uint32_t high = 1;
-}
-namespace usart6::cts {
-    constexpr uint32_t notchanged = 0;
-    constexpr uint32_t changed = 1;
-}
-namespace usart6::ctse {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace usart6::ctsie {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace usart6::dmar {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace usart6::dmat {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace usart6::eie {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace usart6::fe {
-    constexpr uint32_t noerror = 0;
-    constexpr uint32_t error = 1;
-}
-namespace usart6::hdsel {
-    constexpr uint32_t fullduplex = 0;
-    constexpr uint32_t halfduplex = 1;
-}
-namespace usart6::idle {
-    constexpr uint32_t noidle = 0;
-    constexpr uint32_t idle = 1;
-}
-namespace usart6::idleie {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace usart6::iren {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace usart6::irlp {
-    constexpr uint32_t normal = 0;
-    constexpr uint32_t lowpower = 1;
-}
-namespace usart6::lbcl {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace usart6::lbd {
-    constexpr uint32_t notdetected = 0;
-    constexpr uint32_t detected = 1;
-}
-namespace usart6::lbdie {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace usart6::lbdl {
-    constexpr uint32_t lbdl10 = 0;
-    constexpr uint32_t lbdl11 = 1;
-}
-namespace usart6::linen {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace usart6::m {
-    constexpr uint32_t m8 = 0;
-    constexpr uint32_t m9 = 1;
-}
-namespace usart6::nack {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace usart6::ne {
-    constexpr uint32_t nonoise = 0;
-    constexpr uint32_t noise = 1;
-}
-namespace usart6::nf {
-    constexpr uint32_t nonoise = 0;
-    constexpr uint32_t noise = 1;
-}
-namespace usart6::onebit {
-    constexpr uint32_t sample3 = 0;
-    constexpr uint32_t sample1 = 1;
-}
-namespace usart6::ore {
-    constexpr uint32_t nooverrun = 0;
-    constexpr uint32_t overrun = 1;
-}
-namespace usart6::over8 {
-    constexpr uint32_t oversample16 = 0;
-    constexpr uint32_t oversample8 = 1;
-}
-namespace usart6::pce {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace usart6::pe {
-    constexpr uint32_t noerror = 0;
-    constexpr uint32_t error = 1;
-}
-namespace usart6::peie {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace usart6::ps {
-    constexpr uint32_t even = 0;
-    constexpr uint32_t odd = 1;
-}
-namespace usart6::re {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace usart6::rtse {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace usart6::rwu {
-    constexpr uint32_t active = 0;
-    constexpr uint32_t mute = 1;
-}
-namespace usart6::rxne {
-    constexpr uint32_t nodata = 0;
-    constexpr uint32_t dataready = 1;
-}
-namespace usart6::rxneie {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace usart6::sbk {
-    constexpr uint32_t nobreak = 0;
-    constexpr uint32_t break_ = 1;
-}
-namespace usart6::scen {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace usart6::stop {
-    constexpr uint32_t stop1 = 0;
-    constexpr uint32_t stop0p5 = 1;
-    constexpr uint32_t stop2 = 2;
-    constexpr uint32_t stop1p5 = 3;
-}
-namespace usart6::tc {
-    constexpr uint32_t txnotcomplete = 0;
-    constexpr uint32_t txcomplete = 1;
-}
-namespace usart6::tcie {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace usart6::te {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace usart6::txe {
-    constexpr uint32_t txnotempty = 0;
-    constexpr uint32_t txempty = 1;
-}
-namespace usart6::txeie {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace usart6::ue {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace usart6::wake {
-    constexpr uint32_t idleline = 0;
-    constexpr uint32_t addressmark = 1;
-}
 
 #endif // STM32_USART6_HPP

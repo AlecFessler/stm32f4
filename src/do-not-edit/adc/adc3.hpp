@@ -9,6 +9,171 @@
 
 #include "mmio.hpp"
 
+namespace adc3 {
+enum class Adon : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Align : uint32_t {
+    right = 0,
+    left = 1,
+};
+enum class Awd : uint32_t {
+    noevent = 0,
+    event = 1,
+};
+enum class Awden : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Awdie : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Awdsgl : uint32_t {
+    allchannels = 0,
+    singlechannel = 1,
+};
+enum class Cont : uint32_t {
+    single = 0,
+    continuous = 1,
+};
+enum class Dds : uint32_t {
+    single = 0,
+    continuous = 1,
+};
+enum class Discen : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Dma : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Eoc : uint32_t {
+    notcomplete = 0,
+    complete = 1,
+};
+enum class Eocie : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Eocs : uint32_t {
+    eachsequence = 0,
+    eachconversion = 1,
+};
+enum class Exten : uint32_t {
+    disabled = 0,
+    risingedge = 1,
+    fallingedge = 2,
+    bothedges = 3,
+};
+enum class Extsel : uint32_t {
+    tim1cc1 = 0,
+    tim1cc2 = 1,
+    tim1cc3 = 2,
+    tim2cc2 = 3,
+    tim2cc3 = 4,
+    tim2cc4 = 5,
+    tim2trgo = 6,
+    tim3cc1 = 7,
+    tim3trgo = 8,
+    tim4cc4 = 9,
+    tim5cc1 = 10,
+    tim5cc2 = 11,
+    tim5cc3 = 12,
+    tim8cc1 = 13,
+    tim8trgo = 14,
+    exti11 = 15,
+};
+enum class Jauto : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Jawden : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Jdiscen : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Jeoc : uint32_t {
+    notcomplete = 0,
+    complete = 1,
+};
+enum class Jeocie : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Jexten : uint32_t {
+    disabled = 0,
+    risingedge = 1,
+    fallingedge = 2,
+    bothedges = 3,
+};
+enum class Jextsel : uint32_t {
+    tim1cc4 = 0,
+    tim1trgo = 1,
+    tim2cc1 = 2,
+    tim2trgo = 3,
+    tim3cc2 = 4,
+    tim3cc4 = 5,
+    tim4cc1 = 6,
+    tim4cc2 = 7,
+    tim4cc3 = 8,
+    tim4trgo = 9,
+    tim5cc4 = 10,
+    tim5trgo = 11,
+    tim8cc2 = 12,
+    tim8cc3 = 13,
+    tim8cc4 = 14,
+    exti15 = 15,
+};
+enum class Jstrt : uint32_t {
+    notstarted = 0,
+    started = 1,
+};
+enum class Jswstart : uint32_t {
+    start = 1,
+};
+enum class Ovr : uint32_t {
+    nooverrun = 0,
+    overrun = 1,
+};
+enum class Ovrie : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Res : uint32_t {
+    twelvebit = 0,
+    tenbit = 1,
+    eightbit = 2,
+    sixbit = 3,
+};
+enum class Scan : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Smp : uint32_t {
+    cycles3 = 0,
+    cycles15 = 1,
+    cycles28 = 2,
+    cycles56 = 3,
+    cycles84 = 4,
+    cycles112 = 5,
+    cycles144 = 6,
+    cycles480 = 7,
+};
+enum class Strt : uint32_t {
+    notstarted = 0,
+    started = 1,
+};
+enum class Swstart : uint32_t {
+    start = 1,
+};
+} // namespace adc3
+
 // The BASE and Regs struct are defined entirely for debug utility.
 constexpr uintptr_t ADC3_BASE = 0x40012200;
 struct Adc3Regs {
@@ -54,40 +219,40 @@ static_assert(offsetof(Adc3Regs, jdr3) == 68);
 static_assert(offsetof(Adc3Regs, jdr4) == 72);
 static_assert(offsetof(Adc3Regs, dr) == 76);
 
-constexpr Field<Access::RW> adc3_sr_ovr{0x40012200u, 0x00000020u, 5};
-constexpr Field<Access::RW> adc3_sr_strt{0x40012200u, 0x00000010u, 4};
-constexpr Field<Access::RW> adc3_sr_jstrt{0x40012200u, 0x00000008u, 3};
-constexpr Field<Access::RW> adc3_sr_jeoc{0x40012200u, 0x00000004u, 2};
-constexpr Field<Access::RW> adc3_sr_eoc{0x40012200u, 0x00000002u, 1};
-constexpr Field<Access::RW> adc3_sr_awd{0x40012200u, 0x00000001u, 0};
-constexpr Field<Access::RW> adc3_cr1_ovrie{0x40012204u, 0x04000000u, 26};
-constexpr Field<Access::RW> adc3_cr1_res{0x40012204u, 0x03000000u, 24};
-constexpr Field<Access::RW> adc3_cr1_awden{0x40012204u, 0x00800000u, 23};
-constexpr Field<Access::RW> adc3_cr1_jawden{0x40012204u, 0x00400000u, 22};
+constexpr Field<Access::RW, adc3::Ovr> adc3_sr_ovr{0x40012200u, 0x00000020u, 5};
+constexpr Field<Access::RW, adc3::Strt> adc3_sr_strt{0x40012200u, 0x00000010u, 4};
+constexpr Field<Access::RW, adc3::Jstrt> adc3_sr_jstrt{0x40012200u, 0x00000008u, 3};
+constexpr Field<Access::RW, adc3::Jeoc> adc3_sr_jeoc{0x40012200u, 0x00000004u, 2};
+constexpr Field<Access::RW, adc3::Eoc> adc3_sr_eoc{0x40012200u, 0x00000002u, 1};
+constexpr Field<Access::RW, adc3::Awd> adc3_sr_awd{0x40012200u, 0x00000001u, 0};
+constexpr Field<Access::RW, adc3::Ovrie> adc3_cr1_ovrie{0x40012204u, 0x04000000u, 26};
+constexpr Field<Access::RW, adc3::Res> adc3_cr1_res{0x40012204u, 0x03000000u, 24};
+constexpr Field<Access::RW, adc3::Awden> adc3_cr1_awden{0x40012204u, 0x00800000u, 23};
+constexpr Field<Access::RW, adc3::Jawden> adc3_cr1_jawden{0x40012204u, 0x00400000u, 22};
 constexpr Field<Access::RW> adc3_cr1_discnum{0x40012204u, 0x0000E000u, 13};
-constexpr Field<Access::RW> adc3_cr1_jdiscen{0x40012204u, 0x00001000u, 12};
-constexpr Field<Access::RW> adc3_cr1_discen{0x40012204u, 0x00000800u, 11};
-constexpr Field<Access::RW> adc3_cr1_jauto{0x40012204u, 0x00000400u, 10};
-constexpr Field<Access::RW> adc3_cr1_awdsgl{0x40012204u, 0x00000200u, 9};
-constexpr Field<Access::RW> adc3_cr1_scan{0x40012204u, 0x00000100u, 8};
-constexpr Field<Access::RW> adc3_cr1_jeocie{0x40012204u, 0x00000080u, 7};
-constexpr Field<Access::RW> adc3_cr1_awdie{0x40012204u, 0x00000040u, 6};
-constexpr Field<Access::RW> adc3_cr1_eocie{0x40012204u, 0x00000020u, 5};
+constexpr Field<Access::RW, adc3::Jdiscen> adc3_cr1_jdiscen{0x40012204u, 0x00001000u, 12};
+constexpr Field<Access::RW, adc3::Discen> adc3_cr1_discen{0x40012204u, 0x00000800u, 11};
+constexpr Field<Access::RW, adc3::Jauto> adc3_cr1_jauto{0x40012204u, 0x00000400u, 10};
+constexpr Field<Access::RW, adc3::Awdsgl> adc3_cr1_awdsgl{0x40012204u, 0x00000200u, 9};
+constexpr Field<Access::RW, adc3::Scan> adc3_cr1_scan{0x40012204u, 0x00000100u, 8};
+constexpr Field<Access::RW, adc3::Jeocie> adc3_cr1_jeocie{0x40012204u, 0x00000080u, 7};
+constexpr Field<Access::RW, adc3::Awdie> adc3_cr1_awdie{0x40012204u, 0x00000040u, 6};
+constexpr Field<Access::RW, adc3::Eocie> adc3_cr1_eocie{0x40012204u, 0x00000020u, 5};
 constexpr Field<Access::RW> adc3_cr1_awdch{0x40012204u, 0x0000001Fu, 0};
-constexpr Field<Access::RW> adc3_cr2_swstart{0x40012208u, 0x40000000u, 30};
-constexpr Field<Access::RW> adc3_cr2_exten{0x40012208u, 0x30000000u, 28};
-constexpr Field<Access::RW> adc3_cr2_extsel{0x40012208u, 0x0F000000u, 24};
-constexpr Field<Access::RW> adc3_cr2_jswstart{0x40012208u, 0x00400000u, 22};
-constexpr Field<Access::RW> adc3_cr2_jexten{0x40012208u, 0x00300000u, 20};
-constexpr Field<Access::RW> adc3_cr2_jextsel{0x40012208u, 0x000F0000u, 16};
-constexpr Field<Access::RW> adc3_cr2_align{0x40012208u, 0x00000800u, 11};
-constexpr Field<Access::RW> adc3_cr2_eocs{0x40012208u, 0x00000400u, 10};
-constexpr Field<Access::RW> adc3_cr2_dds{0x40012208u, 0x00000200u, 9};
-constexpr Field<Access::RW> adc3_cr2_dma{0x40012208u, 0x00000100u, 8};
-constexpr Field<Access::RW> adc3_cr2_cont{0x40012208u, 0x00000002u, 1};
-constexpr Field<Access::RW> adc3_cr2_adon{0x40012208u, 0x00000001u, 0};
-constexpr Field<Access::RW> adc3_smpr1_smpx_x{0x4001220Cu, 0xFFFFFFFFu, 0};
-constexpr Field<Access::RW> adc3_smpr2_smpx_x{0x40012210u, 0xFFFFFFFFu, 0};
+constexpr Field<Access::RW, adc3::Swstart> adc3_cr2_swstart{0x40012208u, 0x40000000u, 30};
+constexpr Field<Access::RW, adc3::Exten> adc3_cr2_exten{0x40012208u, 0x30000000u, 28};
+constexpr Field<Access::RW, adc3::Extsel> adc3_cr2_extsel{0x40012208u, 0x0F000000u, 24};
+constexpr Field<Access::RW, adc3::Jswstart> adc3_cr2_jswstart{0x40012208u, 0x00400000u, 22};
+constexpr Field<Access::RW, adc3::Jexten> adc3_cr2_jexten{0x40012208u, 0x00300000u, 20};
+constexpr Field<Access::RW, adc3::Jextsel> adc3_cr2_jextsel{0x40012208u, 0x000F0000u, 16};
+constexpr Field<Access::RW, adc3::Align> adc3_cr2_align{0x40012208u, 0x00000800u, 11};
+constexpr Field<Access::RW, adc3::Eocs> adc3_cr2_eocs{0x40012208u, 0x00000400u, 10};
+constexpr Field<Access::RW, adc3::Dds> adc3_cr2_dds{0x40012208u, 0x00000200u, 9};
+constexpr Field<Access::RW, adc3::Dma> adc3_cr2_dma{0x40012208u, 0x00000100u, 8};
+constexpr Field<Access::RW, adc3::Cont> adc3_cr2_cont{0x40012208u, 0x00000002u, 1};
+constexpr Field<Access::RW, adc3::Adon> adc3_cr2_adon{0x40012208u, 0x00000001u, 0};
+constexpr Field<Access::RW, adc3::Smp> adc3_smpr1_smpx_x{0x4001220Cu, 0xFFFFFFFFu, 0};
+constexpr Field<Access::RW, adc3::Smp> adc3_smpr2_smpx_x{0x40012210u, 0xFFFFFFFFu, 0};
 constexpr Field<Access::RW> adc3_jofr1_joffset1{0x40012214u, 0x00000FFFu, 0};
 constexpr Field<Access::RW> adc3_jofr2_joffset2{0x40012218u, 0x00000FFFu, 0};
 constexpr Field<Access::RW> adc3_jofr3_joffset3{0x4001221Cu, 0x00000FFFu, 0};
@@ -121,168 +286,5 @@ constexpr Field<Access::RO> adc3_jdr2_jdata{0x40012240u, 0x0000FFFFu, 0};
 constexpr Field<Access::RO> adc3_jdr3_jdata{0x40012244u, 0x0000FFFFu, 0};
 constexpr Field<Access::RO> adc3_jdr4_jdata{0x40012248u, 0x0000FFFFu, 0};
 constexpr Field<Access::RO> adc3_dr_data{0x4001224Cu, 0x0000FFFFu, 0};
-
-namespace adc3::adon {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace adc3::align {
-    constexpr uint32_t right = 0;
-    constexpr uint32_t left = 1;
-}
-namespace adc3::awd {
-    constexpr uint32_t noevent = 0;
-    constexpr uint32_t event = 1;
-}
-namespace adc3::awden {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace adc3::awdie {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace adc3::awdsgl {
-    constexpr uint32_t allchannels = 0;
-    constexpr uint32_t singlechannel = 1;
-}
-namespace adc3::cont {
-    constexpr uint32_t single = 0;
-    constexpr uint32_t continuous = 1;
-}
-namespace adc3::dds {
-    constexpr uint32_t single = 0;
-    constexpr uint32_t continuous = 1;
-}
-namespace adc3::discen {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace adc3::dma {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace adc3::eoc {
-    constexpr uint32_t notcomplete = 0;
-    constexpr uint32_t complete = 1;
-}
-namespace adc3::eocie {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace adc3::eocs {
-    constexpr uint32_t eachsequence = 0;
-    constexpr uint32_t eachconversion = 1;
-}
-namespace adc3::exten {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t risingedge = 1;
-    constexpr uint32_t fallingedge = 2;
-    constexpr uint32_t bothedges = 3;
-}
-namespace adc3::extsel {
-    constexpr uint32_t tim1cc1 = 0;
-    constexpr uint32_t tim1cc2 = 1;
-    constexpr uint32_t tim1cc3 = 2;
-    constexpr uint32_t tim2cc2 = 3;
-    constexpr uint32_t tim2cc3 = 4;
-    constexpr uint32_t tim2cc4 = 5;
-    constexpr uint32_t tim2trgo = 6;
-    constexpr uint32_t tim3cc1 = 7;
-    constexpr uint32_t tim3trgo = 8;
-    constexpr uint32_t tim4cc4 = 9;
-    constexpr uint32_t tim5cc1 = 10;
-    constexpr uint32_t tim5cc2 = 11;
-    constexpr uint32_t tim5cc3 = 12;
-    constexpr uint32_t tim8cc1 = 13;
-    constexpr uint32_t tim8trgo = 14;
-    constexpr uint32_t exti11 = 15;
-}
-namespace adc3::jauto {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace adc3::jawden {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace adc3::jdiscen {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace adc3::jeoc {
-    constexpr uint32_t notcomplete = 0;
-    constexpr uint32_t complete = 1;
-}
-namespace adc3::jeocie {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace adc3::jexten {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t risingedge = 1;
-    constexpr uint32_t fallingedge = 2;
-    constexpr uint32_t bothedges = 3;
-}
-namespace adc3::jextsel {
-    constexpr uint32_t tim1cc4 = 0;
-    constexpr uint32_t tim1trgo = 1;
-    constexpr uint32_t tim2cc1 = 2;
-    constexpr uint32_t tim2trgo = 3;
-    constexpr uint32_t tim3cc2 = 4;
-    constexpr uint32_t tim3cc4 = 5;
-    constexpr uint32_t tim4cc1 = 6;
-    constexpr uint32_t tim4cc2 = 7;
-    constexpr uint32_t tim4cc3 = 8;
-    constexpr uint32_t tim4trgo = 9;
-    constexpr uint32_t tim5cc4 = 10;
-    constexpr uint32_t tim5trgo = 11;
-    constexpr uint32_t tim8cc2 = 12;
-    constexpr uint32_t tim8cc3 = 13;
-    constexpr uint32_t tim8cc4 = 14;
-    constexpr uint32_t exti15 = 15;
-}
-namespace adc3::jstrt {
-    constexpr uint32_t notstarted = 0;
-    constexpr uint32_t started = 1;
-}
-namespace adc3::jswstart {
-    constexpr uint32_t start = 1;
-}
-namespace adc3::ovr {
-    constexpr uint32_t nooverrun = 0;
-    constexpr uint32_t overrun = 1;
-}
-namespace adc3::ovrie {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace adc3::res {
-    constexpr uint32_t twelvebit = 0;
-    constexpr uint32_t tenbit = 1;
-    constexpr uint32_t eightbit = 2;
-    constexpr uint32_t sixbit = 3;
-}
-namespace adc3::scan {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace adc3::smp {
-    constexpr uint32_t cycles3 = 0;
-    constexpr uint32_t cycles15 = 1;
-    constexpr uint32_t cycles28 = 2;
-    constexpr uint32_t cycles56 = 3;
-    constexpr uint32_t cycles84 = 4;
-    constexpr uint32_t cycles112 = 5;
-    constexpr uint32_t cycles144 = 6;
-    constexpr uint32_t cycles480 = 7;
-}
-namespace adc3::strt {
-    constexpr uint32_t notstarted = 0;
-    constexpr uint32_t started = 1;
-}
-namespace adc3::swstart {
-    constexpr uint32_t start = 1;
-}
 
 #endif // STM32_ADC3_HPP

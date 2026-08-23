@@ -9,6 +9,160 @@
 
 #include "mmio.hpp"
 
+namespace rtc {
+enum class Add1h : uint32_t {
+    add1 = 1,
+};
+enum class Add1s : uint32_t {
+    add1 = 1,
+};
+enum class Alrabe : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Alrabf : uint32_t {
+    match = 1,
+};
+enum class Alrabie : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Alrwf : uint32_t {
+    updatenotallowed = 0,
+    updateallowed = 1,
+};
+enum class Bkp : uint32_t {
+    dst_not_changed = 0,
+    dst_changed = 1,
+};
+enum class Bypshad : uint32_t {
+    shadowreg = 0,
+    bypassshadowreg = 1,
+};
+enum class Calp : uint32_t {
+    nochange = 0,
+    increasefreq = 1,
+};
+enum class Calw16 : uint32_t {
+    sixteen_second = 1,
+};
+enum class Calw8 : uint32_t {
+    eight_second = 1,
+};
+enum class Coe : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Cosel : uint32_t {
+    calfreq_512hz = 0,
+    calfreq_1hz = 1,
+};
+enum class Fmt : uint32_t {
+    twenty_four_hour = 0,
+    am_pm = 1,
+};
+enum class Init : uint32_t {
+    freerunningmode = 0,
+    initmode = 1,
+};
+enum class Initf : uint32_t {
+    notallowed = 0,
+    allowed = 1,
+};
+enum class Inits : uint32_t {
+    notinitalized = 0,
+    initalized = 1,
+};
+enum class Msk : uint32_t {
+    mask = 0,
+    notmask = 1,
+};
+enum class Mt : uint32_t {
+    zero = 0,
+    one = 1,
+};
+enum class Osel : uint32_t {
+    disabled = 0,
+    alarma = 1,
+    alarmb = 2,
+    wakeup = 3,
+};
+enum class Pm : uint32_t {
+    am = 0,
+    pm = 1,
+};
+enum class Pol : uint32_t {
+    high = 0,
+    low = 1,
+};
+enum class Recalpf : uint32_t {
+    pending = 1,
+};
+enum class Refckon : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Rsf : uint32_t {
+    notsynced = 0,
+    synced = 1,
+};
+enum class Shpf : uint32_t {
+    noshiftpending = 0,
+    shiftpending = 1,
+};
+enum class Sub1h : uint32_t {
+    sub1 = 1,
+};
+enum class Tampf : uint32_t {
+    tampered = 1,
+};
+enum class Tse : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Tsedge : uint32_t {
+    risingedge = 0,
+    fallingedge = 1,
+};
+enum class Tsf : uint32_t {
+    timestampevent = 1,
+};
+enum class Tsie : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Tsovf : uint32_t {
+    overflow = 1,
+};
+enum class Wdsel : uint32_t {
+    dateunits = 0,
+    weekday = 1,
+};
+enum class Wucksel : uint32_t {
+    div16 = 0,
+    div8 = 1,
+    div4 = 2,
+    div2 = 3,
+    clockspare = 4,
+    clocksparewithoffset = 6,
+};
+enum class Wute : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Wutf : uint32_t {
+    zero = 1,
+};
+enum class Wutie : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Wutwf : uint32_t {
+    updatenotallowed = 0,
+    updateallowed = 1,
+};
+} // namespace rtc
+
 // The BASE and Regs struct are defined entirely for debug utility.
 constexpr uintptr_t RTC_BASE = 0x40002800;
 struct RtcRegs {
@@ -93,7 +247,7 @@ static_assert(offsetof(RtcRegs, bkp17r) == 148);
 static_assert(offsetof(RtcRegs, bkp18r) == 152);
 static_assert(offsetof(RtcRegs, bkp19r) == 156);
 
-constexpr Field<Access::RW> rtc_tr_pm{0x40002800u, 0x00400000u, 22};
+constexpr Field<Access::RW, rtc::Pm> rtc_tr_pm{0x40002800u, 0x00400000u, 22};
 constexpr Field<Access::RW> rtc_tr_ht{0x40002800u, 0x00300000u, 20};
 constexpr Field<Access::RW> rtc_tr_hu{0x40002800u, 0x000F0000u, 16};
 constexpr Field<Access::RW> rtc_tr_mnt{0x40002800u, 0x00007000u, 12};
@@ -103,81 +257,81 @@ constexpr Field<Access::RW> rtc_tr_su{0x40002800u, 0x0000000Fu, 0};
 constexpr Field<Access::RW> rtc_dr_yt{0x40002804u, 0x00F00000u, 20};
 constexpr Field<Access::RW> rtc_dr_yu{0x40002804u, 0x000F0000u, 16};
 constexpr Field<Access::RW> rtc_dr_wdu{0x40002804u, 0x0000E000u, 13};
-constexpr Field<Access::RW> rtc_dr_mt{0x40002804u, 0x00001000u, 12};
+constexpr Field<Access::RW, rtc::Mt> rtc_dr_mt{0x40002804u, 0x00001000u, 12};
 constexpr Field<Access::RW> rtc_dr_mu{0x40002804u, 0x00000F00u, 8};
 constexpr Field<Access::RW> rtc_dr_dt{0x40002804u, 0x00000030u, 4};
 constexpr Field<Access::RW> rtc_dr_du{0x40002804u, 0x0000000Fu, 0};
-constexpr Field<Access::RW> rtc_cr_coe{0x40002808u, 0x00800000u, 23};
-constexpr Field<Access::RW> rtc_cr_osel{0x40002808u, 0x00600000u, 21};
-constexpr Field<Access::RW> rtc_cr_pol{0x40002808u, 0x00100000u, 20};
-constexpr Field<Access::RW> rtc_cr_bkp{0x40002808u, 0x00040000u, 18};
-constexpr Field<Access::RW> rtc_cr_sub1h{0x40002808u, 0x00020000u, 17};
-constexpr Field<Access::RW> rtc_cr_add1h{0x40002808u, 0x00010000u, 16};
-constexpr Field<Access::RW> rtc_cr_tsie{0x40002808u, 0x00008000u, 15};
-constexpr Field<Access::RW> rtc_cr_wutie{0x40002808u, 0x00004000u, 14};
-constexpr Field<Access::RW> rtc_cr_alrbie{0x40002808u, 0x00002000u, 13};
-constexpr Field<Access::RW> rtc_cr_alraie{0x40002808u, 0x00001000u, 12};
-constexpr Field<Access::RW> rtc_cr_tse{0x40002808u, 0x00000800u, 11};
-constexpr Field<Access::RW> rtc_cr_wute{0x40002808u, 0x00000400u, 10};
-constexpr Field<Access::RW> rtc_cr_alrbe{0x40002808u, 0x00000200u, 9};
-constexpr Field<Access::RW> rtc_cr_alrae{0x40002808u, 0x00000100u, 8};
+constexpr Field<Access::RW, rtc::Coe> rtc_cr_coe{0x40002808u, 0x00800000u, 23};
+constexpr Field<Access::RW, rtc::Osel> rtc_cr_osel{0x40002808u, 0x00600000u, 21};
+constexpr Field<Access::RW, rtc::Pol> rtc_cr_pol{0x40002808u, 0x00100000u, 20};
+constexpr Field<Access::RW, rtc::Bkp> rtc_cr_bkp{0x40002808u, 0x00040000u, 18};
+constexpr Field<Access::RW, rtc::Sub1h> rtc_cr_sub1h{0x40002808u, 0x00020000u, 17};
+constexpr Field<Access::RW, rtc::Add1h> rtc_cr_add1h{0x40002808u, 0x00010000u, 16};
+constexpr Field<Access::RW, rtc::Tsie> rtc_cr_tsie{0x40002808u, 0x00008000u, 15};
+constexpr Field<Access::RW, rtc::Wutie> rtc_cr_wutie{0x40002808u, 0x00004000u, 14};
+constexpr Field<Access::RW, rtc::Alrabie> rtc_cr_alrbie{0x40002808u, 0x00002000u, 13};
+constexpr Field<Access::RW, rtc::Alrabie> rtc_cr_alraie{0x40002808u, 0x00001000u, 12};
+constexpr Field<Access::RW, rtc::Tse> rtc_cr_tse{0x40002808u, 0x00000800u, 11};
+constexpr Field<Access::RW, rtc::Wute> rtc_cr_wute{0x40002808u, 0x00000400u, 10};
+constexpr Field<Access::RW, rtc::Alrabe> rtc_cr_alrbe{0x40002808u, 0x00000200u, 9};
+constexpr Field<Access::RW, rtc::Alrabe> rtc_cr_alrae{0x40002808u, 0x00000100u, 8};
 constexpr Field<Access::RW> rtc_cr_dce{0x40002808u, 0x00000080u, 7};
-constexpr Field<Access::RW> rtc_cr_fmt{0x40002808u, 0x00000040u, 6};
-constexpr Field<Access::RW> rtc_cr_refckon{0x40002808u, 0x00000010u, 4};
-constexpr Field<Access::RW> rtc_cr_tsedge{0x40002808u, 0x00000008u, 3};
+constexpr Field<Access::RW, rtc::Fmt> rtc_cr_fmt{0x40002808u, 0x00000040u, 6};
+constexpr Field<Access::RW, rtc::Refckon> rtc_cr_refckon{0x40002808u, 0x00000010u, 4};
+constexpr Field<Access::RW, rtc::Tsedge> rtc_cr_tsedge{0x40002808u, 0x00000008u, 3};
 constexpr Field<Access::RW> rtc_cr_wcksel{0x40002808u, 0x00000007u, 0};
-constexpr Field<Access::RO> rtc_isr_alrawf{0x4000280Cu, 0x00000001u, 0};
-constexpr Field<Access::RO> rtc_isr_alrbwf{0x4000280Cu, 0x00000002u, 1};
-constexpr Field<Access::RO> rtc_isr_wutwf{0x4000280Cu, 0x00000004u, 2};
-constexpr Field<Access::RW> rtc_isr_shpf{0x4000280Cu, 0x00000008u, 3};
-constexpr Field<Access::RO> rtc_isr_inits{0x4000280Cu, 0x00000010u, 4};
-constexpr Field<Access::RW> rtc_isr_rsf{0x4000280Cu, 0x00000020u, 5};
-constexpr Field<Access::RO> rtc_isr_initf{0x4000280Cu, 0x00000040u, 6};
-constexpr Field<Access::RW> rtc_isr_init{0x4000280Cu, 0x00000080u, 7};
-constexpr Field<Access::RW> rtc_isr_alraf{0x4000280Cu, 0x00000100u, 8};
-constexpr Field<Access::RW> rtc_isr_alrbf{0x4000280Cu, 0x00000200u, 9};
-constexpr Field<Access::RW> rtc_isr_wutf{0x4000280Cu, 0x00000400u, 10};
-constexpr Field<Access::RW> rtc_isr_tsf{0x4000280Cu, 0x00000800u, 11};
-constexpr Field<Access::RW> rtc_isr_tsovf{0x4000280Cu, 0x00001000u, 12};
-constexpr Field<Access::RW> rtc_isr_tamp1f{0x4000280Cu, 0x00002000u, 13};
-constexpr Field<Access::RW> rtc_isr_tamp2f{0x4000280Cu, 0x00004000u, 14};
-constexpr Field<Access::RO> rtc_isr_recalpf{0x4000280Cu, 0x00010000u, 16};
+constexpr Field<Access::RO, rtc::Alrwf> rtc_isr_alrawf{0x4000280Cu, 0x00000001u, 0};
+constexpr Field<Access::RO, rtc::Alrwf> rtc_isr_alrbwf{0x4000280Cu, 0x00000002u, 1};
+constexpr Field<Access::RO, rtc::Wutwf> rtc_isr_wutwf{0x4000280Cu, 0x00000004u, 2};
+constexpr Field<Access::RW, rtc::Shpf> rtc_isr_shpf{0x4000280Cu, 0x00000008u, 3};
+constexpr Field<Access::RO, rtc::Inits> rtc_isr_inits{0x4000280Cu, 0x00000010u, 4};
+constexpr Field<Access::RW, rtc::Rsf> rtc_isr_rsf{0x4000280Cu, 0x00000020u, 5};
+constexpr Field<Access::RO, rtc::Initf> rtc_isr_initf{0x4000280Cu, 0x00000040u, 6};
+constexpr Field<Access::RW, rtc::Init> rtc_isr_init{0x4000280Cu, 0x00000080u, 7};
+constexpr Field<Access::RW, rtc::Alrabf> rtc_isr_alraf{0x4000280Cu, 0x00000100u, 8};
+constexpr Field<Access::RW, rtc::Alrabf> rtc_isr_alrbf{0x4000280Cu, 0x00000200u, 9};
+constexpr Field<Access::RW, rtc::Wutf> rtc_isr_wutf{0x4000280Cu, 0x00000400u, 10};
+constexpr Field<Access::RW, rtc::Tsf> rtc_isr_tsf{0x4000280Cu, 0x00000800u, 11};
+constexpr Field<Access::RW, rtc::Tsovf> rtc_isr_tsovf{0x4000280Cu, 0x00001000u, 12};
+constexpr Field<Access::RW, rtc::Tampf> rtc_isr_tamp1f{0x4000280Cu, 0x00002000u, 13};
+constexpr Field<Access::RW, rtc::Tampf> rtc_isr_tamp2f{0x4000280Cu, 0x00004000u, 14};
+constexpr Field<Access::RO, rtc::Recalpf> rtc_isr_recalpf{0x4000280Cu, 0x00010000u, 16};
 constexpr Field<Access::RW> rtc_prer_prediv_a{0x40002810u, 0x007F0000u, 16};
 constexpr Field<Access::RW> rtc_prer_prediv_s{0x40002810u, 0x00007FFFu, 0};
 constexpr Field<Access::RW> rtc_wutr_wut{0x40002814u, 0x0000FFFFu, 0};
 constexpr Field<Access::RW> rtc_calibr_dcs{0x40002818u, 0x00000080u, 7};
 constexpr Field<Access::RW> rtc_calibr_dc{0x40002818u, 0x0000001Fu, 0};
-constexpr Field<Access::RW> rtc_alrmar_wdsel{0x4000281Cu, 0x40000000u, 30};
+constexpr Field<Access::RW, rtc::Wdsel> rtc_alrmar_wdsel{0x4000281Cu, 0x40000000u, 30};
 constexpr Field<Access::RW> rtc_alrmar_dt{0x4000281Cu, 0x30000000u, 28};
 constexpr Field<Access::RW> rtc_alrmar_du{0x4000281Cu, 0x0F000000u, 24};
-constexpr Field<Access::RW> rtc_alrmar_pm{0x4000281Cu, 0x00400000u, 22};
+constexpr Field<Access::RW, rtc::Pm> rtc_alrmar_pm{0x4000281Cu, 0x00400000u, 22};
 constexpr Field<Access::RW> rtc_alrmar_ht{0x4000281Cu, 0x00300000u, 20};
 constexpr Field<Access::RW> rtc_alrmar_hu{0x4000281Cu, 0x000F0000u, 16};
 constexpr Field<Access::RW> rtc_alrmar_mnt{0x4000281Cu, 0x00007000u, 12};
 constexpr Field<Access::RW> rtc_alrmar_mnu{0x4000281Cu, 0x00000F00u, 8};
 constexpr Field<Access::RW> rtc_alrmar_st{0x4000281Cu, 0x00000070u, 4};
 constexpr Field<Access::RW> rtc_alrmar_su{0x4000281Cu, 0x0000000Fu, 0};
-constexpr Field<Access::RW> rtc_alrmar_msk4{0x4000281Cu, 0x80000000u, 31};
-constexpr Field<Access::RW> rtc_alrmar_msk3{0x4000281Cu, 0x00800000u, 23};
-constexpr Field<Access::RW> rtc_alrmar_msk2{0x4000281Cu, 0x00008000u, 15};
-constexpr Field<Access::RW> rtc_alrmar_msk1{0x4000281Cu, 0x00000080u, 7};
-constexpr Field<Access::RW> rtc_alrmbr_wdsel{0x40002820u, 0x40000000u, 30};
+constexpr Field<Access::RW, rtc::Msk> rtc_alrmar_msk4{0x4000281Cu, 0x80000000u, 31};
+constexpr Field<Access::RW, rtc::Msk> rtc_alrmar_msk3{0x4000281Cu, 0x00800000u, 23};
+constexpr Field<Access::RW, rtc::Msk> rtc_alrmar_msk2{0x4000281Cu, 0x00008000u, 15};
+constexpr Field<Access::RW, rtc::Msk> rtc_alrmar_msk1{0x4000281Cu, 0x00000080u, 7};
+constexpr Field<Access::RW, rtc::Wdsel> rtc_alrmbr_wdsel{0x40002820u, 0x40000000u, 30};
 constexpr Field<Access::RW> rtc_alrmbr_dt{0x40002820u, 0x30000000u, 28};
 constexpr Field<Access::RW> rtc_alrmbr_du{0x40002820u, 0x0F000000u, 24};
-constexpr Field<Access::RW> rtc_alrmbr_pm{0x40002820u, 0x00400000u, 22};
+constexpr Field<Access::RW, rtc::Pm> rtc_alrmbr_pm{0x40002820u, 0x00400000u, 22};
 constexpr Field<Access::RW> rtc_alrmbr_ht{0x40002820u, 0x00300000u, 20};
 constexpr Field<Access::RW> rtc_alrmbr_hu{0x40002820u, 0x000F0000u, 16};
 constexpr Field<Access::RW> rtc_alrmbr_mnt{0x40002820u, 0x00007000u, 12};
 constexpr Field<Access::RW> rtc_alrmbr_mnu{0x40002820u, 0x00000F00u, 8};
 constexpr Field<Access::RW> rtc_alrmbr_st{0x40002820u, 0x00000070u, 4};
 constexpr Field<Access::RW> rtc_alrmbr_su{0x40002820u, 0x0000000Fu, 0};
-constexpr Field<Access::RW> rtc_alrmbr_msk4{0x40002820u, 0x80000000u, 31};
-constexpr Field<Access::RW> rtc_alrmbr_msk3{0x40002820u, 0x00800000u, 23};
-constexpr Field<Access::RW> rtc_alrmbr_msk2{0x40002820u, 0x00008000u, 15};
-constexpr Field<Access::RW> rtc_alrmbr_msk1{0x40002820u, 0x00000080u, 7};
+constexpr Field<Access::RW, rtc::Msk> rtc_alrmbr_msk4{0x40002820u, 0x80000000u, 31};
+constexpr Field<Access::RW, rtc::Msk> rtc_alrmbr_msk3{0x40002820u, 0x00800000u, 23};
+constexpr Field<Access::RW, rtc::Msk> rtc_alrmbr_msk2{0x40002820u, 0x00008000u, 15};
+constexpr Field<Access::RW, rtc::Msk> rtc_alrmbr_msk1{0x40002820u, 0x00000080u, 7};
 constexpr Field<Access::WO> rtc_wpr_key{0x40002824u, 0x000000FFu, 0};
 constexpr Field<Access::RO> rtc_ssr_ss{0x40002828u, 0x0000FFFFu, 0};
-constexpr Field<Access::WO> rtc_shiftr_add1s{0x4000282Cu, 0x80000000u, 31};
+constexpr Field<Access::WO, rtc::Add1s> rtc_shiftr_add1s{0x4000282Cu, 0x80000000u, 31};
 constexpr Field<Access::WO> rtc_shiftr_subfs{0x4000282Cu, 0x00007FFFu, 0};
 constexpr Field<Access::RO> rtc_tstr_alarmouttype{0x40002830u, 0x00040000u, 18};
 constexpr Field<Access::RO> rtc_tstr_tsinsel{0x40002830u, 0x00020000u, 17};
@@ -186,15 +340,15 @@ constexpr Field<Access::RO> rtc_tstr_tampie{0x40002830u, 0x00000004u, 2};
 constexpr Field<Access::RO> rtc_tstr_tamp1trg{0x40002830u, 0x00000002u, 1};
 constexpr Field<Access::RO> rtc_tstr_tamp1e{0x40002830u, 0x00000001u, 0};
 constexpr Field<Access::RO> rtc_tsdr_wdu{0x40002834u, 0x0000E000u, 13};
-constexpr Field<Access::RO> rtc_tsdr_mt{0x40002834u, 0x00001000u, 12};
+constexpr Field<Access::RO, rtc::Mt> rtc_tsdr_mt{0x40002834u, 0x00001000u, 12};
 constexpr Field<Access::RO> rtc_tsdr_mu{0x40002834u, 0x00000F00u, 8};
 constexpr Field<Access::RO> rtc_tsdr_dt{0x40002834u, 0x00000030u, 4};
 constexpr Field<Access::RO> rtc_tsdr_du{0x40002834u, 0x0000000Fu, 0};
 constexpr Field<Access::RO> rtc_tsssr_ss{0x40002838u, 0x0000FFFFu, 0};
-constexpr Field<Access::RW> rtc_calr_calp{0x4000283Cu, 0x00008000u, 15};
+constexpr Field<Access::RW, rtc::Calp> rtc_calr_calp{0x4000283Cu, 0x00008000u, 15};
 constexpr Field<Access::RW> rtc_calr_calm{0x4000283Cu, 0x000001FFu, 0};
-constexpr Field<Access::RW> rtc_calr_calw8{0x4000283Cu, 0x00004000u, 14};
-constexpr Field<Access::RW> rtc_calr_calw16{0x4000283Cu, 0x00002000u, 13};
+constexpr Field<Access::RW, rtc::Calw8> rtc_calr_calw8{0x4000283Cu, 0x00004000u, 14};
+constexpr Field<Access::RW, rtc::Calw16> rtc_calr_calw16{0x4000283Cu, 0x00002000u, 13};
 constexpr Field<Access::RW> rtc_tafcr_alarmouttype{0x40002840u, 0x00040000u, 18};
 constexpr Field<Access::RW> rtc_tafcr_tsinsel{0x40002840u, 0x00020000u, 17};
 constexpr Field<Access::RW> rtc_tafcr_tamp1insel{0x40002840u, 0x00010000u, 16};
@@ -232,157 +386,5 @@ constexpr Field<Access::RW> rtc_bkp16r_bkp{0x40002890u, 0xFFFFFFFFu, 0};
 constexpr Field<Access::RW> rtc_bkp17r_bkp{0x40002894u, 0xFFFFFFFFu, 0};
 constexpr Field<Access::RW> rtc_bkp18r_bkp{0x40002898u, 0xFFFFFFFFu, 0};
 constexpr Field<Access::RW> rtc_bkp19r_bkp{0x4000289Cu, 0xFFFFFFFFu, 0};
-
-namespace rtc::add1h {
-    constexpr uint32_t add1 = 1;
-}
-namespace rtc::add1s {
-    constexpr uint32_t add1 = 1;
-}
-namespace rtc::alrabe {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace rtc::alrabf {
-    constexpr uint32_t match = 1;
-}
-namespace rtc::alrabie {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace rtc::alrwf {
-    constexpr uint32_t updatenotallowed = 0;
-    constexpr uint32_t updateallowed = 1;
-}
-namespace rtc::bkp {
-    constexpr uint32_t dst_not_changed = 0;
-    constexpr uint32_t dst_changed = 1;
-}
-namespace rtc::bypshad {
-    constexpr uint32_t shadowreg = 0;
-    constexpr uint32_t bypassshadowreg = 1;
-}
-namespace rtc::calp {
-    constexpr uint32_t nochange = 0;
-    constexpr uint32_t increasefreq = 1;
-}
-namespace rtc::calw16 {
-    constexpr uint32_t sixteen_second = 1;
-}
-namespace rtc::calw8 {
-    constexpr uint32_t eight_second = 1;
-}
-namespace rtc::coe {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace rtc::cosel {
-    constexpr uint32_t calfreq_512hz = 0;
-    constexpr uint32_t calfreq_1hz = 1;
-}
-namespace rtc::fmt {
-    constexpr uint32_t twenty_four_hour = 0;
-    constexpr uint32_t am_pm = 1;
-}
-namespace rtc::init {
-    constexpr uint32_t freerunningmode = 0;
-    constexpr uint32_t initmode = 1;
-}
-namespace rtc::initf {
-    constexpr uint32_t notallowed = 0;
-    constexpr uint32_t allowed = 1;
-}
-namespace rtc::inits {
-    constexpr uint32_t notinitalized = 0;
-    constexpr uint32_t initalized = 1;
-}
-namespace rtc::msk {
-    constexpr uint32_t mask = 0;
-    constexpr uint32_t notmask = 1;
-}
-namespace rtc::mt {
-    constexpr uint32_t zero = 0;
-    constexpr uint32_t one = 1;
-}
-namespace rtc::osel {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t alarma = 1;
-    constexpr uint32_t alarmb = 2;
-    constexpr uint32_t wakeup = 3;
-}
-namespace rtc::pm {
-    constexpr uint32_t am = 0;
-    constexpr uint32_t pm = 1;
-}
-namespace rtc::pol {
-    constexpr uint32_t high = 0;
-    constexpr uint32_t low = 1;
-}
-namespace rtc::recalpf {
-    constexpr uint32_t pending = 1;
-}
-namespace rtc::refckon {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace rtc::rsf {
-    constexpr uint32_t notsynced = 0;
-    constexpr uint32_t synced = 1;
-}
-namespace rtc::shpf {
-    constexpr uint32_t noshiftpending = 0;
-    constexpr uint32_t shiftpending = 1;
-}
-namespace rtc::sub1h {
-    constexpr uint32_t sub1 = 1;
-}
-namespace rtc::tampf {
-    constexpr uint32_t tampered = 1;
-}
-namespace rtc::tse {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace rtc::tsedge {
-    constexpr uint32_t risingedge = 0;
-    constexpr uint32_t fallingedge = 1;
-}
-namespace rtc::tsf {
-    constexpr uint32_t timestampevent = 1;
-}
-namespace rtc::tsie {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace rtc::tsovf {
-    constexpr uint32_t overflow = 1;
-}
-namespace rtc::wdsel {
-    constexpr uint32_t dateunits = 0;
-    constexpr uint32_t weekday = 1;
-}
-namespace rtc::wucksel {
-    constexpr uint32_t div16 = 0;
-    constexpr uint32_t div8 = 1;
-    constexpr uint32_t div4 = 2;
-    constexpr uint32_t div2 = 3;
-    constexpr uint32_t clockspare = 4;
-    constexpr uint32_t clocksparewithoffset = 6;
-}
-namespace rtc::wute {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace rtc::wutf {
-    constexpr uint32_t zero = 1;
-}
-namespace rtc::wutie {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace rtc::wutwf {
-    constexpr uint32_t updatenotallowed = 0;
-    constexpr uint32_t updateallowed = 1;
-}
 
 #endif // STM32_RTC_HPP

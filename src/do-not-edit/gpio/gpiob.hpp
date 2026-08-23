@@ -9,6 +9,8 @@
 
 #include "mmio.hpp"
 
+#include "values.hpp"
+
 // The BASE and Regs struct are defined entirely for debug utility.
 constexpr uintptr_t GPIOB_BASE = 0x40020400;
 struct GpiobRegs {
@@ -34,7 +36,7 @@ static_assert(offsetof(GpiobRegs, lckr) == 28);
 static_assert(offsetof(GpiobRegs, afrl) == 32);
 static_assert(offsetof(GpiobRegs, afrh) == 36);
 
-constexpr Field<Access::RW> gpiob_moder_moder[16] = {
+constexpr Field<Access::RW, gpio::Mode> gpiob_moder_moder[16] = {
     {0x40020400u, 0x00000003u, 0},
     {0x40020400u, 0x0000000Cu, 2},
     {0x40020400u, 0x00000030u, 4},
@@ -52,7 +54,7 @@ constexpr Field<Access::RW> gpiob_moder_moder[16] = {
     {0x40020400u, 0x30000000u, 28},
     {0x40020400u, 0xC0000000u, 30},
 };
-constexpr Field<Access::RW> gpiob_otyper_ot[16] = {
+constexpr Field<Access::RW, gpio::Outputtype> gpiob_otyper_ot[16] = {
     {0x40020404u, 0x00000001u, 0},
     {0x40020404u, 0x00000002u, 1},
     {0x40020404u, 0x00000004u, 2},
@@ -70,7 +72,7 @@ constexpr Field<Access::RW> gpiob_otyper_ot[16] = {
     {0x40020404u, 0x00004000u, 14},
     {0x40020404u, 0x00008000u, 15},
 };
-constexpr Field<Access::RW> gpiob_ospeedr_ospeedr[16] = {
+constexpr Field<Access::RW, gpio::Outputspeed> gpiob_ospeedr_ospeedr[16] = {
     {0x40020408u, 0x00000003u, 0},
     {0x40020408u, 0x0000000Cu, 2},
     {0x40020408u, 0x00000030u, 4},
@@ -88,7 +90,7 @@ constexpr Field<Access::RW> gpiob_ospeedr_ospeedr[16] = {
     {0x40020408u, 0x30000000u, 28},
     {0x40020408u, 0xC0000000u, 30},
 };
-constexpr Field<Access::RW> gpiob_pupdr_pupdr[16] = {
+constexpr Field<Access::RW, gpio::Pull> gpiob_pupdr_pupdr[16] = {
     {0x4002040Cu, 0x00000003u, 0},
     {0x4002040Cu, 0x0000000Cu, 2},
     {0x4002040Cu, 0x00000030u, 4},
@@ -106,7 +108,7 @@ constexpr Field<Access::RW> gpiob_pupdr_pupdr[16] = {
     {0x4002040Cu, 0x30000000u, 28},
     {0x4002040Cu, 0xC0000000u, 30},
 };
-constexpr Field<Access::RO> gpiob_idr_idr[16] = {
+constexpr Field<Access::RO, gpio::Inputdata> gpiob_idr_idr[16] = {
     {0x40020410u, 0x00000001u, 0},
     {0x40020410u, 0x00000002u, 1},
     {0x40020410u, 0x00000004u, 2},
@@ -124,7 +126,7 @@ constexpr Field<Access::RO> gpiob_idr_idr[16] = {
     {0x40020410u, 0x00004000u, 14},
     {0x40020410u, 0x00008000u, 15},
 };
-constexpr Field<Access::RW> gpiob_odr_odr[16] = {
+constexpr Field<Access::RW, gpio::Outputdata> gpiob_odr_odr[16] = {
     {0x40020414u, 0x00000001u, 0},
     {0x40020414u, 0x00000002u, 1},
     {0x40020414u, 0x00000004u, 2},
@@ -142,7 +144,7 @@ constexpr Field<Access::RW> gpiob_odr_odr[16] = {
     {0x40020414u, 0x00004000u, 14},
     {0x40020414u, 0x00008000u, 15},
 };
-constexpr Field<Access::WO> gpiob_bsrr_br[16] = {
+constexpr Field<Access::WO, gpio::Br> gpiob_bsrr_br[16] = {
     {0x40020418u, 0x00010000u, 16},
     {0x40020418u, 0x00020000u, 17},
     {0x40020418u, 0x00040000u, 18},
@@ -160,7 +162,7 @@ constexpr Field<Access::WO> gpiob_bsrr_br[16] = {
     {0x40020418u, 0x40000000u, 30},
     {0x40020418u, 0x80000000u, 31},
 };
-constexpr Field<Access::WO> gpiob_bsrr_bs[16] = {
+constexpr Field<Access::WO, gpio::Bs> gpiob_bsrr_bs[16] = {
     {0x40020418u, 0x00000001u, 0},
     {0x40020418u, 0x00000002u, 1},
     {0x40020418u, 0x00000004u, 2},
@@ -178,7 +180,7 @@ constexpr Field<Access::WO> gpiob_bsrr_bs[16] = {
     {0x40020418u, 0x00004000u, 14},
     {0x40020418u, 0x00008000u, 15},
 };
-constexpr Field<Access::RW> gpiob_lckr_lck[16] = {
+constexpr Field<Access::RW, gpio::Lock> gpiob_lckr_lck[16] = {
     {0x4002041Cu, 0x00000001u, 0},
     {0x4002041Cu, 0x00000002u, 1},
     {0x4002041Cu, 0x00000004u, 2},
@@ -196,8 +198,8 @@ constexpr Field<Access::RW> gpiob_lckr_lck[16] = {
     {0x4002041Cu, 0x00004000u, 14},
     {0x4002041Cu, 0x00008000u, 15},
 };
-constexpr Field<Access::RW> gpiob_lckr_lckk{0x4002041Cu, 0x00010000u, 16};
-constexpr Field<Access::RW> gpiob_afrl_afrl[8] = {
+constexpr Field<Access::RW, gpio::Lockkey> gpiob_lckr_lckk{0x4002041Cu, 0x00010000u, 16};
+constexpr Field<Access::RW, gpio::Alternatefunction> gpiob_afrl_afrl[8] = {
     {0x40020420u, 0x0000000Fu, 0},
     {0x40020420u, 0x000000F0u, 4},
     {0x40020420u, 0x00000F00u, 8},
@@ -207,13 +209,13 @@ constexpr Field<Access::RW> gpiob_afrl_afrl[8] = {
     {0x40020420u, 0x0F000000u, 24},
     {0x40020420u, 0xF0000000u, 28},
 };
-constexpr Field<Access::RW> gpiob_afrh_afrh15{0x40020424u, 0xF0000000u, 28};
-constexpr Field<Access::RW> gpiob_afrh_afrh14{0x40020424u, 0x0F000000u, 24};
-constexpr Field<Access::RW> gpiob_afrh_afrh13{0x40020424u, 0x00F00000u, 20};
-constexpr Field<Access::RW> gpiob_afrh_afrh12{0x40020424u, 0x000F0000u, 16};
-constexpr Field<Access::RW> gpiob_afrh_afrh11{0x40020424u, 0x0000F000u, 12};
-constexpr Field<Access::RW> gpiob_afrh_afrh10{0x40020424u, 0x00000F00u, 8};
-constexpr Field<Access::RW> gpiob_afrh_afrh9{0x40020424u, 0x000000F0u, 4};
-constexpr Field<Access::RW> gpiob_afrh_afrh8{0x40020424u, 0x0000000Fu, 0};
+constexpr Field<Access::RW, gpio::Alternatefunction> gpiob_afrh_afrh15{0x40020424u, 0xF0000000u, 28};
+constexpr Field<Access::RW, gpio::Alternatefunction> gpiob_afrh_afrh14{0x40020424u, 0x0F000000u, 24};
+constexpr Field<Access::RW, gpio::Alternatefunction> gpiob_afrh_afrh13{0x40020424u, 0x00F00000u, 20};
+constexpr Field<Access::RW, gpio::Alternatefunction> gpiob_afrh_afrh12{0x40020424u, 0x000F0000u, 16};
+constexpr Field<Access::RW, gpio::Alternatefunction> gpiob_afrh_afrh11{0x40020424u, 0x0000F000u, 12};
+constexpr Field<Access::RW, gpio::Alternatefunction> gpiob_afrh_afrh10{0x40020424u, 0x00000F00u, 8};
+constexpr Field<Access::RW, gpio::Alternatefunction> gpiob_afrh_afrh9{0x40020424u, 0x000000F0u, 4};
+constexpr Field<Access::RW, gpio::Alternatefunction> gpiob_afrh_afrh8{0x40020424u, 0x0000000Fu, 0};
 
 #endif // STM32_GPIOB_HPP

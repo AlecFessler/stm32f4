@@ -9,6 +9,64 @@
 
 #include "mmio.hpp"
 
+namespace dac {
+enum class Boff : uint32_t {
+    enabled = 0,
+    disabled = 1,
+};
+enum class Dmaen : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Dmaudr : uint32_t {
+    nounderrun = 0,
+    underrun = 1,
+};
+enum class Dmaudrie : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class En : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Mamp : uint32_t {
+    amp1 = 0,
+    amp3 = 1,
+    amp7 = 2,
+    amp15 = 3,
+    amp31 = 4,
+    amp63 = 5,
+    amp127 = 6,
+    amp255 = 7,
+    amp511 = 8,
+    amp1023 = 9,
+    amp2047 = 10,
+};
+enum class Swtrig : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Ten : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Tsel : uint32_t {
+    tim6trgo = 0,
+    tim8trgo = 1,
+    tim7trgo = 2,
+    tim5trgo = 3,
+    tim2trgo = 4,
+    tim4trgo = 5,
+    exti9 = 6,
+    swtrig = 7,
+};
+enum class Wave : uint32_t {
+    disabled = 0,
+    noise = 1,
+};
+} // namespace dac
+
 // The BASE and Regs struct are defined entirely for debug utility.
 constexpr uintptr_t DAC_BASE = 0x40007400;
 struct DacRegs {
@@ -42,24 +100,24 @@ static_assert(offsetof(DacRegs, dor1) == 44);
 static_assert(offsetof(DacRegs, dor2) == 48);
 static_assert(offsetof(DacRegs, sr) == 52);
 
-constexpr Field<Access::RW> dac_cr_dmaudrie2{0x40007400u, 0x20000000u, 29};
-constexpr Field<Access::RW> dac_cr_dmaudrie1{0x40007400u, 0x00002000u, 13};
-constexpr Field<Access::RW> dac_cr_dmaen2{0x40007400u, 0x10000000u, 28};
-constexpr Field<Access::RW> dac_cr_dmaen1{0x40007400u, 0x00001000u, 12};
-constexpr Field<Access::RW> dac_cr_mamp2{0x40007400u, 0x0F000000u, 24};
-constexpr Field<Access::RW> dac_cr_mamp1{0x40007400u, 0x00000F00u, 8};
-constexpr Field<Access::RW> dac_cr_wave2{0x40007400u, 0x00C00000u, 22};
-constexpr Field<Access::RW> dac_cr_wave1{0x40007400u, 0x000000C0u, 6};
-constexpr Field<Access::RW> dac_cr_tsel2{0x40007400u, 0x00380000u, 19};
-constexpr Field<Access::RW> dac_cr_tsel1{0x40007400u, 0x00000038u, 3};
-constexpr Field<Access::RW> dac_cr_ten2{0x40007400u, 0x00040000u, 18};
-constexpr Field<Access::RW> dac_cr_ten1{0x40007400u, 0x00000004u, 2};
-constexpr Field<Access::RW> dac_cr_boff2{0x40007400u, 0x00020000u, 17};
-constexpr Field<Access::RW> dac_cr_boff1{0x40007400u, 0x00000002u, 1};
-constexpr Field<Access::RW> dac_cr_en2{0x40007400u, 0x00010000u, 16};
-constexpr Field<Access::RW> dac_cr_en1{0x40007400u, 0x00000001u, 0};
-constexpr Field<Access::WO> dac_swtrigr_swtrig2{0x40007404u, 0x00000002u, 1};
-constexpr Field<Access::WO> dac_swtrigr_swtrig1{0x40007404u, 0x00000001u, 0};
+constexpr Field<Access::RW, dac::Dmaudrie> dac_cr_dmaudrie2{0x40007400u, 0x20000000u, 29};
+constexpr Field<Access::RW, dac::Dmaudrie> dac_cr_dmaudrie1{0x40007400u, 0x00002000u, 13};
+constexpr Field<Access::RW, dac::Dmaen> dac_cr_dmaen2{0x40007400u, 0x10000000u, 28};
+constexpr Field<Access::RW, dac::Dmaen> dac_cr_dmaen1{0x40007400u, 0x00001000u, 12};
+constexpr Field<Access::RW, dac::Mamp> dac_cr_mamp2{0x40007400u, 0x0F000000u, 24};
+constexpr Field<Access::RW, dac::Mamp> dac_cr_mamp1{0x40007400u, 0x00000F00u, 8};
+constexpr Field<Access::RW, dac::Wave> dac_cr_wave2{0x40007400u, 0x00C00000u, 22};
+constexpr Field<Access::RW, dac::Wave> dac_cr_wave1{0x40007400u, 0x000000C0u, 6};
+constexpr Field<Access::RW, dac::Tsel> dac_cr_tsel2{0x40007400u, 0x00380000u, 19};
+constexpr Field<Access::RW, dac::Tsel> dac_cr_tsel1{0x40007400u, 0x00000038u, 3};
+constexpr Field<Access::RW, dac::Ten> dac_cr_ten2{0x40007400u, 0x00040000u, 18};
+constexpr Field<Access::RW, dac::Ten> dac_cr_ten1{0x40007400u, 0x00000004u, 2};
+constexpr Field<Access::RW, dac::Boff> dac_cr_boff2{0x40007400u, 0x00020000u, 17};
+constexpr Field<Access::RW, dac::Boff> dac_cr_boff1{0x40007400u, 0x00000002u, 1};
+constexpr Field<Access::RW, dac::En> dac_cr_en2{0x40007400u, 0x00010000u, 16};
+constexpr Field<Access::RW, dac::En> dac_cr_en1{0x40007400u, 0x00000001u, 0};
+constexpr Field<Access::WO, dac::Swtrig> dac_swtrigr_swtrig2{0x40007404u, 0x00000002u, 1};
+constexpr Field<Access::WO, dac::Swtrig> dac_swtrigr_swtrig1{0x40007404u, 0x00000001u, 0};
 constexpr Field<Access::RW> dac_dhr12r1_dacc1dhr{0x40007408u, 0x00000FFFu, 0};
 constexpr Field<Access::RW> dac_dhr12l1_dacc1dhr{0x4000740Cu, 0x0000FFF0u, 4};
 constexpr Field<Access::RW> dac_dhr8r1_dacc1dhr{0x40007410u, 0x000000FFu, 0};
@@ -74,65 +132,7 @@ constexpr Field<Access::RW> dac_dhr8rd_dacc2dhr{0x40007428u, 0x0000FF00u, 8};
 constexpr Field<Access::RW> dac_dhr8rd_dacc1dhr{0x40007428u, 0x000000FFu, 0};
 constexpr Field<Access::RO> dac_dor1_dacc1dor{0x4000742Cu, 0x00000FFFu, 0};
 constexpr Field<Access::RO> dac_dor2_dacc2dor{0x40007430u, 0x00000FFFu, 0};
-constexpr Field<Access::RW> dac_sr_dmaudr2{0x40007434u, 0x20000000u, 29};
-constexpr Field<Access::RW> dac_sr_dmaudr1{0x40007434u, 0x00002000u, 13};
-
-namespace dac::boff {
-    constexpr uint32_t enabled = 0;
-    constexpr uint32_t disabled = 1;
-}
-namespace dac::dmaen {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace dac::dmaudr {
-    constexpr uint32_t nounderrun = 0;
-    constexpr uint32_t underrun = 1;
-}
-namespace dac::dmaudrie {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace dac::en {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace dac::mamp {
-    constexpr uint32_t amp4095 = -1;
-    constexpr uint32_t amp1 = 0;
-    constexpr uint32_t amp3 = 1;
-    constexpr uint32_t amp7 = 2;
-    constexpr uint32_t amp15 = 3;
-    constexpr uint32_t amp31 = 4;
-    constexpr uint32_t amp63 = 5;
-    constexpr uint32_t amp127 = 6;
-    constexpr uint32_t amp255 = 7;
-    constexpr uint32_t amp511 = 8;
-    constexpr uint32_t amp1023 = 9;
-    constexpr uint32_t amp2047 = 10;
-}
-namespace dac::swtrig {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace dac::ten {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace dac::tsel {
-    constexpr uint32_t tim6trgo = 0;
-    constexpr uint32_t tim8trgo = 1;
-    constexpr uint32_t tim7trgo = 2;
-    constexpr uint32_t tim5trgo = 3;
-    constexpr uint32_t tim2trgo = 4;
-    constexpr uint32_t tim4trgo = 5;
-    constexpr uint32_t exti9 = 6;
-    constexpr uint32_t swtrig = 7;
-}
-namespace dac::wave {
-    constexpr uint32_t triangle = -1;
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t noise = 1;
-}
+constexpr Field<Access::RW, dac::Dmaudr> dac_sr_dmaudr2{0x40007434u, 0x20000000u, 29};
+constexpr Field<Access::RW, dac::Dmaudr> dac_sr_dmaudr1{0x40007434u, 0x00002000u, 13};
 
 #endif // STM32_DAC_HPP

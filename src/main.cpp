@@ -5,16 +5,16 @@
 #include "startup.hpp"
 
 int main() {
-    rcc_ahb1enr_gpioben.rmw(rcc::en::enabled);
+    rcc_ahb1enr_gpioben.rmw(rcc::En::enabled);
 
-    gpiob_moder_moder[board::led_green].rmw(gpio::mode::output);
-    gpiob_bsrr_bs[board::led_green].write(gpio::bs::set);
+    gpiob_moder_moder[board::led_green].rmw(gpio::Mode::output);
+    gpiob_bsrr_bs[board::led_green].write(gpio::Bs::set);
 
-    gpiob_moder_moder[board::led_blue].rmw(gpio::mode::output);
-    gpiob_bsrr_bs[board::led_blue].write(gpio::bs::set);
+    gpiob_moder_moder[board::led_blue].rmw(gpio::Mode::output);
+    gpiob_bsrr_bs[board::led_blue].write(gpio::Bs::set);
 
-    gpiob_moder_moder[board::led_red].rmw(gpio::mode::output);
-    gpiob_bsrr_bs[board::led_red].write(gpio::bs::set);
+    gpiob_moder_moder[board::led_red].rmw(gpio::Mode::output);
+    gpiob_bsrr_bs[board::led_red].write(gpio::Bs::set);
 
     while (true);
     return 0;

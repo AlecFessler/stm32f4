@@ -9,6 +9,45 @@
 
 #include "mmio.hpp"
 
+namespace syscfg {
+enum class Cmp_pd : uint32_t {
+    powerdown = 0,
+    enabled = 1,
+};
+enum class Exti0 : uint32_t {
+    pa = 0,
+    pb = 1,
+    pc = 2,
+    pd = 3,
+    pe = 4,
+    pf = 5,
+    pg = 6,
+    ph = 7,
+    pi = 8,
+    pj = 9,
+    pk = 10,
+};
+enum class Mem_mode : uint32_t {
+    mainflash = 0,
+    systemflash = 1,
+    fsmcbank1 = 2,
+    embeddedsram = 3,
+    fmcsdrambank1 = 4,
+};
+enum class Mii_rmii_sel : uint32_t {
+    mii = 0,
+    rmii_phy = 1,
+};
+enum class Ready : uint32_t {
+    notready = 0,
+    ready = 1,
+};
+enum class Swp_fmc : uint32_t {
+    noswap = 0,
+    swapped = 1,
+};
+} // namespace syscfg
+
 // The BASE and Regs struct are defined entirely for debug utility.
 constexpr uintptr_t SYSCFG_BASE = 0x40013800;
 struct SyscfgRegs {
@@ -32,11 +71,11 @@ static_assert(offsetof(SyscfgRegs, cmpcr) == 32);
 constexpr Field<Access::RW> syscfg_memrm_mem_mode{0x40013800u, 0x00000007u, 0};
 constexpr Field<Access::RW> syscfg_memrm_fb_mode{0x40013800u, 0x00000100u, 8};
 constexpr Field<Access::RW> syscfg_memrm_swp_fmc{0x40013800u, 0x00000C00u, 10};
-constexpr Field<Access::RW> syscfg_pmc_mii_rmii_sel{0x40013804u, 0x00800000u, 23};
+constexpr Field<Access::RW, syscfg::Mii_rmii_sel> syscfg_pmc_mii_rmii_sel{0x40013804u, 0x00800000u, 23};
 constexpr Field<Access::RW> syscfg_pmc_adc1dc2{0x40013804u, 0x00010000u, 16};
 constexpr Field<Access::RW> syscfg_pmc_adc2dc2{0x40013804u, 0x00020000u, 17};
 constexpr Field<Access::RW> syscfg_pmc_adc3dc2{0x40013804u, 0x00040000u, 18};
-constexpr Field<Access::RW> syscfg_exticr1_exti[4] = {
+constexpr Field<Access::RW, syscfg::Exti0> syscfg_exticr1_exti[4] = {
     {0x40013808u, 0x0000000Fu, 0},
     {0x40013808u, 0x000000F0u, 4},
     {0x40013808u, 0x00000F00u, 8},
@@ -54,44 +93,7 @@ constexpr Field<Access::RW> syscfg_exticr4_exti15{0x40013814u, 0x0000F000u, 12};
 constexpr Field<Access::RW> syscfg_exticr4_exti14{0x40013814u, 0x00000F00u, 8};
 constexpr Field<Access::RW> syscfg_exticr4_exti13{0x40013814u, 0x000000F0u, 4};
 constexpr Field<Access::RW> syscfg_exticr4_exti12{0x40013814u, 0x0000000Fu, 0};
-constexpr Field<Access::RO> syscfg_cmpcr_ready{0x40013820u, 0x00000100u, 8};
-constexpr Field<Access::RO> syscfg_cmpcr_cmp_pd{0x40013820u, 0x00000001u, 0};
-
-namespace syscfg::cmp_pd {
-    constexpr uint32_t powerdown = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace syscfg::exti0 {
-    constexpr uint32_t pa = 0;
-    constexpr uint32_t pb = 1;
-    constexpr uint32_t pc = 2;
-    constexpr uint32_t pd = 3;
-    constexpr uint32_t pe = 4;
-    constexpr uint32_t pf = 5;
-    constexpr uint32_t pg = 6;
-    constexpr uint32_t ph = 7;
-    constexpr uint32_t pi = 8;
-    constexpr uint32_t pj = 9;
-    constexpr uint32_t pk = 10;
-}
-namespace syscfg::mem_mode {
-    constexpr uint32_t mainflash = 0;
-    constexpr uint32_t systemflash = 1;
-    constexpr uint32_t fsmcbank1 = 2;
-    constexpr uint32_t embeddedsram = 3;
-    constexpr uint32_t fmcsdrambank1 = 4;
-}
-namespace syscfg::mii_rmii_sel {
-    constexpr uint32_t mii = 0;
-    constexpr uint32_t rmii_phy = 1;
-}
-namespace syscfg::ready {
-    constexpr uint32_t notready = 0;
-    constexpr uint32_t ready = 1;
-}
-namespace syscfg::swp_fmc {
-    constexpr uint32_t noswap = 0;
-    constexpr uint32_t swapped = 1;
-}
+constexpr Field<Access::RO, syscfg::Ready> syscfg_cmpcr_ready{0x40013820u, 0x00000100u, 8};
+constexpr Field<Access::RO, syscfg::Cmp_pd> syscfg_cmpcr_cmp_pd{0x40013820u, 0x00000001u, 0};
 
 #endif // STM32_SYSCFG_HPP

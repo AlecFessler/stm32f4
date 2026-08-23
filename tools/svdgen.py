@@ -218,14 +218,20 @@ def collect_enum_values(spec):
         if name.startswith("_"):
             continue
         value = entry[0] if isinstance(entry, list) and entry else entry
-        if isinstance(value, int):
+        # svdtools uses -1 for "any other value", which has no C++ enumerator
+        if isinstance(value, int) and value >= 0:
             values[cpp_identifier(str(name).lower())] = value
     return values
 
 
 def load_enum_values(enumdir, paths):
-    """-> {namespace: {member: value}}"""
+    """-> ({enum_name: {member: value}}, [(register_glob, field_glob, enum_name)])
+
+    The second list is what lets a Field be typed: at emit time each field's
+    real register and field name is matched against these globs.
+    """
     out = {}
+    globs = []
     seen = set()
 
     def visit(rel):
@@ -252,11 +258,12 @@ def load_enum_values(enumdir, paths):
                     if namespace in out and out[namespace] != values:
                         continue
                     out[namespace] = values
+                    globs.append((register_glob, field_glob, namespace))
 
     for path in sorted(paths):
         visit(path)
 
-    return out
+    return out, globs
 
 
 def text(element, tag):
@@ -340,16 +347,54 @@ def field_access(field, register_access):
     return field.findtext("access") or register_access or "read-write"
 
 
+def enum_type(enum_globs, namespace, register_name, field_name):
+    """The enum class for one field, or None. Globs may be comma-separated
+    lists, and a register glob can be one too."""
+    for register_glob, field_glob, enum_name in enum_globs:
+        if not any(
+            fnmatch.fnmatchcase(register_name, g.strip().lstrip("?~"))
+            for g in register_glob.split(",")
+        ):
+            continue
+        if not any(
+            fnmatch.fnmatchcase(field_name, g.strip().lstrip("?~"))
+            for g in field_glob.split(",")
+        ):
+            continue
+        return f"{namespace}::{enum_name[:1].upper()}{enum_name[1:]}"
+    return None
+
+
+def field_type(access, enum):
+    """Field<Access::X> or Field<Access::X, gpio::Mode>"""
+    if enum:
+        return f"Field<{access_str_map[access]}, {enum}>"
+    return f"Field<{access_str_map[access]}>"
+
+
 def field_lines(
-    peripheral_name, register_name, register_base, register_access, arrays, singles
+    peripheral_name,
+    register_name,
+    register_base,
+    register_access,
+    arrays,
+    singles,
+    enum_globs=(),
+    enum_namespace="",
 ):
     """constexpr Field definitions: arrays for families, scalars for the rest."""
     lines = []
 
     for name_prefix, members in arrays.items():
         access = field_access(members[0], register_access)
+        enum = enum_type(
+            enum_globs,
+            enum_namespace,
+            register_name,
+            members[0].findtext("name", "MISSING"),
+        )
         lines.append(
-            f"constexpr Field<{access_str_map[access]}> "
+            f"constexpr {field_type(access, enum)} "
             f"{peripheral_name.lower()}_{register_name.lower()}_{name_prefix.lower()}"
             f"[{len(members)}] = {{"
         )
@@ -363,9 +408,10 @@ def field_lines(
     for field in singles:
         field_name = field.findtext("name", "MISSING")
         access = field_access(field, register_access)
+        enum = enum_type(enum_globs, enum_namespace, register_name, field_name)
         mask, bit_offset = field_mask(field)
         lines.append(
-            f"constexpr Field<{access_str_map[access]}> "
+            f"constexpr {field_type(access, enum)} "
             f"{peripheral_name.lower()}_{register_name.lower()}_{field_name.lower()}"
             f"{{0x{register_base:08X}u, "
             f"0x{mask:08X}u, "
@@ -377,13 +423,15 @@ def field_lines(
 
 def enum_lines(namespace, values):
     """namespace gpio::mode {constexpr uint32_t input = 0b00, ...}"""
-    lines = []
+    lines = [f"namespace {namespace} {{"]
     for name in sorted(values):
         members = values[name]
-        lines.append(f"namespace {namespace}::{name} {{")
+        enum = f"{name[:1].upper()}{name[1:]}"
+        lines.append(f"enum class {enum} : uint32_t {{")
         for member in sorted(members, key=lambda m: members[m]):
-            lines.append(f"    constexpr uint32_t {member} = {members[member]};")
-        lines.append("}")
+            lines.append(f"    {member} = {members[member]},")
+        lines.append("};")
+    lines.append(f"}} // namespace {namespace}")
     return lines
 
 
@@ -434,7 +482,15 @@ def struct_lines(peripheral_name, base, registers):
     return lines, asserts, ok
 
 
-def peripheral_header(peripheral_name, base, src, enums=None):
+def peripheral_header(
+    peripheral_name,
+    base,
+    src,
+    enums=None,
+    enum_globs=(),
+    enum_namespace="",
+    values_include="",
+):
     """One header: guard, debug struct, Field definitions."""
     guard = f"STM32_{peripheral_name.upper()}_HPP"
     lines = [
@@ -446,6 +502,14 @@ def peripheral_header(peripheral_name, base, src, enums=None):
         "#include <cstdint>\n",
         '#include "mmio.hpp"\n',
     ]
+
+    if values_include:
+        lines.append(f'#include "{values_include}"\n')
+
+    # must precede the Field definitions, which name these types
+    if enums:
+        lines.extend(enum_lines(peripheral_name.lower(), enums))
+        lines.append("")
 
     registers = sorted_registers(src)
 
@@ -469,14 +533,29 @@ def peripheral_header(peripheral_name, base, src, enums=None):
                 register.findtext("access"),
                 arrays,
                 singles,
+                enum_globs,
+                enum_namespace,
             )
         )
     lines.append("")
 
-    if enums:
-        lines.extend(enum_lines(peripheral_name.lower(), enums))
-        lines.append("")
+    lines.append(f"#endif // {guard}")
+    return lines
 
+
+def values_header(group_name, enums):
+    """Shared enum classes for a group, included by every member so each header
+    stands alone."""
+    guard = f"STM32_{group_name.upper()}_VALUES_HPP"
+    lines = [
+        "// DO NOT EDIT: PROGRAMATICALLY GENERATED CODE\n",
+        f"// {group_name} field values, shared by every {group_name} peripheral",
+        f"#ifndef {guard}",
+        f"#define {guard}\n",
+        "#include <cstdint>\n",
+    ]
+    lines.extend(enum_lines(group_name.lower(), enums))
+    lines.append("")
     lines.append(f"#endif // {guard}")
     return lines
 
@@ -493,9 +572,6 @@ def aggregate_header(group_name, members, enums=None):
     for member_name in sorted(members):
         lines.append(f'#include "{group_name.lower()}/{member_name.lower()}.hpp"')
     lines.append("")
-    if enums:
-        lines.extend(enum_lines(group_name.lower(), enums))
-        lines.append("")
     lines.append(f"#endif // {guard}")
     return lines
 
@@ -537,11 +613,22 @@ def main():
         src = resolve(peripheral, derivation_map)
 
         group_name = src.findtext("groupName")
-        # values shared by the whole group live in the aggregate instead
-        enums = (
-            None if group_name in uniform else enums_for(enum_files[peripheral_name])
+        values, enum_globs = enums_for(enum_files[peripheral_name])
+        shared = group_name in uniform
+        # shared values go in <group>/values.hpp, which each member includes so
+        # every header still compiles on its own
+        enums = None if shared else values
+        enum_namespace = (group_name if shared else peripheral_name).lower()
+        values_include = "values.hpp" if shared and values else ""
+        lines = peripheral_header(
+            peripheral_name,
+            base,
+            src,
+            enums,
+            enum_globs,
+            enum_namespace,
+            values_include,
         )
-        lines = peripheral_header(peripheral_name, base, src, enums)
 
         path = output_path(outdir, groups, group_name, peripheral_name)
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -550,8 +637,13 @@ def main():
     for group_name, members in groups.items():
         if len(members) <= 1:
             continue
-        enums = enums_for(enum_files[members[0]]) if group_name in uniform else None
-        lines = aggregate_header(group_name, members, enums)
+        values, _ = enums_for(enum_files[members[0]])
+        if group_name in uniform and values:
+            lines = values_header(group_name, values)
+            (outdir / group_name.lower() / "values.hpp").write_text(
+                "\n".join(lines) + "\n"
+            )
+        lines = aggregate_header(group_name, members)
         (outdir / f"{group_name.lower()}.hpp").write_text("\n".join(lines) + "\n")
 
 

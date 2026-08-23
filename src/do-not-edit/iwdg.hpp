@@ -9,6 +9,22 @@
 
 #include "mmio.hpp"
 
+namespace iwdg {
+enum class Key : uint32_t {
+    unlock = 21845,
+    feed = 43690,
+    start = 52428,
+};
+enum class Pr : uint32_t {
+    divideby4 = 0,
+    divideby8 = 1,
+    divideby16 = 2,
+    divideby32 = 3,
+    divideby64 = 4,
+    divideby128 = 5,
+};
+} // namespace iwdg
+
 // The BASE and Regs struct are defined entirely for debug utility.
 constexpr uintptr_t IWDG_BASE = 0x40003000;
 struct IwdgRegs {
@@ -22,25 +38,10 @@ static_assert(offsetof(IwdgRegs, pr) == 4);
 static_assert(offsetof(IwdgRegs, rlr) == 8);
 static_assert(offsetof(IwdgRegs, sr) == 12);
 
-constexpr Field<Access::WO> iwdg_kr_key{0x40003000u, 0x0000FFFFu, 0};
-constexpr Field<Access::RW> iwdg_pr_pr{0x40003004u, 0x00000007u, 0};
+constexpr Field<Access::WO, iwdg::Key> iwdg_kr_key{0x40003000u, 0x0000FFFFu, 0};
+constexpr Field<Access::RW, iwdg::Pr> iwdg_pr_pr{0x40003004u, 0x00000007u, 0};
 constexpr Field<Access::RW> iwdg_rlr_rl{0x40003008u, 0x00000FFFu, 0};
 constexpr Field<Access::RO> iwdg_sr_rvu{0x4000300Cu, 0x00000002u, 1};
 constexpr Field<Access::RO> iwdg_sr_pvu{0x4000300Cu, 0x00000001u, 0};
-
-namespace iwdg::key {
-    constexpr uint32_t unlock = 21845;
-    constexpr uint32_t feed = 43690;
-    constexpr uint32_t start = 52428;
-}
-namespace iwdg::pr {
-    constexpr uint32_t divideby256 = -1;
-    constexpr uint32_t divideby4 = 0;
-    constexpr uint32_t divideby8 = 1;
-    constexpr uint32_t divideby16 = 2;
-    constexpr uint32_t divideby32 = 3;
-    constexpr uint32_t divideby64 = 4;
-    constexpr uint32_t divideby128 = 5;
-}
 
 #endif // STM32_IWDG_HPP

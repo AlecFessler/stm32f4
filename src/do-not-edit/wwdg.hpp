@@ -9,6 +9,26 @@
 
 #include "mmio.hpp"
 
+namespace wwdg {
+enum class Ewi : uint32_t {
+    enable = 1,
+};
+enum class Ewif : uint32_t {
+    finished = 0,
+    pending = 1,
+};
+enum class Wdga : uint32_t {
+    disabled = 0,
+    enabled = 1,
+};
+enum class Wdgtb : uint32_t {
+    div1 = 0,
+    div2 = 1,
+    div4 = 2,
+    div8 = 3,
+};
+} // namespace wwdg
+
 // The BASE and Regs struct are defined entirely for debug utility.
 constexpr uintptr_t WWDG_BASE = 0x40002C00;
 struct WwdgRegs {
@@ -20,30 +40,12 @@ static_assert(offsetof(WwdgRegs, cr) == 0);
 static_assert(offsetof(WwdgRegs, cfr) == 4);
 static_assert(offsetof(WwdgRegs, sr) == 8);
 
-constexpr Field<Access::RW> wwdg_cr_wdga{0x40002C00u, 0x00000080u, 7};
+constexpr Field<Access::RW, wwdg::Wdga> wwdg_cr_wdga{0x40002C00u, 0x00000080u, 7};
 constexpr Field<Access::RW> wwdg_cr_t{0x40002C00u, 0x0000007Fu, 0};
-constexpr Field<Access::RW> wwdg_cfr_ewi{0x40002C04u, 0x00000200u, 9};
+constexpr Field<Access::RW, wwdg::Ewi> wwdg_cfr_ewi{0x40002C04u, 0x00000200u, 9};
 constexpr Field<Access::RW> wwdg_cfr_w{0x40002C04u, 0x0000007Fu, 0};
 constexpr Field<Access::RW> wwdg_cfr_wdgtb1{0x40002C04u, 0x00000100u, 8};
 constexpr Field<Access::RW> wwdg_cfr_wdgtb0{0x40002C04u, 0x00000080u, 7};
-constexpr Field<Access::RW> wwdg_sr_ewif{0x40002C08u, 0x00000001u, 0};
-
-namespace wwdg::ewi {
-    constexpr uint32_t enable = 1;
-}
-namespace wwdg::ewif {
-    constexpr uint32_t finished = 0;
-    constexpr uint32_t pending = 1;
-}
-namespace wwdg::wdga {
-    constexpr uint32_t disabled = 0;
-    constexpr uint32_t enabled = 1;
-}
-namespace wwdg::wdgtb {
-    constexpr uint32_t div1 = 0;
-    constexpr uint32_t div2 = 1;
-    constexpr uint32_t div4 = 2;
-    constexpr uint32_t div8 = 3;
-}
+constexpr Field<Access::RW, wwdg::Ewif> wwdg_sr_ewif{0x40002C08u, 0x00000001u, 0};
 
 #endif // STM32_WWDG_HPP
