@@ -59,7 +59,7 @@ constexpr Field<Access::RO, spi::Fre> spi6_sr_tifrfe{0x40015408u, 0x00000100u, 8
 constexpr Field<Access::RO, spi::Bsy> spi6_sr_bsy{0x40015408u, 0x00000080u, 7};
 constexpr Field<Access::RO, spi::Ovr> spi6_sr_ovr{0x40015408u, 0x00000040u, 6};
 constexpr Field<Access::RO, spi::Modf> spi6_sr_modf{0x40015408u, 0x00000020u, 5};
-constexpr Field<Access::RW, spi::Crcerr> spi6_sr_crcerr{0x40015408u, 0x00000010u, 4};
+constexpr Field<Access::RC_W0, spi::Crcerr, 0x00000000u, 0x00000010u, false> spi6_sr_crcerr{0x40015408u, 0x00000010u, 4};
 constexpr Field<Access::RO, spi::Udr> spi6_sr_udr{0x40015408u, 0x00000008u, 3};
 constexpr Field<Access::RO, spi::Chside> spi6_sr_chside{0x40015408u, 0x00000004u, 2};
 constexpr Field<Access::RO, spi::Txe> spi6_sr_txe{0x40015408u, 0x00000002u, 1};

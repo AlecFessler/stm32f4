@@ -219,12 +219,12 @@ static_assert(offsetof(Adc1Regs, jdr3) == 68);
 static_assert(offsetof(Adc1Regs, jdr4) == 72);
 static_assert(offsetof(Adc1Regs, dr) == 76);
 
-constexpr Field<Access::RW, adc1::Ovr> adc1_sr_ovr{0x40012000u, 0x00000020u, 5};
-constexpr Field<Access::RW, adc1::Strt> adc1_sr_strt{0x40012000u, 0x00000010u, 4};
-constexpr Field<Access::RW, adc1::Jstrt> adc1_sr_jstrt{0x40012000u, 0x00000008u, 3};
-constexpr Field<Access::RW, adc1::Jeoc> adc1_sr_jeoc{0x40012000u, 0x00000004u, 2};
-constexpr Field<Access::RW, adc1::Eoc> adc1_sr_eoc{0x40012000u, 0x00000002u, 1};
-constexpr Field<Access::RW, adc1::Awd> adc1_sr_awd{0x40012000u, 0x00000001u, 0};
+constexpr Field<Access::RC_W0, adc1::Ovr, 0x00000000u, 0x0000003Fu, false> adc1_sr_ovr{0x40012000u, 0x00000020u, 5};
+constexpr Field<Access::RC_W0, adc1::Strt, 0x00000000u, 0x0000003Fu, false> adc1_sr_strt{0x40012000u, 0x00000010u, 4};
+constexpr Field<Access::RC_W0, adc1::Jstrt, 0x00000000u, 0x0000003Fu, false> adc1_sr_jstrt{0x40012000u, 0x00000008u, 3};
+constexpr Field<Access::RC_W0, adc1::Jeoc, 0x00000000u, 0x0000003Fu, false> adc1_sr_jeoc{0x40012000u, 0x00000004u, 2};
+constexpr Field<Access::RC_W0, adc1::Eoc, 0x00000000u, 0x0000003Fu, false> adc1_sr_eoc{0x40012000u, 0x00000002u, 1};
+constexpr Field<Access::RC_W0, adc1::Awd, 0x00000000u, 0x0000003Fu, false> adc1_sr_awd{0x40012000u, 0x00000001u, 0};
 constexpr Field<Access::RW, adc1::Ovrie> adc1_cr1_ovrie{0x40012004u, 0x04000000u, 26};
 constexpr Field<Access::RW, adc1::Res> adc1_cr1_res{0x40012004u, 0x03000000u, 24};
 constexpr Field<Access::RW, adc1::Awden> adc1_cr1_awden{0x40012004u, 0x00800000u, 23};

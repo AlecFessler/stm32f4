@@ -2,7 +2,13 @@
 
 ## svdgen.py
 
-Generates `src/do-not-edit/` from `tools/svd/STM32F429.svd`.
+Generates `src/do-not-edit/` from three inputs:
+
+| | |
+|---|---|
+| `svd/STM32F429.svd` | registers, fields, offsets, access |
+| `enums/` | symbolic field values, vendored from stm32-rs |
+| `clear_on_write.yaml` | the access the SVD gets wrong |
 
 ```
 make regen         # run the generator
@@ -30,8 +36,8 @@ name, so a subdirectory would collide with the file.
 
 - `constexpr uintptr_t <PERIPHERAL>_BASE`
 - `struct <Peripheral>Regs` plus `static_assert(offsetof(...))` per register
-- `constexpr Field<Access::X[, Enum]> <per>_<reg>_<field>{addr, mask, shift}`
-- `constexpr Field<Access::X[, Enum]> <per>_<reg>_<stem>[N]` for numeric families
+- `constexpr Field<Access::X, ...> <per>_<reg>_<field>{addr, mask, shift}`
+- `constexpr Field<...> <per>_<reg>_<stem>[N]` for numeric families
 - `enum class <Field> : uint32_t` for fields with known values
 
 `addr` is the register's absolute address (peripheral base + register offset),
@@ -105,18 +111,98 @@ integer, there are >= 4 of them, and the indices run contiguously from 0.
 Elements are emitted in index order, not document order: the SVD lists fields
 high-to-low.
 
+### Clear-on-write
+
+`EXTI_PR`, every status register: writing a bit acknowledges a flag rather than
+storing a value. An `rmw` reads the word, catches whatever flags are set, and
+writing them back is what acknowledges them, so one meant for a single field
+eats all of them. The SVD has no `modifiedWriteValues` and calls these
+registers read-write, so the access comes from `clear_on_write.yaml`: 28
+registers covering 105 instances, read from the RM0090 Rev 19 diagrams. It
+nests peripheral, then register, then a list per category, every key a shell
+glob matched against SVD names:
+
+```yaml
+PWR:
+  CR:
+    rc_w1: [CSBF, CWUF]
+    keep: [UDEN, ODSWEN, ODEN, VOS, ...]
+```
+
+Globs starting with `*` need quoting, since YAML reads a leading `*` as an
+alias. An unknown category name is an error rather than a no-op: a misspelled
+`keep` would otherwise leave `has_rw` false and turn `RTC_ISR`'s `clear` into a
+store that zeroes `INIT`, with the table still looking right.
+
+Matched fields become `Access::RC_W1` or `Access::RC_W0`, which allows only
+`read` and `clear`. `write` and `rmw` fail to compile. 641 declarations.
+
+The hazard is not confined to the flags, though. A store is all-or-nothing, so
+writing *any* field also writes every flag beside it, and `pwr_cr_vos.rmw()`
+would acknowledge CWUF and CSBF on its way past. Every field in a listed
+register therefore carries three masks naming its neighbors by how each
+survives a write-back, and each accessor honors the ones it can:
+
+| | `preserve_w1_mask` | `preserve_w0_mask` | `has_rw` |
+|---|---|---|---|
+| bits | `rc_w1` | `rc_w0` | `rw` |
+| survive | a written 0 | a written 1 | only a read |
+| `write` | already 0 | `\| preserve_w0_mask` | not honored |
+| `rmw` | `& ~preserve_w1_mask` | `\| preserve_w0_mask` | the read |
+| `clear` | `& ~preserve_w1_mask` | `\| preserve_w0_mask` | picks the path |
+
+`has_rw` is a `bool`, not a mask: rw bits are recovered by the read itself, so
+nothing ever ORs or ANDs them and only their presence matters.
+
+`clear` needs a read only when `has_rw` is set. Otherwise the whole word is a
+compile-time constant and it compiles to one store: 621 of 641 declarations,
+the exceptions being `PWR_CR`, `PWR_CSR`, `RTC_ISR`, `ETH_MACFCR` and
+`OTG_*_HPRT`.
+
+That constant leaves everything outside the two masks at 0, which is why it is
+safe: writes to read-only bits are ignored, and 0 is the reset value RM0090
+asks reserved bits be kept at.
+
+The `keep` list is read from the diagrams, never from the SVD's access
+attribute, which calls `PWR_CSR.VOSRDY`, `RTC_ISR.SHPF` and
+`OTG_HS_GINTSTS.DATAFSUSP` read-write where RM0090 marks all three `r`.
+Deriving it would put five registers on the read path for nothing.
+
+Regen prints a warning for every field the SVD calls read-write that no list
+claims. Each is a table gap, an SVD access bug, or an `rs` bit. All ten that
+remain are accounted for: `VOSRDY` / `SHPF` / `DATAFSUSP` above, `CAN1` and
+`CAN2`'s `ABRQ*` and `RFOM*` (`rs`, so a written 0 is ignored and they need no
+read), and `BERR` / `BNA` in `OTG_HS_DIEPINTx`, which the SVD invents over bits
+RM0090 shows as Reserved.
+
+Eight of the 146 globs match nothing, because the SVD omits fields RM0090
+documents: `FLASH_SR.RDERR`, `DIEPINT.INEPNM` / `.AHBERR`, and `DOEPINT.NAK` /
+`.BERR` / `.OUTPKTERR` / `.STSPHSRX` / `.AHBERR`. Harmless, and correct against
+a fixed SVD.
+
 ## mmio.hpp
 
-Hand-written, not generated. Holds `Access`, `Field<Access, Value>`, and the
-`read` / `write` / `rmw` accessors.
+Hand-written, not generated. Holds `Access`, `Field`, and the `read` / `write`
+/ `rmw` / `clear` accessors.
 
-Two template parameters, both enforced at compile time and neither costing
-anything at runtime:
+| | read | write | rmw | clear |
+|---|---|---|---|---|
+| `RW` | y | y | y | . |
+| `RO` | y | . | . | . |
+| `WO` | . | y | . | . |
+| `RC_W1` | y | . | . | y |
+| `RC_W0` | y | . | . | y |
 
-- `Access` — `static_assert` rejects illegal access: no `rmw` on write-only, no
-  `read` on write-only, no `write` on read-only.
+Every `.` is a `static_assert`. Five template parameters, all enforced at
+compile time and none costing anything at runtime:
+
+- `Access` — the row above.
 - `Value` — the enum type this field accepts, defaulting to `uint32_t`. `read`
   returns it; `write` and `rmw` take it.
+- `preserve_w1_mask`, `preserve_w0_mask`, `has_rw` — the neighboring
+  clear-on-write bits, per the table in Clear-on-write. All three keep their
+  defaults on an ordinary register, which is what collapses every accessor to
+  its naive form.
 
 The accessors are `__attribute__((always_inline))`. Without it, `-Os` declines
 to inline `rmw` when the `Field` comes from an array subscript, which forces

@@ -83,7 +83,7 @@ constexpr Field<Access::RW, tim6::Cen> tim6_cr1_cen{0x40001000u, 0x00000001u, 0}
 constexpr Field<Access::RW, tim6::Mms> tim6_cr2_mms{0x40001004u, 0x00000070u, 4};
 constexpr Field<Access::RW, tim6::Ude> tim6_dier_ude{0x4000100Cu, 0x00000100u, 8};
 constexpr Field<Access::RW, tim6::Uie> tim6_dier_uie{0x4000100Cu, 0x00000001u, 0};
-constexpr Field<Access::RW, tim6::Uif> tim6_sr_uif{0x40001010u, 0x00000001u, 0};
+constexpr Field<Access::RC_W0, tim6::Uif, 0x00000000u, 0x00000001u, false> tim6_sr_uif{0x40001010u, 0x00000001u, 0};
 constexpr Field<Access::WO, tim6::Ug> tim6_egr_ug{0x40001014u, 0x00000001u, 0};
 constexpr Field<Access::RW> tim6_cnt_cnt{0x40001024u, 0x0000FFFFu, 0};
 constexpr Field<Access::RW> tim6_psc_psc{0x40001028u, 0x0000FFFFu, 0};

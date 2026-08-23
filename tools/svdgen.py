@@ -1,6 +1,7 @@
 import fnmatch
 import re
 import shutil
+import sys
 import xml.etree.ElementTree as ET
 from collections import defaultdict
 from pathlib import Path
@@ -11,6 +12,8 @@ access_str_map = {
     "read-write": "Access::RW",
     "read-only": "Access::RO",
     "write-only": "Access::WO",
+    "rc_w1": "Access::RC_W1",
+    "rc_w0": "Access::RC_W0",
 }
 
 FIELD_RE = re.compile(r"([A-Za-z_]+?)(\d+)")
@@ -342,9 +345,99 @@ def field_mask(field):
     return ((1 << bit_width) - 1) << bit_offset, bit_offset
 
 
-def field_access(field, register_access):
-    """Field access is usually absent; the SVD default is read-write."""
+def field_access(field, register_access, clear=None):
+    """Field access is usually absent; the SVD default is read-write.
+
+    The clear-on-write table overrides both. The SVD carries no
+    modifiedWriteValues, so it calls these bits read-write and nothing would
+    stop an rmw() that clears every other flag the register happened to hold.
+    """
+    if clear:
+        direction = clear[0].get(field.findtext("name", "MISSING"))
+        if direction:
+            return direction
     return field.findtext("access") or register_access or "read-write"
+
+
+def clear_on_write_entry(table, peripheral_name, register_name):
+    """The clear_on_write entry covering one register, or None."""
+    for peripheral_glob, registers in table.items():
+        if not fnmatch.fnmatchcase(peripheral_name, peripheral_glob):
+            continue
+        for register_glob, entry in registers.items():
+            if fnmatch.fnmatchcase(register_name, register_glob):
+                return entry
+    return None
+
+
+KINDS = ("rc_w1", "rc_w0", "keep")
+
+
+def load_clear_on_write(path):
+    """peripheral glob -> register glob -> {kind: [field globs]}
+
+    Rejects an unknown kind rather than ignoring it: a misspelled one would
+    otherwise leave a mask silently empty and the generated code silently
+    wrong, with the table still looking right.
+    """
+    table = load_yaml(path)
+    for peripheral_glob, registers in table.items():
+        for register_glob, entry in registers.items():
+            for kind in entry:
+                if kind not in KINDS:
+                    raise ValueError(
+                        f"{path.name}: {peripheral_glob}.{register_glob} lists "
+                        f"'{kind}', which is not one of {', '.join(KINDS)}"
+                    )
+    return table
+
+
+def clear_on_write(table, peripheral_name, register):
+    """-> ({field name: rc_w1 | rc_w0}, preserve_w1_mask, preserve_w0_mask,
+    has_rw), or None for a register the table does not cover.
+
+    Every field in a covered register carries all three masks, not just the
+    clear-on-write ones: the hazard is that writing any field also writes the
+    flags beside it, so it is the neighbors that need naming.
+    """
+    register_name = register.findtext("name", "MISSING")
+    entry = clear_on_write_entry(table, peripheral_name, register_name)
+    if not entry:
+        return None
+
+    directions = {}
+    masks = dict.fromkeys(KINDS, 0)
+    for field in register.findall("fields/field"):
+        field_name = field.findtext("name", "MISSING")
+        for kind in KINDS:
+            if any(fnmatch.fnmatchcase(field_name, g) for g in entry.get(kind, ())):
+                if kind != "keep":
+                    directions[field_name] = kind
+                masks[kind] |= field_mask(field)[0]
+                break
+
+    return directions, masks["rc_w1"], masks["rc_w0"], masks["keep"] != 0
+
+
+def uncovered_fields(table, peripheral_name, register):
+    """Fields the SVD calls read-write that no table list claims.
+
+    Each one is a table gap, an SVD access bug, or an rs bit. All three want a
+    look at the diagram, so the generator reports them rather than guessing.
+    """
+    entry = clear_on_write_entry(
+        table, peripheral_name, register.findtext("name", "MISSING")
+    )
+    if not entry:
+        return []
+    globs = [g for kind in KINDS for g in entry.get(kind, ())]
+    return [
+        name
+        for field in register.findall("fields/field")
+        if (name := field.findtext("name", "MISSING"))
+        and field_access(field, register.findtext("access")) == "read-write"
+        and not any(fnmatch.fnmatchcase(name, glob) for glob in globs)
+    ]
 
 
 def enum_type(enum_globs, namespace, register_name, field_name):
@@ -365,11 +458,30 @@ def enum_type(enum_globs, namespace, register_name, field_name):
     return None
 
 
-def field_type(access, enum):
-    """Field<Access::X> or Field<Access::X, gpio::Mode>"""
-    if enum:
-        return f"Field<{access_str_map[access]}, {enum}>"
-    return f"Field<{access_str_map[access]}>"
+def field_type(access, enum, preserve=(0, 0, False)):
+    """Field<Access::X>, Field<Access::X, gpio::Mode>, and for a field sharing
+    a register with clear-on-write flags, its two masks and has_rw. Those are
+    positional, so an untyped field has to name uint32_t to reach them."""
+    arguments = [access_str_map[access]]
+    if any(preserve):
+        preserve_w1_mask, preserve_w0_mask, has_rw = preserve
+        arguments += [
+            enum or "uint32_t",
+            f"0x{preserve_w1_mask:08X}u",
+            f"0x{preserve_w0_mask:08X}u",
+            "true" if has_rw else "false",
+        ]
+    elif enum:
+        arguments.append(enum)
+    return f"Field<{', '.join(arguments)}>"
+
+
+def preserve_masks(access, clear):
+    """Read-only fields never store, so this would be dead weight in the
+    declaration."""
+    if clear and access != "read-only":
+        return clear[1:]
+    return (0, 0, False)
 
 
 def field_lines(
@@ -381,12 +493,13 @@ def field_lines(
     singles,
     enum_globs=(),
     enum_namespace="",
+    clear=None,
 ):
     """constexpr Field definitions: arrays for families, scalars for the rest."""
     lines = []
 
     for name_prefix, members in arrays.items():
-        access = field_access(members[0], register_access)
+        access = field_access(members[0], register_access, clear)
         enum = enum_type(
             enum_globs,
             enum_namespace,
@@ -394,7 +507,7 @@ def field_lines(
             members[0].findtext("name", "MISSING"),
         )
         lines.append(
-            f"constexpr {field_type(access, enum)} "
+            f"constexpr {field_type(access, enum, preserve_masks(access, clear))} "
             f"{peripheral_name.lower()}_{register_name.lower()}_{name_prefix.lower()}"
             f"[{len(members)}] = {{"
         )
@@ -407,11 +520,11 @@ def field_lines(
 
     for field in singles:
         field_name = field.findtext("name", "MISSING")
-        access = field_access(field, register_access)
+        access = field_access(field, register_access, clear)
         enum = enum_type(enum_globs, enum_namespace, register_name, field_name)
         mask, bit_offset = field_mask(field)
         lines.append(
-            f"constexpr {field_type(access, enum)} "
+            f"constexpr {field_type(access, enum, preserve_masks(access, clear))} "
             f"{peripheral_name.lower()}_{register_name.lower()}_{field_name.lower()}"
             f"{{0x{register_base:08X}u, "
             f"0x{mask:08X}u, "
@@ -490,6 +603,7 @@ def peripheral_header(
     enum_globs=(),
     enum_namespace="",
     values_include="",
+    clear_table=None,
 ):
     """One header: guard, debug struct, Field definitions."""
     guard = f"STM32_{peripheral_name.upper()}_HPP"
@@ -535,6 +649,7 @@ def peripheral_header(
                 singles,
                 enum_globs,
                 enum_namespace,
+                clear_on_write(clear_table or {}, peripheral_name, register),
             )
         )
     lines.append("")
@@ -594,6 +709,9 @@ def main():
     peripherals = root.findall("peripherals/peripheral")
 
     enumdir = Path(__file__).resolve().parent.parent / "tools" / "enums"
+    clear_table = load_clear_on_write(
+        Path(__file__).resolve().parent / "clear_on_write.yaml"
+    )
 
     derivation_map = build_derivation_map(peripherals)
     groups = build_groups(peripherals, derivation_map)
@@ -607,10 +725,24 @@ def main():
             enum_cache[paths] = load_enum_values(enumdir, paths)
         return enum_cache[paths]
 
+    reported = set()
+
     for peripheral in peripherals:
         peripheral_name = peripheral.findtext("name", "MISSING")
         base = int(peripheral.findtext("baseAddress", "0"), 0)
         src = resolve(peripheral, derivation_map)
+
+        for register in src.findall("registers/register"):
+            uncovered = uncovered_fields(clear_table, peripheral_name, register)
+            # DIEPINT0..7 and friends repeat one layout; report the family once
+            key = (peripheral_name, tuple(uncovered))
+            if uncovered and key not in reported:
+                reported.add(key)
+                print(
+                    f"clear_on_write: {peripheral_name}.{register.findtext('name')} "
+                    f"not covered by any list: {' '.join(sorted(uncovered))}",
+                    file=sys.stderr,
+                )
 
         group_name = src.findtext("groupName")
         values, enum_globs = enums_for(enum_files[peripheral_name])
@@ -628,6 +760,7 @@ def main():
             enum_globs,
             enum_namespace,
             values_include,
+            clear_table,
         )
 
         path = output_path(outdir, groups, group_name, peripheral_name)

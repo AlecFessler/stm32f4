@@ -143,9 +143,9 @@ constexpr Field<Access::RW, tim11::Udis> tim11_cr1_udis{0x40014800u, 0x00000002u
 constexpr Field<Access::RW, tim11::Cen> tim11_cr1_cen{0x40014800u, 0x00000001u, 0};
 constexpr Field<Access::RW, tim11::Ccie> tim11_dier_cc1ie{0x4001480Cu, 0x00000002u, 1};
 constexpr Field<Access::RW, tim11::Uie> tim11_dier_uie{0x4001480Cu, 0x00000001u, 0};
-constexpr Field<Access::RW, tim11::Ccof> tim11_sr_cc1of{0x40014810u, 0x00000200u, 9};
-constexpr Field<Access::RW, tim11::Ccif> tim11_sr_cc1if{0x40014810u, 0x00000002u, 1};
-constexpr Field<Access::RW, tim11::Uif> tim11_sr_uif{0x40014810u, 0x00000001u, 0};
+constexpr Field<Access::RC_W0, tim11::Ccof, 0x00000000u, 0x00000203u, false> tim11_sr_cc1of{0x40014810u, 0x00000200u, 9};
+constexpr Field<Access::RC_W0, tim11::Ccif, 0x00000000u, 0x00000203u, false> tim11_sr_cc1if{0x40014810u, 0x00000002u, 1};
+constexpr Field<Access::RC_W0, tim11::Uif, 0x00000000u, 0x00000203u, false> tim11_sr_uif{0x40014810u, 0x00000001u, 0};
 constexpr Field<Access::WO, tim11::Ccg> tim11_egr_cc1g{0x40014814u, 0x00000002u, 1};
 constexpr Field<Access::WO, tim11::Ug> tim11_egr_ug{0x40014814u, 0x00000001u, 0};
 constexpr Field<Access::RW, tim11::Ocm> tim11_ccmr1_output_oc1m{0x40014818u, 0x00000070u, 4};

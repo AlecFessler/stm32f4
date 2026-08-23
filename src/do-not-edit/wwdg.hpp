@@ -46,6 +46,6 @@ constexpr Field<Access::RW, wwdg::Ewi> wwdg_cfr_ewi{0x40002C04u, 0x00000200u, 9}
 constexpr Field<Access::RW> wwdg_cfr_w{0x40002C04u, 0x0000007Fu, 0};
 constexpr Field<Access::RW> wwdg_cfr_wdgtb1{0x40002C04u, 0x00000100u, 8};
 constexpr Field<Access::RW> wwdg_cfr_wdgtb0{0x40002C04u, 0x00000080u, 7};
-constexpr Field<Access::RW, wwdg::Ewif> wwdg_sr_ewif{0x40002C08u, 0x00000001u, 0};
+constexpr Field<Access::RC_W0, wwdg::Ewif, 0x00000000u, 0x00000001u, false> wwdg_sr_ewif{0x40002C08u, 0x00000001u, 0};
 
 #endif // STM32_WWDG_HPP

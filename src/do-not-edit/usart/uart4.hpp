@@ -173,10 +173,10 @@ static_assert(offsetof(Uart4Regs, cr1) == 12);
 static_assert(offsetof(Uart4Regs, cr2) == 16);
 static_assert(offsetof(Uart4Regs, cr3) == 20);
 
-constexpr Field<Access::RW, uart4::Lbd> uart4_sr_lbd{0x40004C00u, 0x00000100u, 8};
+constexpr Field<Access::RC_W0, uart4::Lbd, 0x00000000u, 0x00000160u, false> uart4_sr_lbd{0x40004C00u, 0x00000100u, 8};
 constexpr Field<Access::RO, uart4::Txe> uart4_sr_txe{0x40004C00u, 0x00000080u, 7};
-constexpr Field<Access::RW, uart4::Tc> uart4_sr_tc{0x40004C00u, 0x00000040u, 6};
-constexpr Field<Access::RW, uart4::Rxne> uart4_sr_rxne{0x40004C00u, 0x00000020u, 5};
+constexpr Field<Access::RC_W0, uart4::Tc, 0x00000000u, 0x00000160u, false> uart4_sr_tc{0x40004C00u, 0x00000040u, 6};
+constexpr Field<Access::RC_W0, uart4::Rxne, 0x00000000u, 0x00000160u, false> uart4_sr_rxne{0x40004C00u, 0x00000020u, 5};
 constexpr Field<Access::RO, uart4::Idle> uart4_sr_idle{0x40004C00u, 0x00000010u, 4};
 constexpr Field<Access::RO, uart4::Ore> uart4_sr_ore{0x40004C00u, 0x00000008u, 3};
 constexpr Field<Access::RO, uart4::Ne> uart4_sr_nf{0x40004C00u, 0x00000004u, 2};

@@ -190,12 +190,12 @@ constexpr Field<Access::WO, flash::Icrst> flash_acr_icrst{0x40023C00u, 0x0000080
 constexpr Field<Access::RW, flash::Dcrst> flash_acr_dcrst{0x40023C00u, 0x00001000u, 12};
 constexpr Field<Access::WO> flash_keyr_key{0x40023C04u, 0xFFFFFFFFu, 0};
 constexpr Field<Access::WO> flash_optkeyr_optkey{0x40023C08u, 0xFFFFFFFFu, 0};
-constexpr Field<Access::RW, flash::Eop> flash_sr_eop{0x40023C0Cu, 0x00000001u, 0};
-constexpr Field<Access::RW, flash::Operr> flash_sr_operr{0x40023C0Cu, 0x00000002u, 1};
-constexpr Field<Access::RW, flash::Wrperr> flash_sr_wrperr{0x40023C0Cu, 0x00000010u, 4};
-constexpr Field<Access::RW, flash::Pgaerr> flash_sr_pgaerr{0x40023C0Cu, 0x00000020u, 5};
-constexpr Field<Access::RW, flash::Pgperr> flash_sr_pgperr{0x40023C0Cu, 0x00000040u, 6};
-constexpr Field<Access::RW, flash::Pgserr> flash_sr_pgserr{0x40023C0Cu, 0x00000080u, 7};
+constexpr Field<Access::RC_W1, flash::Eop, 0x000000F3u, 0x00000000u, false> flash_sr_eop{0x40023C0Cu, 0x00000001u, 0};
+constexpr Field<Access::RC_W1, flash::Operr, 0x000000F3u, 0x00000000u, false> flash_sr_operr{0x40023C0Cu, 0x00000002u, 1};
+constexpr Field<Access::RC_W1, flash::Wrperr, 0x000000F3u, 0x00000000u, false> flash_sr_wrperr{0x40023C0Cu, 0x00000010u, 4};
+constexpr Field<Access::RC_W1, flash::Pgaerr, 0x000000F3u, 0x00000000u, false> flash_sr_pgaerr{0x40023C0Cu, 0x00000020u, 5};
+constexpr Field<Access::RC_W1, flash::Pgperr, 0x000000F3u, 0x00000000u, false> flash_sr_pgperr{0x40023C0Cu, 0x00000040u, 6};
+constexpr Field<Access::RC_W1, flash::Pgserr, 0x000000F3u, 0x00000000u, false> flash_sr_pgserr{0x40023C0Cu, 0x00000080u, 7};
 constexpr Field<Access::RO, flash::Bsy> flash_sr_bsy{0x40023C0Cu, 0x00010000u, 16};
 constexpr Field<Access::RW, flash::Pg> flash_cr_pg{0x40023C10u, 0x00000001u, 0};
 constexpr Field<Access::RW, flash::Ser> flash_cr_ser{0x40023C10u, 0x00000002u, 1};

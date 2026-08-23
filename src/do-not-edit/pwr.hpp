@@ -114,29 +114,29 @@ struct PwrRegs {
 static_assert(offsetof(PwrRegs, cr) == 0);
 static_assert(offsetof(PwrRegs, csr) == 4);
 
-constexpr Field<Access::RW, pwr::Lpds> pwr_cr_lpds{0x40007000u, 0x00000001u, 0};
-constexpr Field<Access::RW, pwr::Pdds> pwr_cr_pdds{0x40007000u, 0x00000002u, 1};
-constexpr Field<Access::RW, pwr::Cwuf> pwr_cr_cwuf{0x40007000u, 0x00000004u, 2};
-constexpr Field<Access::RW, pwr::Csbf> pwr_cr_csbf{0x40007000u, 0x00000008u, 3};
-constexpr Field<Access::RW, pwr::Pvde> pwr_cr_pvde{0x40007000u, 0x00000010u, 4};
-constexpr Field<Access::RW> pwr_cr_pls{0x40007000u, 0x000000E0u, 5};
-constexpr Field<Access::RW, pwr::Dbp> pwr_cr_dbp{0x40007000u, 0x00000100u, 8};
-constexpr Field<Access::RW, pwr::Fpds> pwr_cr_fpds{0x40007000u, 0x00000200u, 9};
-constexpr Field<Access::RW> pwr_cr_lplvds{0x40007000u, 0x00000400u, 10};
-constexpr Field<Access::RW> pwr_cr_mrlvds{0x40007000u, 0x00000800u, 11};
-constexpr Field<Access::RW, pwr::Vos> pwr_cr_vos{0x40007000u, 0x0000C000u, 14};
-constexpr Field<Access::RW, pwr::Oden> pwr_cr_oden{0x40007000u, 0x00010000u, 16};
-constexpr Field<Access::RW, pwr::Odswen> pwr_cr_odswen{0x40007000u, 0x00020000u, 17};
-constexpr Field<Access::RW, pwr::Uden> pwr_cr_uden{0x40007000u, 0x000C0000u, 18};
+constexpr Field<Access::RW, pwr::Lpds, 0x0000000Cu, 0x00000000u, true> pwr_cr_lpds{0x40007000u, 0x00000001u, 0};
+constexpr Field<Access::RW, pwr::Pdds, 0x0000000Cu, 0x00000000u, true> pwr_cr_pdds{0x40007000u, 0x00000002u, 1};
+constexpr Field<Access::RC_W1, pwr::Cwuf, 0x0000000Cu, 0x00000000u, true> pwr_cr_cwuf{0x40007000u, 0x00000004u, 2};
+constexpr Field<Access::RC_W1, pwr::Csbf, 0x0000000Cu, 0x00000000u, true> pwr_cr_csbf{0x40007000u, 0x00000008u, 3};
+constexpr Field<Access::RW, pwr::Pvde, 0x0000000Cu, 0x00000000u, true> pwr_cr_pvde{0x40007000u, 0x00000010u, 4};
+constexpr Field<Access::RW, uint32_t, 0x0000000Cu, 0x00000000u, true> pwr_cr_pls{0x40007000u, 0x000000E0u, 5};
+constexpr Field<Access::RW, pwr::Dbp, 0x0000000Cu, 0x00000000u, true> pwr_cr_dbp{0x40007000u, 0x00000100u, 8};
+constexpr Field<Access::RW, pwr::Fpds, 0x0000000Cu, 0x00000000u, true> pwr_cr_fpds{0x40007000u, 0x00000200u, 9};
+constexpr Field<Access::RW, uint32_t, 0x0000000Cu, 0x00000000u, true> pwr_cr_lplvds{0x40007000u, 0x00000400u, 10};
+constexpr Field<Access::RW, uint32_t, 0x0000000Cu, 0x00000000u, true> pwr_cr_mrlvds{0x40007000u, 0x00000800u, 11};
+constexpr Field<Access::RW, pwr::Vos, 0x0000000Cu, 0x00000000u, true> pwr_cr_vos{0x40007000u, 0x0000C000u, 14};
+constexpr Field<Access::RW, pwr::Oden, 0x0000000Cu, 0x00000000u, true> pwr_cr_oden{0x40007000u, 0x00010000u, 16};
+constexpr Field<Access::RW, pwr::Odswen, 0x0000000Cu, 0x00000000u, true> pwr_cr_odswen{0x40007000u, 0x00020000u, 17};
+constexpr Field<Access::RW, pwr::Uden, 0x0000000Cu, 0x00000000u, true> pwr_cr_uden{0x40007000u, 0x000C0000u, 18};
 constexpr Field<Access::RO, pwr::Wuf> pwr_csr_wuf{0x40007004u, 0x00000001u, 0};
 constexpr Field<Access::RO, pwr::Sbf> pwr_csr_sbf{0x40007004u, 0x00000002u, 1};
 constexpr Field<Access::RO, pwr::Pvdo> pwr_csr_pvdo{0x40007004u, 0x00000004u, 2};
 constexpr Field<Access::RO, pwr::Brr> pwr_csr_brr{0x40007004u, 0x00000008u, 3};
-constexpr Field<Access::RW, pwr::Ewup> pwr_csr_ewup{0x40007004u, 0x00000100u, 8};
-constexpr Field<Access::RW, pwr::Bre> pwr_csr_bre{0x40007004u, 0x00000200u, 9};
-constexpr Field<Access::RW, pwr::Vosrdy> pwr_csr_vosrdy{0x40007004u, 0x00004000u, 14};
+constexpr Field<Access::RW, pwr::Ewup, 0x000C0000u, 0x00000000u, true> pwr_csr_ewup{0x40007004u, 0x00000100u, 8};
+constexpr Field<Access::RW, pwr::Bre, 0x000C0000u, 0x00000000u, true> pwr_csr_bre{0x40007004u, 0x00000200u, 9};
+constexpr Field<Access::RW, pwr::Vosrdy, 0x000C0000u, 0x00000000u, true> pwr_csr_vosrdy{0x40007004u, 0x00004000u, 14};
 constexpr Field<Access::RO, pwr::Odrdy> pwr_csr_odrdy{0x40007004u, 0x00010000u, 16};
 constexpr Field<Access::RO, pwr::Odswrdy> pwr_csr_odswrdy{0x40007004u, 0x00020000u, 17};
-constexpr Field<Access::RW, pwr::Udrdy> pwr_csr_udrdy{0x40007004u, 0x000C0000u, 18};
+constexpr Field<Access::RC_W1, pwr::Udrdy, 0x000C0000u, 0x00000000u, true> pwr_csr_udrdy{0x40007004u, 0x000C0000u, 18};
 
 #endif // STM32_PWR_HPP

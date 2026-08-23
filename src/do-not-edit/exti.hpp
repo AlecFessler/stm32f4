@@ -184,7 +184,7 @@ constexpr Field<Access::RW, exti::Swier> exti_swier_swier[23] = {
     {0x40013C10u, 0x00200000u, 21},
     {0x40013C10u, 0x00400000u, 22},
 };
-constexpr Field<Access::RW, exti::Pr> exti_pr_pr[23] = {
+constexpr Field<Access::RC_W1, exti::Pr, 0x007FFFFFu, 0x00000000u, false> exti_pr_pr[23] = {
     {0x40013C14u, 0x00000001u, 0},
     {0x40013C14u, 0x00000002u, 1},
     {0x40013C14u, 0x00000004u, 2},

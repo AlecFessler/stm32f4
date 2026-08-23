@@ -57,8 +57,8 @@ static_assert(offsetof(RngRegs, dr) == 8);
 
 constexpr Field<Access::RW, rng::Ie> rng_cr_ie{0x50060800u, 0x00000008u, 3};
 constexpr Field<Access::RW, rng::Rngen> rng_cr_rngen{0x50060800u, 0x00000004u, 2};
-constexpr Field<Access::RW, rng::Seis> rng_sr_seis{0x50060804u, 0x00000040u, 6};
-constexpr Field<Access::RW, rng::Ceis> rng_sr_ceis{0x50060804u, 0x00000020u, 5};
+constexpr Field<Access::RC_W0, rng::Seis, 0x00000000u, 0x00000060u, false> rng_sr_seis{0x50060804u, 0x00000040u, 6};
+constexpr Field<Access::RC_W0, rng::Ceis, 0x00000000u, 0x00000060u, false> rng_sr_ceis{0x50060804u, 0x00000020u, 5};
 constexpr Field<Access::RO, rng::Secs> rng_sr_secs{0x50060804u, 0x00000004u, 2};
 constexpr Field<Access::RO, rng::Cecs> rng_sr_cecs{0x50060804u, 0x00000002u, 1};
 constexpr Field<Access::RO, rng::Drdy> rng_sr_drdy{0x50060804u, 0x00000001u, 0};

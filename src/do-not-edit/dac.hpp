@@ -132,7 +132,7 @@ constexpr Field<Access::RW> dac_dhr8rd_dacc2dhr{0x40007428u, 0x0000FF00u, 8};
 constexpr Field<Access::RW> dac_dhr8rd_dacc1dhr{0x40007428u, 0x000000FFu, 0};
 constexpr Field<Access::RO> dac_dor1_dacc1dor{0x4000742Cu, 0x00000FFFu, 0};
 constexpr Field<Access::RO> dac_dor2_dacc2dor{0x40007430u, 0x00000FFFu, 0};
-constexpr Field<Access::RW, dac::Dmaudr> dac_sr_dmaudr2{0x40007434u, 0x20000000u, 29};
-constexpr Field<Access::RW, dac::Dmaudr> dac_sr_dmaudr1{0x40007434u, 0x00002000u, 13};
+constexpr Field<Access::RC_W1, dac::Dmaudr, 0x20002000u, 0x00000000u, false> dac_sr_dmaudr2{0x40007434u, 0x20000000u, 29};
+constexpr Field<Access::RC_W1, dac::Dmaudr, 0x20002000u, 0x00000000u, false> dac_sr_dmaudr1{0x40007434u, 0x00002000u, 13};
 
 #endif // STM32_DAC_HPP

@@ -217,11 +217,11 @@ static_assert(offsetof(Usart2Regs, cr2) == 16);
 static_assert(offsetof(Usart2Regs, cr3) == 20);
 static_assert(offsetof(Usart2Regs, gtpr) == 24);
 
-constexpr Field<Access::RW, usart2::Cts> usart2_sr_cts{0x40004400u, 0x00000200u, 9};
-constexpr Field<Access::RW, usart2::Lbd> usart2_sr_lbd{0x40004400u, 0x00000100u, 8};
+constexpr Field<Access::RC_W0, usart2::Cts, 0x00000000u, 0x00000360u, false> usart2_sr_cts{0x40004400u, 0x00000200u, 9};
+constexpr Field<Access::RC_W0, usart2::Lbd, 0x00000000u, 0x00000360u, false> usart2_sr_lbd{0x40004400u, 0x00000100u, 8};
 constexpr Field<Access::RO, usart2::Txe> usart2_sr_txe{0x40004400u, 0x00000080u, 7};
-constexpr Field<Access::RW, usart2::Tc> usart2_sr_tc{0x40004400u, 0x00000040u, 6};
-constexpr Field<Access::RW, usart2::Rxne> usart2_sr_rxne{0x40004400u, 0x00000020u, 5};
+constexpr Field<Access::RC_W0, usart2::Tc, 0x00000000u, 0x00000360u, false> usart2_sr_tc{0x40004400u, 0x00000040u, 6};
+constexpr Field<Access::RC_W0, usart2::Rxne, 0x00000000u, 0x00000360u, false> usart2_sr_rxne{0x40004400u, 0x00000020u, 5};
 constexpr Field<Access::RO, usart2::Idle> usart2_sr_idle{0x40004400u, 0x00000010u, 4};
 constexpr Field<Access::RO, usart2::Ore> usart2_sr_ore{0x40004400u, 0x00000008u, 3};
 constexpr Field<Access::RO, usart2::Ne> usart2_sr_nf{0x40004400u, 0x00000004u, 2};

@@ -189,12 +189,12 @@ constexpr Field<Access::RW, tim12::Tie> tim12_dier_tie{0x4000180Cu, 0x00000040u,
 constexpr Field<Access::RW, tim12::Ccie> tim12_dier_cc2ie{0x4000180Cu, 0x00000004u, 2};
 constexpr Field<Access::RW, tim12::Ccie> tim12_dier_cc1ie{0x4000180Cu, 0x00000002u, 1};
 constexpr Field<Access::RW, tim12::Uie> tim12_dier_uie{0x4000180Cu, 0x00000001u, 0};
-constexpr Field<Access::RW, tim12::Ccof> tim12_sr_cc2of{0x40001810u, 0x00000400u, 10};
-constexpr Field<Access::RW, tim12::Ccof> tim12_sr_cc1of{0x40001810u, 0x00000200u, 9};
-constexpr Field<Access::RW, tim12::Tif> tim12_sr_tif{0x40001810u, 0x00000040u, 6};
-constexpr Field<Access::RW, tim12::Ccif> tim12_sr_cc2if{0x40001810u, 0x00000004u, 2};
-constexpr Field<Access::RW, tim12::Ccif> tim12_sr_cc1if{0x40001810u, 0x00000002u, 1};
-constexpr Field<Access::RW, tim12::Uif> tim12_sr_uif{0x40001810u, 0x00000001u, 0};
+constexpr Field<Access::RC_W0, tim12::Ccof, 0x00000000u, 0x00000647u, false> tim12_sr_cc2of{0x40001810u, 0x00000400u, 10};
+constexpr Field<Access::RC_W0, tim12::Ccof, 0x00000000u, 0x00000647u, false> tim12_sr_cc1of{0x40001810u, 0x00000200u, 9};
+constexpr Field<Access::RC_W0, tim12::Tif, 0x00000000u, 0x00000647u, false> tim12_sr_tif{0x40001810u, 0x00000040u, 6};
+constexpr Field<Access::RC_W0, tim12::Ccif, 0x00000000u, 0x00000647u, false> tim12_sr_cc2if{0x40001810u, 0x00000004u, 2};
+constexpr Field<Access::RC_W0, tim12::Ccif, 0x00000000u, 0x00000647u, false> tim12_sr_cc1if{0x40001810u, 0x00000002u, 1};
+constexpr Field<Access::RC_W0, tim12::Uif, 0x00000000u, 0x00000647u, false> tim12_sr_uif{0x40001810u, 0x00000001u, 0};
 constexpr Field<Access::WO, tim12::Tg> tim12_egr_tg{0x40001814u, 0x00000040u, 6};
 constexpr Field<Access::WO, tim12::Ccg> tim12_egr_cc2g{0x40001814u, 0x00000004u, 2};
 constexpr Field<Access::WO, tim12::Ccg> tim12_egr_cc1g{0x40001814u, 0x00000002u, 1};

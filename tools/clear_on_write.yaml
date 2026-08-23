@@ -1,0 +1,160 @@
+# Clear-on-write field access, read from the RM0090 Rev 19 register diagrams.
+#
+# The SVD has no modifiedWriteValues, so it calls these registers read-write and
+# nothing stops a read-modify-write on them. An RMW on a clear-on-write register
+# acknowledges every flag that happened to be set at the read, not just the one
+# you meant.
+#
+# RM0090 marks it per bit (see the abbreviation list, p.57):
+#
+#     rc_w1   clear this bit by writing 1;  writing 0 has no effect
+#     rc_w0   clear this bit by writing 0;  writing 1 has no effect
+#     rs      set this bit by writing 1;    writing 0 has no effect
+#
+# A 32-bit store is all-or-nothing, so every write to one of these registers is
+# also a decision about every flag in it. Each register lists its bits by how
+# the generated code has to preserve them:
+#
+#     rc_w1   preserved by writing 0    -> preserve_w1_mask
+#     rc_w0   preserved by writing 1    -> preserve_w0_mask
+#     keep    preserved only by reading -> has_rw
+#
+# keep is the rw bits: real storage whose value cannot be reconstructed, so
+# touching the register at all costs a read. Only five registers have any. Bits
+# that are r, rs, or reserved belong in no list, because a written 0 is correct
+# or harmless for all three, which is what a bare store already gives them.
+#
+# Read keep from the manual, never from the SVD's access attribute: the SVD
+# calls PWR_CSR.VOSRDY, RTC_ISR.SHPF and OTG_HS_GINTSTS.DATAFSUSP read-write
+# where RM0090 marks all three r.
+#
+# Every key is a shell glob: peripheral, then register, then each field name.
+
+EXTI:
+  PR:
+    rc_w1: [PR*]
+
+USART*:
+  SR:
+    rc_w0: [CTS, LBD, TC, RXNE]
+
+UART*:
+  SR:
+    rc_w0: [CTS, LBD, TC, RXNE]
+
+SPI*:
+  SR:
+    rc_w0: [CRCERR]
+
+I2S*ext:
+  SR:
+    rc_w0: [CRCERR]
+
+TIM*:
+  SR:
+    rc_w0: ["*IF", "*OF"]
+
+I2C*:
+  SR1:
+    rc_w0: [SMBALERT, TIMEOUT, PECERR, OVR, AF, ARLO, BERR]
+
+ADC*:
+  SR:
+    rc_w0: [OVR, STRT, JSTRT, JEOC, EOC, AWD]
+
+WWDG:
+  SR:
+    rc_w0: [EWIF]
+
+RNG:
+  SR:
+    rc_w0: [SEIS, CEIS]
+
+HASH:
+  SR:
+    rc_w0: [DCIS, DINIS]
+
+DAC:
+  SR:
+    rc_w1: [DMAUDR1, DMAUDR2]
+
+DMA2D:
+  IFCR:
+    rc_w1: [C*IF]
+
+FLASH:
+  SR:
+    rc_w1: [RDERR, PGSERR, PGPERR, PGAERR, WRPERR, OPERR, EOP]
+
+# ABRQ* and RFOM* are rs, so they need no read: a bare store gives them 0, which
+# they ignore. That is why neither register has a keep list.
+CAN*:
+  TSR:
+    rc_w1: [TERR*, ALST*, TXOK*, RQCP*]
+  MSR:
+    rc_w1: [SLAKI, WKUI, ERRI]
+  RF0R:
+    rc_w1: [FOVR0, FULL0]
+  RF1R:
+    rc_w1: [FOVR1, FULL1]
+
+PWR:
+  CR:
+    rc_w1: [CSBF, CWUF]
+    keep: [UDEN, ODSWEN, ODEN, VOS, MRLVDS, LPLVDS, FPDS, DBP, PLS, PVDE,
+           PDDS, LPDS]
+  CSR:
+    rc_w1: [UDRDY]
+    keep: [BRE, EWUP]
+
+RTC:
+  ISR:
+    rc_w0: [TAMP2F, TAMP1F, TSOVF, TSF, WUTF, ALRBF, ALRAF, RSF]
+    keep: [INIT]
+
+Ethernet_MAC:
+  MACFCR:
+    rc_w1: [FCB]
+    keep: [PT, ZQPD, PLT, UPFD, RFCE, TFCE]
+
+# USB OTG: same core in FS and HS, but HS adds bits FS does not have (NYET,
+# AHBERR, TXFIFOUDRN). Those globs simply match nothing on FS.
+OTG_*_GLOBAL:
+  "*GOTGINT":
+    rc_w1: [DBCDNE, ADTOCHG, HNGDET, HNSSCHG, SRSSCHG, SEDET]
+  "*GINTSTS":
+    rc_w1: [WKU*INT, SRQINT, DISCINT, CIDSCHG, "*PXFR_INCOMPISOOUT", IISOIXFR,
+            EOPF, ISOODRP, ENUMDNE, USBRST, USBSUSP, ESUSP, SOF, MMIS]
+
+OTG_*_HOST:
+  "*HCINT[0-9]*":
+    rc_w1: [DTERR, FRMOR, BBERR, TXERR, NYET, ACK, NAK, STALL, AHBERR, CHH,
+            XFRC]
+  # the only register mixing both directions
+  "*HPRT":
+    rc_w1: [PCDET, PENCHNG, POCCHNG]
+    rc_w0: [PENA]
+    keep: [PTCTL, PPWR, PRST, PSUSP, PRES]
+
+OTG_*_DEVICE:
+  "*DIEPINT[0-9]*":
+    rc_w1: [NAK, PKTDRPSTS, TXFIFOUDRN, INEPNE, INEPNM, ITTXFE, TOC, AHBERR,
+            EPDISD, XFRC]
+  "*DOEPINT[0-9]*":
+    rc_w1: [NYET, NAK, BERR, OUTPKTERR, B2BSTUP, STSPHSRX, OTEPDIS, STUP,
+            AHBERR, EPDISD, XFRC]
+
+# Notes from reading the manual, worth keeping:
+#
+# PWR_CR and PWR_CSR appear twice in RM0090, once for STM32F405/415 and once for
+# STM32F42x/F43x. The entries above are the F42x/F43x ones, which is this part.
+# On the F405 variant CSBF and CWUF are plain write-only, not rc_w1.
+#
+# OTG_FS_DOEPCTL0 and OTG_HS_DOEPCTL0 look like candidates but are not: their
+# bits are w, r, rs and rw only (diagram on p.1314).
+#
+# DIEPINT.TXFE sits among ten rc_w1 bits and is r, so it is deliberately absent.
+#
+# svdgen warns when the SVD calls a field in one of these registers read-write
+# and no list here covers it. Each warning is a table gap, an SVD access bug, or
+# an rs bit; all three want checking against the diagram.
