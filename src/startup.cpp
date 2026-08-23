@@ -1,4 +1,4 @@
-#include <startup.hpp>
+#include "startup.hpp"
 
 extern "C" {
 	extern uint32_t __rom_start__;
