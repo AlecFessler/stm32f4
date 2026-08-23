@@ -5,15 +5,16 @@
 #include <rcc.hpp>
 
 int main() {
-    modify_reg(rcc().ahb1enr, rcc_ahb1enr_gpioben, 1);
-    modify_reg(gpiob().moder, gpiob_moder_moder0, 0b01);
-    write_reg(gpiob().bsrr, gpiob_bsrr_bs0.mask);
+    rcc_ahb1enr_gpioben.rmw(1);
 
-    modify_reg(gpiob().moder, gpiob_moder_moder7, 0b01);
-    write_reg(gpiob().bsrr, gpiob_bsrr_bs7.mask);
+    gpiob_moder_moder0.rmw(0b01);
+    gpiob_bsrr_bs0.write(1);
 
-    modify_reg(gpiob().moder, gpiob_moder_moder14, 0b01);
-    write_reg(gpiob().bsrr, gpiob_bsrr_bs14.mask);
+    gpiob_moder_moder7.rmw(0b01);
+    gpiob_bsrr_bs7.write(1);
+
+    gpiob_moder_moder14.rmw(0b01);
+    gpiob_bsrr_bs14.write(1);
 
     while (true);
     return 0;

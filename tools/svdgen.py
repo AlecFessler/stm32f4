@@ -38,6 +38,13 @@ class Overlap(Exception):
     pass
 
 
+access_str_map = {
+    "read-write": "Access::RW",
+    "read-only": "Access::RO",
+    "write-only": "Access::WO",
+}
+
+
 def main():
     outdir = Path(__file__).resolve().parent.parent / "src" / "do-not-edit"
     outdir.mkdir(parents=True, exist_ok=True)
@@ -57,7 +64,7 @@ def main():
             file_lines = []
 
             peripheral_name = str.upper(peripheral.findtext("name", "MISSING"))
-            base = peripheral.findtext("baseAddress")
+            base = int(peripheral.findtext("baseAddress", "0"), 0)
 
             derives_from = peripheral.get("derivedFrom")
             if derives_from is not None:
@@ -80,14 +87,18 @@ def main():
 
             file_lines.append('#include "mmio.hpp"\n')
 
-            file_lines.append(f"constexpr uintptr_t {peripheral_name}_BASE = {base};\n")
-
+            file_lines.append(
+                "// The BASE and Regs struct are defined entirely for debug utility."
+            )
+            file_lines.append(
+                f"constexpr uintptr_t {peripheral_name}_BASE = 0x{base:08X};"
+            )
             file_lines.append(f"struct {peripheral_name_capped}Regs {{")
 
             registers = peripheral.findall("registers/register")
             registers.sort(key=lambda reg: int(reg.findtext("addressOffset", "0"), 0))
 
-            regfield_defs = []
+            field_defs = []
             static_asserts = []
             prev_offset = 0x0
             prev_size_bytes = 0
@@ -100,6 +111,7 @@ def main():
                     register.findtext("description", "").split()
                 )
                 offset = int(register.findtext("addressOffset", "0"), 0)
+                register_base = base + offset
                 size = int(register.findtext("size", "0"), 0)
                 register_access = register.findtext("access")
                 reset_value = register.findtext("resetValue")
@@ -131,20 +143,19 @@ def main():
                     field_name_lower = str.lower(field_name)
                     bit_offset = int(field.findtext("bitOffset", "0"), 0)
                     bit_width = int(field.findtext("bitWidth", "0"), 0)
-                    field_access = field.findtext("access") or register_access
+                    field_access = (
+                        field.findtext("access") or register_access or "read-write"
+                    )
                     mask = ((1 << bit_width) - 1) << bit_offset
 
-                    regfield_defs.append(
-                        f"constexpr RegField {peripheral_name_lower}_{register_name_lower}_{field_name_lower}{{0x{mask:08X}u, {bit_offset}}};"
+                    field_defs.append(
+                        f"constexpr Field<{access_str_map[field_access]}> {peripheral_name_lower}_{register_name_lower}_{field_name_lower}{{0x{register_base:08X}u, 0x{mask:08X}u, {bit_offset}}};"
                     )
 
             file_lines.append("};\n")
             file_lines.extend(static_asserts)
             file_lines.append("")
-            file_lines.append(
-                f"inline {peripheral_name_capped}Regs& {peripheral_name_lower}() {{ return *reinterpret_cast<{peripheral_name_capped}Regs*>({peripheral_name}_BASE); }}\n"
-            )
-            file_lines.extend(regfield_defs)
+            file_lines.extend(field_defs)
             file_lines.append("")
 
             end_include_guard_line = f"#endif // {peripheral_name}_HPP"

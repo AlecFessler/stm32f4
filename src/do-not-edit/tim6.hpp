@@ -9,8 +9,8 @@
 
 #include "mmio.hpp"
 
+// The BASE and Regs struct are defined entirely for debug utility.
 constexpr uintptr_t TIM6_BASE = 0x40001000;
-
 struct Tim6Regs {
     volatile uint32_t cr1; // control register 1
     volatile uint32_t cr2; // control register 2
@@ -33,20 +33,18 @@ static_assert(offsetof(Tim6Regs, cnt) == 36);
 static_assert(offsetof(Tim6Regs, psc) == 40);
 static_assert(offsetof(Tim6Regs, arr) == 44);
 
-inline Tim6Regs& tim6() { return *reinterpret_cast<Tim6Regs*>(TIM6_BASE); }
-
-constexpr RegField tim6_cr1_arpe{0x00000080u, 7};
-constexpr RegField tim6_cr1_opm{0x00000008u, 3};
-constexpr RegField tim6_cr1_urs{0x00000004u, 2};
-constexpr RegField tim6_cr1_udis{0x00000002u, 1};
-constexpr RegField tim6_cr1_cen{0x00000001u, 0};
-constexpr RegField tim6_cr2_mms{0x00000070u, 4};
-constexpr RegField tim6_dier_ude{0x00000100u, 8};
-constexpr RegField tim6_dier_uie{0x00000001u, 0};
-constexpr RegField tim6_sr_uif{0x00000001u, 0};
-constexpr RegField tim6_egr_ug{0x00000001u, 0};
-constexpr RegField tim6_cnt_cnt{0x0000FFFFu, 0};
-constexpr RegField tim6_psc_psc{0x0000FFFFu, 0};
-constexpr RegField tim6_arr_arr{0x0000FFFFu, 0};
+constexpr Field<Access::RW> tim6_cr1_arpe{0x40001000u, 0x00000080u, 7};
+constexpr Field<Access::RW> tim6_cr1_opm{0x40001000u, 0x00000008u, 3};
+constexpr Field<Access::RW> tim6_cr1_urs{0x40001000u, 0x00000004u, 2};
+constexpr Field<Access::RW> tim6_cr1_udis{0x40001000u, 0x00000002u, 1};
+constexpr Field<Access::RW> tim6_cr1_cen{0x40001000u, 0x00000001u, 0};
+constexpr Field<Access::RW> tim6_cr2_mms{0x40001004u, 0x00000070u, 4};
+constexpr Field<Access::RW> tim6_dier_ude{0x4000100Cu, 0x00000100u, 8};
+constexpr Field<Access::RW> tim6_dier_uie{0x4000100Cu, 0x00000001u, 0};
+constexpr Field<Access::RW> tim6_sr_uif{0x40001010u, 0x00000001u, 0};
+constexpr Field<Access::WO> tim6_egr_ug{0x40001014u, 0x00000001u, 0};
+constexpr Field<Access::RW> tim6_cnt_cnt{0x40001024u, 0x0000FFFFu, 0};
+constexpr Field<Access::RW> tim6_psc_psc{0x40001028u, 0x0000FFFFu, 0};
+constexpr Field<Access::RW> tim6_arr_arr{0x4000102Cu, 0x0000FFFFu, 0};
 
 #endif // TIM6_HPP

@@ -9,8 +9,8 @@
 
 #include "mmio.hpp"
 
+// The BASE and Regs struct are defined entirely for debug utility.
 constexpr uintptr_t TIM7_BASE = 0x40001400;
-
 struct Tim7Regs {
     volatile uint32_t cr1; // control register 1
     volatile uint32_t cr2; // control register 2
@@ -33,20 +33,18 @@ static_assert(offsetof(Tim7Regs, cnt) == 36);
 static_assert(offsetof(Tim7Regs, psc) == 40);
 static_assert(offsetof(Tim7Regs, arr) == 44);
 
-inline Tim7Regs& tim7() { return *reinterpret_cast<Tim7Regs*>(TIM7_BASE); }
-
-constexpr RegField tim7_cr1_arpe{0x00000080u, 7};
-constexpr RegField tim7_cr1_opm{0x00000008u, 3};
-constexpr RegField tim7_cr1_urs{0x00000004u, 2};
-constexpr RegField tim7_cr1_udis{0x00000002u, 1};
-constexpr RegField tim7_cr1_cen{0x00000001u, 0};
-constexpr RegField tim7_cr2_mms{0x00000070u, 4};
-constexpr RegField tim7_dier_ude{0x00000100u, 8};
-constexpr RegField tim7_dier_uie{0x00000001u, 0};
-constexpr RegField tim7_sr_uif{0x00000001u, 0};
-constexpr RegField tim7_egr_ug{0x00000001u, 0};
-constexpr RegField tim7_cnt_cnt{0x0000FFFFu, 0};
-constexpr RegField tim7_psc_psc{0x0000FFFFu, 0};
-constexpr RegField tim7_arr_arr{0x0000FFFFu, 0};
+constexpr Field<Access::RW> tim7_cr1_arpe{0x40001400u, 0x00000080u, 7};
+constexpr Field<Access::RW> tim7_cr1_opm{0x40001400u, 0x00000008u, 3};
+constexpr Field<Access::RW> tim7_cr1_urs{0x40001400u, 0x00000004u, 2};
+constexpr Field<Access::RW> tim7_cr1_udis{0x40001400u, 0x00000002u, 1};
+constexpr Field<Access::RW> tim7_cr1_cen{0x40001400u, 0x00000001u, 0};
+constexpr Field<Access::RW> tim7_cr2_mms{0x40001404u, 0x00000070u, 4};
+constexpr Field<Access::RW> tim7_dier_ude{0x4000140Cu, 0x00000100u, 8};
+constexpr Field<Access::RW> tim7_dier_uie{0x4000140Cu, 0x00000001u, 0};
+constexpr Field<Access::RW> tim7_sr_uif{0x40001410u, 0x00000001u, 0};
+constexpr Field<Access::WO> tim7_egr_ug{0x40001414u, 0x00000001u, 0};
+constexpr Field<Access::RW> tim7_cnt_cnt{0x40001424u, 0x0000FFFFu, 0};
+constexpr Field<Access::RW> tim7_psc_psc{0x40001428u, 0x0000FFFFu, 0};
+constexpr Field<Access::RW> tim7_arr_arr{0x4000142Cu, 0x0000FFFFu, 0};
 
 #endif // TIM7_HPP

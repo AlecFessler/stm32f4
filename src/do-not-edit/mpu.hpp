@@ -9,8 +9,8 @@
 
 #include "mmio.hpp"
 
+// The BASE and Regs struct are defined entirely for debug utility.
 constexpr uintptr_t MPU_BASE = 0xE000ED90;
-
 struct MpuRegs {
     volatile uint32_t mpu_typer; // MPU type register
     volatile uint32_t mpu_ctrl; // MPU control register
@@ -25,26 +25,24 @@ static_assert(offsetof(MpuRegs, mpu_rnr) == 8);
 static_assert(offsetof(MpuRegs, mpu_rbar) == 12);
 static_assert(offsetof(MpuRegs, mpu_rasr) == 16);
 
-inline MpuRegs& mpu() { return *reinterpret_cast<MpuRegs*>(MPU_BASE); }
-
-constexpr RegField mpu_mpu_typer_separate{0x00000001u, 0};
-constexpr RegField mpu_mpu_typer_dregion{0x0000FF00u, 8};
-constexpr RegField mpu_mpu_typer_iregion{0x00FF0000u, 16};
-constexpr RegField mpu_mpu_ctrl_enable{0x00000001u, 0};
-constexpr RegField mpu_mpu_ctrl_hfnmiena{0x00000002u, 1};
-constexpr RegField mpu_mpu_ctrl_privdefena{0x00000004u, 2};
-constexpr RegField mpu_mpu_rnr_region{0x000000FFu, 0};
-constexpr RegField mpu_mpu_rbar_region{0x0000000Fu, 0};
-constexpr RegField mpu_mpu_rbar_valid{0x00000010u, 4};
-constexpr RegField mpu_mpu_rbar_addr{0xFFFFFFE0u, 5};
-constexpr RegField mpu_mpu_rasr_enable{0x00000001u, 0};
-constexpr RegField mpu_mpu_rasr_size{0x0000003Eu, 1};
-constexpr RegField mpu_mpu_rasr_srd{0x0000FF00u, 8};
-constexpr RegField mpu_mpu_rasr_b{0x00010000u, 16};
-constexpr RegField mpu_mpu_rasr_c{0x00020000u, 17};
-constexpr RegField mpu_mpu_rasr_s{0x00040000u, 18};
-constexpr RegField mpu_mpu_rasr_tex{0x00380000u, 19};
-constexpr RegField mpu_mpu_rasr_ap{0x07000000u, 24};
-constexpr RegField mpu_mpu_rasr_xn{0x10000000u, 28};
+constexpr Field<Access::RO> mpu_mpu_typer_separate{0xE000ED90u, 0x00000001u, 0};
+constexpr Field<Access::RO> mpu_mpu_typer_dregion{0xE000ED90u, 0x0000FF00u, 8};
+constexpr Field<Access::RO> mpu_mpu_typer_iregion{0xE000ED90u, 0x00FF0000u, 16};
+constexpr Field<Access::RO> mpu_mpu_ctrl_enable{0xE000ED94u, 0x00000001u, 0};
+constexpr Field<Access::RO> mpu_mpu_ctrl_hfnmiena{0xE000ED94u, 0x00000002u, 1};
+constexpr Field<Access::RO> mpu_mpu_ctrl_privdefena{0xE000ED94u, 0x00000004u, 2};
+constexpr Field<Access::RW> mpu_mpu_rnr_region{0xE000ED98u, 0x000000FFu, 0};
+constexpr Field<Access::RW> mpu_mpu_rbar_region{0xE000ED9Cu, 0x0000000Fu, 0};
+constexpr Field<Access::RW> mpu_mpu_rbar_valid{0xE000ED9Cu, 0x00000010u, 4};
+constexpr Field<Access::RW> mpu_mpu_rbar_addr{0xE000ED9Cu, 0xFFFFFFE0u, 5};
+constexpr Field<Access::RW> mpu_mpu_rasr_enable{0xE000EDA0u, 0x00000001u, 0};
+constexpr Field<Access::RW> mpu_mpu_rasr_size{0xE000EDA0u, 0x0000003Eu, 1};
+constexpr Field<Access::RW> mpu_mpu_rasr_srd{0xE000EDA0u, 0x0000FF00u, 8};
+constexpr Field<Access::RW> mpu_mpu_rasr_b{0xE000EDA0u, 0x00010000u, 16};
+constexpr Field<Access::RW> mpu_mpu_rasr_c{0xE000EDA0u, 0x00020000u, 17};
+constexpr Field<Access::RW> mpu_mpu_rasr_s{0xE000EDA0u, 0x00040000u, 18};
+constexpr Field<Access::RW> mpu_mpu_rasr_tex{0xE000EDA0u, 0x00380000u, 19};
+constexpr Field<Access::RW> mpu_mpu_rasr_ap{0xE000EDA0u, 0x07000000u, 24};
+constexpr Field<Access::RW> mpu_mpu_rasr_xn{0xE000EDA0u, 0x10000000u, 28};
 
 #endif // MPU_HPP

@@ -9,8 +9,8 @@
 
 #include "mmio.hpp"
 
+// The BASE and Regs struct are defined entirely for debug utility.
 constexpr uintptr_t ETHERNET_MMC_BASE = 0x40028100;
-
 struct Ethernet_mmcRegs {
     volatile uint32_t mmccr; // Ethernet MMC control register
     volatile uint32_t mmcrir; // Ethernet MMC receive interrupt register
@@ -41,31 +41,29 @@ static_assert(offsetof(Ethernet_mmcRegs, mmcrfcecr) == 148);
 static_assert(offsetof(Ethernet_mmcRegs, mmcrfaecr) == 152);
 static_assert(offsetof(Ethernet_mmcRegs, mmcrgufcr) == 196);
 
-inline Ethernet_mmcRegs& ethernet_mmc() { return *reinterpret_cast<Ethernet_mmcRegs*>(ETHERNET_MMC_BASE); }
-
-constexpr RegField ethernet_mmc_mmccr_cr{0x00000001u, 0};
-constexpr RegField ethernet_mmc_mmccr_csr{0x00000002u, 1};
-constexpr RegField ethernet_mmc_mmccr_ror{0x00000004u, 2};
-constexpr RegField ethernet_mmc_mmccr_mcf{0x00000008u, 3};
-constexpr RegField ethernet_mmc_mmccr_mcp{0x00000010u, 4};
-constexpr RegField ethernet_mmc_mmccr_mcfhp{0x00000020u, 5};
-constexpr RegField ethernet_mmc_mmcrir_rfces{0x00000020u, 5};
-constexpr RegField ethernet_mmc_mmcrir_rfaes{0x00000040u, 6};
-constexpr RegField ethernet_mmc_mmcrir_rgufs{0x00020000u, 17};
-constexpr RegField ethernet_mmc_mmctir_tgfscs{0x00004000u, 14};
-constexpr RegField ethernet_mmc_mmctir_tgfmscs{0x00008000u, 15};
-constexpr RegField ethernet_mmc_mmctir_tgfs{0x00200000u, 21};
-constexpr RegField ethernet_mmc_mmcrimr_rfcem{0x00000020u, 5};
-constexpr RegField ethernet_mmc_mmcrimr_rfaem{0x00000040u, 6};
-constexpr RegField ethernet_mmc_mmcrimr_rgufm{0x00020000u, 17};
-constexpr RegField ethernet_mmc_mmctimr_tgfscm{0x00004000u, 14};
-constexpr RegField ethernet_mmc_mmctimr_tgfmscm{0x00008000u, 15};
-constexpr RegField ethernet_mmc_mmctimr_tgfm{0x00010000u, 16};
-constexpr RegField ethernet_mmc_mmctgfsccr_tgfscc{0xFFFFFFFFu, 0};
-constexpr RegField ethernet_mmc_mmctgfmsccr_tgfmscc{0xFFFFFFFFu, 0};
-constexpr RegField ethernet_mmc_mmctgfcr_tgfc{0xFFFFFFFFu, 0};
-constexpr RegField ethernet_mmc_mmcrfcecr_rfcfc{0xFFFFFFFFu, 0};
-constexpr RegField ethernet_mmc_mmcrfaecr_rfaec{0xFFFFFFFFu, 0};
-constexpr RegField ethernet_mmc_mmcrgufcr_rgufc{0xFFFFFFFFu, 0};
+constexpr Field<Access::RW> ethernet_mmc_mmccr_cr{0x40028100u, 0x00000001u, 0};
+constexpr Field<Access::RW> ethernet_mmc_mmccr_csr{0x40028100u, 0x00000002u, 1};
+constexpr Field<Access::RW> ethernet_mmc_mmccr_ror{0x40028100u, 0x00000004u, 2};
+constexpr Field<Access::RW> ethernet_mmc_mmccr_mcf{0x40028100u, 0x00000008u, 3};
+constexpr Field<Access::RW> ethernet_mmc_mmccr_mcp{0x40028100u, 0x00000010u, 4};
+constexpr Field<Access::RW> ethernet_mmc_mmccr_mcfhp{0x40028100u, 0x00000020u, 5};
+constexpr Field<Access::RW> ethernet_mmc_mmcrir_rfces{0x40028104u, 0x00000020u, 5};
+constexpr Field<Access::RW> ethernet_mmc_mmcrir_rfaes{0x40028104u, 0x00000040u, 6};
+constexpr Field<Access::RW> ethernet_mmc_mmcrir_rgufs{0x40028104u, 0x00020000u, 17};
+constexpr Field<Access::RO> ethernet_mmc_mmctir_tgfscs{0x40028108u, 0x00004000u, 14};
+constexpr Field<Access::RO> ethernet_mmc_mmctir_tgfmscs{0x40028108u, 0x00008000u, 15};
+constexpr Field<Access::RO> ethernet_mmc_mmctir_tgfs{0x40028108u, 0x00200000u, 21};
+constexpr Field<Access::RW> ethernet_mmc_mmcrimr_rfcem{0x4002810Cu, 0x00000020u, 5};
+constexpr Field<Access::RW> ethernet_mmc_mmcrimr_rfaem{0x4002810Cu, 0x00000040u, 6};
+constexpr Field<Access::RW> ethernet_mmc_mmcrimr_rgufm{0x4002810Cu, 0x00020000u, 17};
+constexpr Field<Access::RW> ethernet_mmc_mmctimr_tgfscm{0x40028110u, 0x00004000u, 14};
+constexpr Field<Access::RW> ethernet_mmc_mmctimr_tgfmscm{0x40028110u, 0x00008000u, 15};
+constexpr Field<Access::RW> ethernet_mmc_mmctimr_tgfm{0x40028110u, 0x00010000u, 16};
+constexpr Field<Access::RO> ethernet_mmc_mmctgfsccr_tgfscc{0x4002814Cu, 0xFFFFFFFFu, 0};
+constexpr Field<Access::RO> ethernet_mmc_mmctgfmsccr_tgfmscc{0x40028150u, 0xFFFFFFFFu, 0};
+constexpr Field<Access::RO> ethernet_mmc_mmctgfcr_tgfc{0x40028168u, 0xFFFFFFFFu, 0};
+constexpr Field<Access::RO> ethernet_mmc_mmcrfcecr_rfcfc{0x40028194u, 0xFFFFFFFFu, 0};
+constexpr Field<Access::RO> ethernet_mmc_mmcrfaecr_rfaec{0x40028198u, 0xFFFFFFFFu, 0};
+constexpr Field<Access::RO> ethernet_mmc_mmcrgufcr_rgufc{0x400281C4u, 0xFFFFFFFFu, 0};
 
 #endif // ETHERNET_MMC_HPP

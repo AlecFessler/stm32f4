@@ -3,29 +3,28 @@
 
 #include <cstdint>
 
-struct RegField {
+enum class Access {RW, RO, WO};
+template <Access Acc> struct Field {
+    uintptr_t addr;
     uint32_t mask;
     uint32_t shift;
+
+    volatile uint32_t& reg() const {return *reinterpret_cast<volatile uint32_t*>(addr);}
+
+    inline uint32_t read() const {
+        static_assert(Acc != Access::WO, "read: register is write-only");
+        return (reg() & mask) >> shift;
+    }
+
+    inline void write(uint32_t val) const {
+        static_assert(Acc != Access::RO, "write: register is read-only");
+        reg() = (val << shift) & mask;
+    }
+
+    inline void rmw(uint32_t val) const {
+        static_assert(Acc == Access::RW, "rmw: register is not read-write");
+        reg() = (reg() & ~mask) | ((val << shift) & mask);
+    }
 };
-
-constexpr uint32_t bsrr_set(uint32_t bit) {
-    return 1u << bit;
-}
-
-constexpr uint32_t bsrr_reset(uint32_t bit) {
-    return 1u << (bit + 16);
-}
-
-inline uint32_t read_reg(volatile uint32_t& reg, RegField field) {
-    return (reg & field.mask) >> field.shift;
-}
-
-inline void write_reg(volatile uint32_t& reg, uint32_t val) {
-    reg = val;
-}
-
-inline void modify_reg(volatile uint32_t& reg, RegField field, uint32_t val) {
-    reg = (reg & ~field.mask) | ((val << field.shift) & field.mask);
-}
 
 #endif // MMIO_HPP
