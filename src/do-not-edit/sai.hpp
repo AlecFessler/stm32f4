@@ -150,4 +150,196 @@ constexpr Field<Access::WO> sai_bclrfr_mutedet{0x4001583Cu, 0x00000002u, 1};
 constexpr Field<Access::WO> sai_bclrfr_ovrudr{0x4001583Cu, 0x00000001u, 0};
 constexpr Field<Access::RW> sai_bdr_data{0x40015840u, 0xFFFFFFFFu, 0};
 
+namespace sai::afsdet {
+    constexpr uint32_t noerror = 0;
+    constexpr uint32_t earlysync = 1;
+}
+namespace sai::afsdetie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace sai::cafsdet {
+    constexpr uint32_t clear = 1;
+}
+namespace sai::ccnrdy {
+    constexpr uint32_t clear = 1;
+}
+namespace sai::ckstr {
+    constexpr uint32_t fallingedge = 0;
+    constexpr uint32_t risingedge = 1;
+}
+namespace sai::clfsdet {
+    constexpr uint32_t clear = 1;
+}
+namespace sai::cmutedet {
+    constexpr uint32_t clear = 1;
+}
+namespace sai::cnrdy {
+    constexpr uint32_t ready = 0;
+    constexpr uint32_t notready = 1;
+}
+namespace sai::cnrdyie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace sai::comp {
+    constexpr uint32_t nocompanding = 0;
+    constexpr uint32_t mulaw = 2;
+    constexpr uint32_t alaw = 3;
+}
+namespace sai::covrudr {
+    constexpr uint32_t clear = 1;
+}
+namespace sai::cpl {
+    constexpr uint32_t onescomplement = 0;
+    constexpr uint32_t twoscomplement = 1;
+}
+namespace sai::cwckcfg {
+    constexpr uint32_t clear = 1;
+}
+namespace sai::dmaen {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace sai::ds {
+    constexpr uint32_t bit8 = 2;
+    constexpr uint32_t bit10 = 3;
+    constexpr uint32_t bit16 = 4;
+    constexpr uint32_t bit20 = 5;
+    constexpr uint32_t bit24 = 6;
+    constexpr uint32_t bit32 = 7;
+}
+namespace sai::fflush {
+    constexpr uint32_t noflush = 0;
+    constexpr uint32_t flush = 1;
+}
+namespace sai::flth {
+    constexpr uint32_t empty = 0;
+    constexpr uint32_t quarter1 = 1;
+    constexpr uint32_t quarter2 = 2;
+    constexpr uint32_t quarter3 = 3;
+    constexpr uint32_t quarter4 = 4;
+    constexpr uint32_t full = 5;
+}
+namespace sai::flvl {
+    constexpr uint32_t empty = 0;
+    constexpr uint32_t quarter1 = 1;
+    constexpr uint32_t quarter2 = 2;
+    constexpr uint32_t quarter3 = 3;
+    constexpr uint32_t quarter4 = 4;
+    constexpr uint32_t full = 5;
+}
+namespace sai::freq {
+    constexpr uint32_t norequest = 0;
+    constexpr uint32_t request = 1;
+}
+namespace sai::freqie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace sai::fsoff {
+    constexpr uint32_t onfirst = 0;
+    constexpr uint32_t beforefirst = 1;
+}
+namespace sai::fspol {
+    constexpr uint32_t fallingedge = 0;
+    constexpr uint32_t risingedge = 1;
+}
+namespace sai::fth {
+    constexpr uint32_t empty = 0;
+    constexpr uint32_t quarter1 = 1;
+    constexpr uint32_t quarter2 = 2;
+    constexpr uint32_t quarter3 = 3;
+    constexpr uint32_t full = 4;
+}
+namespace sai::lfsdet {
+    constexpr uint32_t noerror = 0;
+    constexpr uint32_t nosync = 1;
+}
+namespace sai::lfsdetie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace sai::lsbfirst {
+    constexpr uint32_t msbfirst = 0;
+    constexpr uint32_t lsbfirst = 1;
+}
+namespace sai::mode {
+    constexpr uint32_t mastertx = 0;
+    constexpr uint32_t masterrx = 1;
+    constexpr uint32_t slavetx = 2;
+    constexpr uint32_t slaverx = 3;
+}
+namespace sai::mono {
+    constexpr uint32_t stereo = 0;
+    constexpr uint32_t mono = 1;
+}
+namespace sai::mute {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace sai::mutedet {
+    constexpr uint32_t nomute = 0;
+    constexpr uint32_t mute = 1;
+}
+namespace sai::mutedetie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace sai::muteval {
+    constexpr uint32_t sendzero = 0;
+    constexpr uint32_t sendlast = 1;
+}
+namespace sai::nodiv {
+    constexpr uint32_t masterclock = 0;
+    constexpr uint32_t nodiv = 1;
+}
+namespace sai::nomck {
+    constexpr uint32_t masterclock = 0;
+    constexpr uint32_t nodiv = 1;
+}
+namespace sai::outdriv {
+    constexpr uint32_t onstart = 0;
+    constexpr uint32_t immediately = 1;
+}
+namespace sai::ovrudr {
+    constexpr uint32_t noerror = 0;
+    constexpr uint32_t overrun = 1;
+}
+namespace sai::ovrudrie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace sai::prtcfg {
+    constexpr uint32_t free = 0;
+    constexpr uint32_t spdif = 1;
+    constexpr uint32_t ac97 = 2;
+}
+namespace sai::saien {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace sai::sloten {
+    constexpr uint32_t inactive = 0;
+    constexpr uint32_t active = 1;
+}
+namespace sai::slotsz {
+    constexpr uint32_t datasize = 0;
+    constexpr uint32_t bit16 = 1;
+    constexpr uint32_t bit32 = 2;
+}
+namespace sai::syncen {
+    constexpr uint32_t asynchronous = 0;
+    constexpr uint32_t internal = 1;
+    constexpr uint32_t external = 2;
+}
+namespace sai::wckcfg {
+    constexpr uint32_t correct = 0;
+    constexpr uint32_t wrong = 1;
+}
+namespace sai::wckcfgie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+
 #endif // STM32_SAI_HPP

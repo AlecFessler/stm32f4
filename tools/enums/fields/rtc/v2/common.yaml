@@ -1,0 +1,61 @@
+# Real Time Clock
+
+_include:
+  - basic.yaml
+  - wakeup.yaml
+
+CR:
+  COSEL:
+    CalFreq_512Hz: [0, Calibration output is 512 Hz (with default prescaler setting)]
+    CalFreq_1Hz: [1, Calibration output is 1 Hz (with default prescaler setting)]
+  BYPSHAD:
+    ShadowReg:
+      [
+        0,
+        "Calendar values (when reading from RTC_SSR, RTC_TR, and RTC_DR) are taken from the shadow registers, which are updated once every two RTCCLK cycles",
+      ]
+    BypassShadowReg:
+      [
+        1,
+        "Calendar values (when reading from RTC_SSR, RTC_TR, and RTC_DR) are taken directly from the calendar counters",
+      ]
+
+ISR:
+  RECALPF:
+    _read:
+      Pending:
+        [
+          1,
+          "The RECALPF status flag is automatically set to 1 when software writes to the RTC_CALR register, indicating that the RTC_CALR register is blocked. When the new calibration settings are taken into account, this bit returns to 0",
+        ]
+  SHPF:
+    _read:
+      NoShiftPending: [0, No shift operation is pending]
+      ShiftPending: [1, A shift operation is pending]
+SSR:
+  SS: [0, 65535]
+SHIFTR:
+  ADD1S:
+    _write:
+      Add1: [1, Add one second to the clock/calendar]
+  SUBFS: [0, 32767]
+PRER:
+  PREDIV_S: [0, 0x7FFF]
+TSSSR:
+  SS: [0, 65535]
+CALR:
+  CALP:
+    NoChange: [0, No RTCCLK pulses are added]
+    IncreaseFreq: [1, "One RTCCLK pulse is effectively inserted every 2^11 pulses (frequency increased by 488.5 ppm)"]
+  CALW8:
+    Eight_Second: [1, "When CALW8 is set to ‘1’, the 8-second calibration cycle period is selected"]
+  CALW16:
+    Sixteen_Second:
+      [
+        1,
+        "When CALW16 is set to ‘1’, the 16-second calibration cycle period is selected.This bit must not be set to ‘1’ if CALW8=1",
+      ]
+  CALM: [0, 511]
+ALRM?SSR:
+  MASKSS: [0, 15]
+  SS: [0, 32767]

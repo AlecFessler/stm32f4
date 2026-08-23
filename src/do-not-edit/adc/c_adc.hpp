@@ -48,4 +48,68 @@ constexpr Field<Access::RW> c_adc_ccr_mult{0x40012304u, 0x0000001Fu, 0};
 constexpr Field<Access::RO> c_adc_cdr_data2{0x40012308u, 0xFFFF0000u, 16};
 constexpr Field<Access::RO> c_adc_cdr_data1{0x40012308u, 0x0000FFFFu, 0};
 
+namespace c_adc::adcpre {
+    constexpr uint32_t div2 = 0;
+    constexpr uint32_t div4 = 1;
+    constexpr uint32_t div6 = 2;
+    constexpr uint32_t div8 = 3;
+}
+namespace c_adc::awd {
+    constexpr uint32_t noevent = 0;
+    constexpr uint32_t event = 1;
+}
+namespace c_adc::dds {
+    constexpr uint32_t single = 0;
+    constexpr uint32_t continuous = 1;
+}
+namespace c_adc::dma {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t mode1 = 1;
+    constexpr uint32_t mode2 = 2;
+    constexpr uint32_t mode3 = 3;
+}
+namespace c_adc::eoc {
+    constexpr uint32_t notcomplete = 0;
+    constexpr uint32_t complete = 1;
+}
+namespace c_adc::jeoc {
+    constexpr uint32_t notcomplete = 0;
+    constexpr uint32_t complete = 1;
+}
+namespace c_adc::jstrt {
+    constexpr uint32_t notstarted = 0;
+    constexpr uint32_t started = 1;
+}
+namespace c_adc::multi {
+    constexpr uint32_t independent = 0;
+    constexpr uint32_t dualrj = 1;
+    constexpr uint32_t dualra = 2;
+    constexpr uint32_t dualj = 5;
+    constexpr uint32_t dualr = 6;
+    constexpr uint32_t duali = 7;
+    constexpr uint32_t duala = 9;
+    constexpr uint32_t triplerj = 17;
+    constexpr uint32_t triplera = 18;
+    constexpr uint32_t triplej = 21;
+    constexpr uint32_t tripler = 22;
+    constexpr uint32_t triplei = 23;
+    constexpr uint32_t triplea = 24;
+}
+namespace c_adc::ovr {
+    constexpr uint32_t nooverrun = 0;
+    constexpr uint32_t overrun = 1;
+}
+namespace c_adc::strt {
+    constexpr uint32_t notstarted = 0;
+    constexpr uint32_t started = 1;
+}
+namespace c_adc::tsvrefe {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace c_adc::vbate {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+
 #endif // STM32_C_ADC_HPP

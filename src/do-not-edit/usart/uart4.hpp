@@ -66,4 +66,149 @@ constexpr Field<Access::RW> uart4_cr3_irlp{0x40004C14u, 0x00000004u, 2};
 constexpr Field<Access::RW> uart4_cr3_iren{0x40004C14u, 0x00000002u, 1};
 constexpr Field<Access::RW> uart4_cr3_eie{0x40004C14u, 0x00000001u, 0};
 
+namespace uart4::dmar {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart4::dmat {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart4::eie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart4::fe {
+    constexpr uint32_t noerror = 0;
+    constexpr uint32_t error = 1;
+}
+namespace uart4::hdsel {
+    constexpr uint32_t fullduplex = 0;
+    constexpr uint32_t halfduplex = 1;
+}
+namespace uart4::idle {
+    constexpr uint32_t noidle = 0;
+    constexpr uint32_t idle = 1;
+}
+namespace uart4::idleie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart4::iren {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart4::irlp {
+    constexpr uint32_t normal = 0;
+    constexpr uint32_t lowpower = 1;
+}
+namespace uart4::lbd {
+    constexpr uint32_t notdetected = 0;
+    constexpr uint32_t detected = 1;
+}
+namespace uart4::lbdie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart4::lbdl {
+    constexpr uint32_t lbdl10 = 0;
+    constexpr uint32_t lbdl11 = 1;
+}
+namespace uart4::linen {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart4::m {
+    constexpr uint32_t m8 = 0;
+    constexpr uint32_t m9 = 1;
+}
+namespace uart4::ne {
+    constexpr uint32_t nonoise = 0;
+    constexpr uint32_t noise = 1;
+}
+namespace uart4::nf {
+    constexpr uint32_t nonoise = 0;
+    constexpr uint32_t noise = 1;
+}
+namespace uart4::onebit {
+    constexpr uint32_t sample3 = 0;
+    constexpr uint32_t sample1 = 1;
+}
+namespace uart4::ore {
+    constexpr uint32_t nooverrun = 0;
+    constexpr uint32_t overrun = 1;
+}
+namespace uart4::over8 {
+    constexpr uint32_t oversample16 = 0;
+    constexpr uint32_t oversample8 = 1;
+}
+namespace uart4::pce {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart4::pe {
+    constexpr uint32_t noerror = 0;
+    constexpr uint32_t error = 1;
+}
+namespace uart4::peie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart4::ps {
+    constexpr uint32_t even = 0;
+    constexpr uint32_t odd = 1;
+}
+namespace uart4::re {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart4::rwu {
+    constexpr uint32_t active = 0;
+    constexpr uint32_t mute = 1;
+}
+namespace uart4::rxne {
+    constexpr uint32_t nodata = 0;
+    constexpr uint32_t dataready = 1;
+}
+namespace uart4::rxneie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart4::sbk {
+    constexpr uint32_t nobreak = 0;
+    constexpr uint32_t break_ = 1;
+}
+namespace uart4::stop {
+    constexpr uint32_t stop1 = 0;
+    constexpr uint32_t stop2 = 2;
+}
+namespace uart4::tc {
+    constexpr uint32_t txnotcomplete = 0;
+    constexpr uint32_t txcomplete = 1;
+}
+namespace uart4::tcie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart4::te {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart4::txe {
+    constexpr uint32_t txnotempty = 0;
+    constexpr uint32_t txempty = 1;
+}
+namespace uart4::txeie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart4::ue {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart4::wake {
+    constexpr uint32_t idleline = 0;
+    constexpr uint32_t addressmark = 1;
+}
+
 #endif // STM32_UART4_HPP

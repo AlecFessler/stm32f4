@@ -77,4 +77,62 @@ constexpr Field<Access::RO> dac_dor2_dacc2dor{0x40007430u, 0x00000FFFu, 0};
 constexpr Field<Access::RW> dac_sr_dmaudr2{0x40007434u, 0x20000000u, 29};
 constexpr Field<Access::RW> dac_sr_dmaudr1{0x40007434u, 0x00002000u, 13};
 
+namespace dac::boff {
+    constexpr uint32_t enabled = 0;
+    constexpr uint32_t disabled = 1;
+}
+namespace dac::dmaen {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace dac::dmaudr {
+    constexpr uint32_t nounderrun = 0;
+    constexpr uint32_t underrun = 1;
+}
+namespace dac::dmaudrie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace dac::en {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace dac::mamp {
+    constexpr uint32_t amp4095 = -1;
+    constexpr uint32_t amp1 = 0;
+    constexpr uint32_t amp3 = 1;
+    constexpr uint32_t amp7 = 2;
+    constexpr uint32_t amp15 = 3;
+    constexpr uint32_t amp31 = 4;
+    constexpr uint32_t amp63 = 5;
+    constexpr uint32_t amp127 = 6;
+    constexpr uint32_t amp255 = 7;
+    constexpr uint32_t amp511 = 8;
+    constexpr uint32_t amp1023 = 9;
+    constexpr uint32_t amp2047 = 10;
+}
+namespace dac::swtrig {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace dac::ten {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace dac::tsel {
+    constexpr uint32_t tim6trgo = 0;
+    constexpr uint32_t tim8trgo = 1;
+    constexpr uint32_t tim7trgo = 2;
+    constexpr uint32_t tim5trgo = 3;
+    constexpr uint32_t tim2trgo = 4;
+    constexpr uint32_t tim4trgo = 5;
+    constexpr uint32_t exti9 = 6;
+    constexpr uint32_t swtrig = 7;
+}
+namespace dac::wave {
+    constexpr uint32_t triangle = -1;
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t noise = 1;
+}
+
 #endif // STM32_DAC_HPP

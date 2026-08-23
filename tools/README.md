@@ -31,6 +31,7 @@ name, so a subdirectory would collide with the file.
 - `struct <Peripheral>Regs` plus `static_assert(offsetof(...))` per register
 - `constexpr Field<Access::X> <per>_<reg>_<field>{addr, mask, shift}`
 - `constexpr Field<Access::X> <per>_<reg>_<stem>[N]` for numeric field families
+- `namespace <per>::<field> { constexpr uint32_t ... }` for enum values
 
 `addr` is the register's absolute address (peripheral base + register offset),
 so nothing needs the struct at runtime.
@@ -44,6 +45,32 @@ OTG_HS_GLOBAL. They contain overlapping registers (`TIMx_CCMR1` is documented
 twice, as `CCMR1_Output` and `CCMR1_Input`, because field meanings change with
 channel mode). One register cannot be two struct members. Their fields are
 emitted normally, since each carries its own absolute address.
+
+### Enum values
+
+Symbolic field values, so `rmw(0b01)` reads `rmw(gpio::mode::output)`. Not from
+the SVD, which has no `<enumeratedValues>`. Parsed from the stm32-rs patch files
+vendored in `tools/enums/`, which have their own README and license.
+
+1492 namespaces across 47 of the 92 peripherals; the rest have no patch data.
+
+Placement depends on whether a group's members share one set of patch files:
+
+| | |
+|---|---|
+| aggregate | GPIO, SPI, I2C, CAN, DMA, Ethernet, USB_OTG_*, NVIC, SCB, FPU |
+| member header | TIM (6 file sets), USART (2), ADC (2) |
+
+Which patch files apply to which peripheral comes from `stm32f429.yaml`, whose
+keys are shell globs. Assignment then propagates by identical register layout,
+**not** by `derivedFrom`: the yaml names only the peripherals stm32-rs treats as
+base types (`GPIO[ABK]` for eleven ports), and it rebases `I2C1` and `USART1`,
+so the SVD's derivation direction is wrong for this purpose.
+
+Namespace names come from `_name` when the yaml gives one, otherwise from the
+field glob with its metacharacters stripped. Members that collide with C++
+keywords (`break`, `long`, `short`, `protected`, `xor`) get a trailing
+underscore.
 
 ### Field arrays
 
@@ -82,14 +109,9 @@ this part. Renode's copy omits the ARM core blocks (`STK`, `SCB`, `MPU`,
 `NVIC_STIR`, `FPU`).
 
 Absent from the file, count 0: `enumeratedValues`, `modifiedWriteValues`,
-`readAction`, `dim`. All registers are 32-bit.
+`readAction`, `dim`. All registers are 32-bit. Enum values are sourced
+separately, see Enum values below.
 
 ## TODO
 
-- Enum values for fields, to replace `rmw(0b01)` with `rmw(moder::output)`.
-  Not in the SVD, but stm32-rs has them under `devices/fields/*.yaml` in its
-  own patch format, covering every peripheral this roadmap needs. Values are
-  family-wide, so they belong in the aggregate headers, not the members.
 - Emit `resetValue` as power-on assertions. Parsed, unused.
-- `regen-check` uses `git diff`, which ignores untracked files. Switch to
-  `git status --porcelain`.

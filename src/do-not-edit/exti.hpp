@@ -177,4 +177,35 @@ constexpr Field<Access::RW> exti_pr_pr[23] = {
     {0x40013C14u, 0x00400000u, 22},
 };
 
+namespace exti::eventmask {
+    constexpr uint32_t masked = 0;
+    constexpr uint32_t unmasked = 1;
+}
+namespace exti::fallingtrigger {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace exti::interruptmask {
+    constexpr uint32_t masked = 0;
+    constexpr uint32_t unmasked = 1;
+}
+namespace exti::pif {
+    constexpr uint32_t notpending = 0;
+    constexpr uint32_t pending = 1;
+}
+namespace exti::pr {
+    constexpr uint32_t notpending = 0;
+    constexpr uint32_t pending = 1;
+}
+namespace exti::risingtrigger {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace exti::swi {
+    constexpr uint32_t pend = 1;
+}
+namespace exti::swier {
+    constexpr uint32_t pend = 1;
+}
+
 #endif // STM32_EXTI_HPP

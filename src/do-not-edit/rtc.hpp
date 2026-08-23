@@ -233,4 +233,156 @@ constexpr Field<Access::RW> rtc_bkp17r_bkp{0x40002894u, 0xFFFFFFFFu, 0};
 constexpr Field<Access::RW> rtc_bkp18r_bkp{0x40002898u, 0xFFFFFFFFu, 0};
 constexpr Field<Access::RW> rtc_bkp19r_bkp{0x4000289Cu, 0xFFFFFFFFu, 0};
 
+namespace rtc::add1h {
+    constexpr uint32_t add1 = 1;
+}
+namespace rtc::add1s {
+    constexpr uint32_t add1 = 1;
+}
+namespace rtc::alrabe {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace rtc::alrabf {
+    constexpr uint32_t match = 1;
+}
+namespace rtc::alrabie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace rtc::alrwf {
+    constexpr uint32_t updatenotallowed = 0;
+    constexpr uint32_t updateallowed = 1;
+}
+namespace rtc::bkp {
+    constexpr uint32_t dst_not_changed = 0;
+    constexpr uint32_t dst_changed = 1;
+}
+namespace rtc::bypshad {
+    constexpr uint32_t shadowreg = 0;
+    constexpr uint32_t bypassshadowreg = 1;
+}
+namespace rtc::calp {
+    constexpr uint32_t nochange = 0;
+    constexpr uint32_t increasefreq = 1;
+}
+namespace rtc::calw16 {
+    constexpr uint32_t sixteen_second = 1;
+}
+namespace rtc::calw8 {
+    constexpr uint32_t eight_second = 1;
+}
+namespace rtc::coe {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace rtc::cosel {
+    constexpr uint32_t calfreq_512hz = 0;
+    constexpr uint32_t calfreq_1hz = 1;
+}
+namespace rtc::fmt {
+    constexpr uint32_t twenty_four_hour = 0;
+    constexpr uint32_t am_pm = 1;
+}
+namespace rtc::init {
+    constexpr uint32_t freerunningmode = 0;
+    constexpr uint32_t initmode = 1;
+}
+namespace rtc::initf {
+    constexpr uint32_t notallowed = 0;
+    constexpr uint32_t allowed = 1;
+}
+namespace rtc::inits {
+    constexpr uint32_t notinitalized = 0;
+    constexpr uint32_t initalized = 1;
+}
+namespace rtc::msk {
+    constexpr uint32_t mask = 0;
+    constexpr uint32_t notmask = 1;
+}
+namespace rtc::mt {
+    constexpr uint32_t zero = 0;
+    constexpr uint32_t one = 1;
+}
+namespace rtc::osel {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t alarma = 1;
+    constexpr uint32_t alarmb = 2;
+    constexpr uint32_t wakeup = 3;
+}
+namespace rtc::pm {
+    constexpr uint32_t am = 0;
+    constexpr uint32_t pm = 1;
+}
+namespace rtc::pol {
+    constexpr uint32_t high = 0;
+    constexpr uint32_t low = 1;
+}
+namespace rtc::recalpf {
+    constexpr uint32_t pending = 1;
+}
+namespace rtc::refckon {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace rtc::rsf {
+    constexpr uint32_t notsynced = 0;
+    constexpr uint32_t synced = 1;
+}
+namespace rtc::shpf {
+    constexpr uint32_t noshiftpending = 0;
+    constexpr uint32_t shiftpending = 1;
+}
+namespace rtc::sub1h {
+    constexpr uint32_t sub1 = 1;
+}
+namespace rtc::tampf {
+    constexpr uint32_t tampered = 1;
+}
+namespace rtc::tse {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace rtc::tsedge {
+    constexpr uint32_t risingedge = 0;
+    constexpr uint32_t fallingedge = 1;
+}
+namespace rtc::tsf {
+    constexpr uint32_t timestampevent = 1;
+}
+namespace rtc::tsie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace rtc::tsovf {
+    constexpr uint32_t overflow = 1;
+}
+namespace rtc::wdsel {
+    constexpr uint32_t dateunits = 0;
+    constexpr uint32_t weekday = 1;
+}
+namespace rtc::wucksel {
+    constexpr uint32_t div16 = 0;
+    constexpr uint32_t div8 = 1;
+    constexpr uint32_t div4 = 2;
+    constexpr uint32_t div2 = 3;
+    constexpr uint32_t clockspare = 4;
+    constexpr uint32_t clocksparewithoffset = 6;
+}
+namespace rtc::wute {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace rtc::wutf {
+    constexpr uint32_t zero = 1;
+}
+namespace rtc::wutie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace rtc::wutwf {
+    constexpr uint32_t updatenotallowed = 0;
+    constexpr uint32_t updateallowed = 1;
+}
+
 #endif // STM32_RTC_HPP

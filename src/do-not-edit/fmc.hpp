@@ -238,4 +238,207 @@ constexpr Field<Access::RO> fmc_sdsr_busy{0xA0000158u, 0x00000020u, 5};
 constexpr Field<Access::RO> fmc_sdsr_modes1{0xA0000158u, 0x00000006u, 1};
 constexpr Field<Access::RO> fmc_sdsr_modes2{0xA0000158u, 0x00000018u, 3};
 
+namespace fmc::accmod {
+    constexpr uint32_t a = 0;
+    constexpr uint32_t b = 1;
+    constexpr uint32_t c = 2;
+    constexpr uint32_t d = 3;
+}
+namespace fmc::asyncwait {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace fmc::bursten {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace fmc::busy {
+    constexpr uint32_t notbusy = 0;
+    constexpr uint32_t busy = 1;
+}
+namespace fmc::cas {
+    constexpr uint32_t clocks1 = 1;
+    constexpr uint32_t clocks2 = 2;
+    constexpr uint32_t clocks3 = 3;
+}
+namespace fmc::cburstrw {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace fmc::clk {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t div2 = 2;
+    constexpr uint32_t div3 = 3;
+}
+namespace fmc::cpsize {
+    constexpr uint32_t noburstsplit = 0;
+    constexpr uint32_t bytes128 = 1;
+    constexpr uint32_t bytes256 = 2;
+    constexpr uint32_t bytes512 = 3;
+    constexpr uint32_t bytes1024 = 4;
+}
+namespace fmc::cre {
+    constexpr uint32_t clear = 1;
+}
+namespace fmc::ctb {
+    constexpr uint32_t notissued = 0;
+    constexpr uint32_t issued = 1;
+}
+namespace fmc::eccen {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace fmc::eccps {
+    constexpr uint32_t bytes256 = 0;
+    constexpr uint32_t bytes512 = 1;
+    constexpr uint32_t bytes1024 = 2;
+    constexpr uint32_t bytes2048 = 3;
+    constexpr uint32_t bytes4096 = 4;
+    constexpr uint32_t bytes8192 = 5;
+}
+namespace fmc::extmod {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace fmc::faccen {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace fmc::fempt {
+    constexpr uint32_t notempty = 0;
+    constexpr uint32_t empty = 1;
+}
+namespace fmc::ifen {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace fmc::ifs {
+    constexpr uint32_t didnotoccur = 0;
+    constexpr uint32_t occurred = 1;
+}
+namespace fmc::ilen {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace fmc::ils {
+    constexpr uint32_t didnotoccur = 0;
+    constexpr uint32_t occurred = 1;
+}
+namespace fmc::iren {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace fmc::irs {
+    constexpr uint32_t didnotoccur = 0;
+    constexpr uint32_t occurred = 1;
+}
+namespace fmc::mbken {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace fmc::mode {
+    constexpr uint32_t normal = 0;
+    constexpr uint32_t clockconfigurationenable = 1;
+    constexpr uint32_t pall = 2;
+    constexpr uint32_t autorefreshcommand = 3;
+    constexpr uint32_t loadmoderegister = 4;
+    constexpr uint32_t selfrefreshcommand = 5;
+    constexpr uint32_t powerdowncommand = 6;
+}
+namespace fmc::modes {
+    constexpr uint32_t normal = 0;
+    constexpr uint32_t selfrefresh = 1;
+    constexpr uint32_t powerdown = 2;
+}
+namespace fmc::mtyp {
+    constexpr uint32_t sram = 0;
+    constexpr uint32_t psram = 1;
+    constexpr uint32_t flash = 2;
+}
+namespace fmc::muxen {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace fmc::mwid {
+    constexpr uint32_t bits8 = 0;
+    constexpr uint32_t bits16 = 1;
+    constexpr uint32_t bits32 = 2;
+}
+namespace fmc::nb {
+    constexpr uint32_t nb2 = 0;
+    constexpr uint32_t nb4 = 1;
+}
+namespace fmc::nc {
+    constexpr uint32_t bits8 = 0;
+    constexpr uint32_t bits9 = 1;
+    constexpr uint32_t bits10 = 2;
+    constexpr uint32_t bits11 = 3;
+}
+namespace fmc::nr {
+    constexpr uint32_t bits11 = 0;
+    constexpr uint32_t bits12 = 1;
+    constexpr uint32_t bits13 = 2;
+}
+namespace fmc::pbken {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace fmc::ptyp {
+    constexpr uint32_t nandflash = 1;
+}
+namespace fmc::pwaiten {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace fmc::pwid {
+    constexpr uint32_t bits8 = 0;
+    constexpr uint32_t bits16 = 1;
+}
+namespace fmc::rburst {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace fmc::re {
+    constexpr uint32_t noerror = 0;
+    constexpr uint32_t error = 1;
+}
+namespace fmc::reie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace fmc::rpipe {
+    constexpr uint32_t nodelay = 0;
+    constexpr uint32_t clocks1 = 1;
+    constexpr uint32_t clocks2 = 2;
+}
+namespace fmc::sdclk {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t div2 = 2;
+    constexpr uint32_t div3 = 3;
+}
+namespace fmc::waitcfg {
+    constexpr uint32_t beforewaitstate = 0;
+    constexpr uint32_t duringwaitstate = 1;
+}
+namespace fmc::waiten {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace fmc::waitpol {
+    constexpr uint32_t activelow = 0;
+    constexpr uint32_t activehigh = 1;
+}
+namespace fmc::wp {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace fmc::wrapmod {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace fmc::wren {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+
 #endif // STM32_FMC_HPP

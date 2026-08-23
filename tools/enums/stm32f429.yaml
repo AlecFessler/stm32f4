@@ -1,0 +1,394 @@
+_svd: ../svd/stm32f429.svd
+
+_rebase:
+  # Make I2C1 the base type
+  I2C1: I2C3
+  USART1: USART6
+
+_modify:
+  # The SVD calls this C_ADC in some devices and ADC_Common in others,
+  # we'll prefer the more sensible (and better for sorting) ADC_Common
+  C_ADC:
+    name: ADC_Common
+
+_derive:
+  UART7: UART4
+  UART8: UART4
+
+ADC_Common:
+  _include:
+    - patches/adc/multi.yaml
+    - fields/adc/adc_v2_multi.yaml
+
+ADC1:
+  _include:
+    - patches/adc/smpx_18.yaml
+    - fields/adc/adc_v2.yaml
+    - fields/adc/adc_v2/adc_v2_extsel_c.yaml
+    - collect/adc/jofr_jdr.yaml
+
+ADC[1]:
+  _include: collect/adc/derive_sq.yaml
+
+CAN1:
+  _include:
+    - fields/can/can.yaml
+    - collect/can/can.yaml
+    - collect/can/filter_bank.yaml
+
+CRC:
+  # The SVD calls the RESET field "CR", fix per RM0090
+  CR:
+    _modify:
+      CR:
+        name: RESET
+  _include:
+    - fields/crc/v1.yaml
+    - fields/crc/crc_idr_8bit.yaml
+
+CRYP:
+  _include:
+    - patches/cryp/merge_fields.yaml
+    - collect/cryp/v2.yaml
+
+DAC:
+  _include:
+    - fields/dac/f2_4_7.yaml
+    - collect/dac/v2.yaml
+
+DBGMCU: {}
+
+DCMI:
+  _include:
+    - patches/dcmi/byte.yaml
+    - fields/dcmi/v1.yaml
+    - collect/dcmi/dcmi.yaml
+
+DMA2:
+  _include:
+    - patches/dma/fcr_wo.yaml
+    - patches/dma/dma_v2.yaml
+    - fields/dma/dma_v2.yaml
+    - collect/dma/st.yaml
+
+DMA2D: {}
+
+#Ethernet_DMA: {}
+#Ethernet_MAC: {}
+#Ethernet_MMC: {}
+#Ethernet_PTP: {}
+
+EXTI:
+  _include:
+    - patches/exti/add_fpu_interrupt.yaml
+    - fields/exti/common.yaml
+    - collect/exti/farray.yaml
+
+FLASH:
+  _include:
+    - patches/flash/acr/latency_16_states.yaml
+    - patches/flash/optcr/nwrp.yaml
+    - patches/flash/optcr1/nwrp.yaml
+    - patches/flash/optkeyr/optkeyr.yaml
+    - patches/flash/sr/rderr.yaml
+    - fields/flash/acr/common_f2_f4.yaml
+    - fields/flash/acr/latency_16_states.yaml
+    - fields/flash/cr/common_f2_f4_f7.yaml
+    - fields/flash/cr/errie.yaml
+    - fields/flash/cr/mer_mer1.yaml
+    - fields/flash/keyr/common.yaml
+    - fields/flash/optcr/bfb2.yaml
+    - fields/flash/optcr/common.yaml
+    - fields/flash/optcr/db1m.yaml
+    - fields/flash/optcr/sprmod.yaml
+    - fields/flash/optcr/wdg.yaml
+    - fields/flash/optcr1/nwrp.yaml
+    - fields/flash/optkeyr/common.yaml
+    - fields/flash/sr/common_f2_f4_f7.yaml
+    - fields/flash/sr/pgserr.yaml
+    - fields/flash/sr/rderr.yaml
+    - collect/flash/optcr/nwrp.yaml
+    - collect/flash/optcr1/nwrp.yaml
+
+# Offset of BWTR3 and BWTR4 is incorrect
+FMC:
+  _modify:
+    BWTR3:
+      addressOffset: 0x114
+      alternateRegister: ""
+    BWTR4:
+      addressOffset: 0x11C
+      alternateRegister: ""
+  SDCR2:
+    _modify:
+      CLK:
+        name: SDCLK
+  _include:
+    - patches/fsmc/bcr_btr_reset.yaml
+    - patches/fsmc/nand.yaml
+    - fields/fsmc/sram.yaml
+    - fields/fsmc/nand.yaml
+    - fields/fsmc/sd.yaml
+    - collect/fsmc/sram.yaml
+    - collect/fsmc/nand_v1.yaml
+    - collect/fsmc/sd.yaml
+
+FM[C]:
+  _include:
+    - collect/fsmc/sram_derive.yaml
+    - collect/fsmc/sd_derive.yaml
+
+GPIO[ABK]:
+  _include:
+    - fields/gpio/v2/common.yaml
+    - collect/gpio/v2.yaml
+
+GPIO[A]:
+  _include: collect/gpio/gpioa_afr.yaml
+GPIO[BK]:
+  _include: collect/gpio/v2_derive.yaml
+
+HASH:
+  _include:
+    - collect/hash/v2.yaml
+
+I2C1:
+  _include:
+    - patches/16bit.yaml
+    - fields/i2c/v1.yaml
+  OAR1:
+    _merge:
+      ADD: "ADD[07],ADD10"
+
+IWDG:
+  _include:
+    - patches/16bit.yaml
+    - fields/iwdg/iwdg.yaml
+
+LTDC:
+  _include:
+    - patches/ltdc/f4_f7_ltdc_bccr.yaml
+    - fields/ltdc/ltdc.yaml
+    - collect/ltdc/layer.yaml
+
+OTG_FS_*:
+  _strip: FS_
+
+OTG_FS_DEVICE:
+  _include:
+    - patches/usb_otg/fs_v1_device_ext.yaml
+    - patches/usb_otg/fs_v1_device.yaml
+    - collect/usb_otg/fs_device.yaml
+OTG_FS_GLOBAL:
+  _include:
+    - patches/usb_otg/fs_v1_global_ext.yaml
+    - patches/usb_otg/fs_v1_global.yaml
+    - patches/usb_otg/fs_v1_novbussens.yaml
+    - collect/usb_otg/fs_global.yaml
+OTG_FS_HOST:
+  _include:
+    - patches/usb_otg/fs_v1_host_ext.yaml
+    - patches/usb_otg/fs_v1_host.yaml
+    - collect/usb_otg/fs_host.yaml
+OTG_FS_PWRCLK: {}
+
+OTG_HS_*:
+  _strip: OTG_HS_
+
+OTG_HS_DEVICE:
+  _include:
+    - patches/usb_otg/hs_v1_device.yaml
+    - collect/usb_otg/hs_device.yaml
+OTG_HS_GLOBAL:
+  _include:
+    - patches/usb_otg/hs_v1_global.yaml
+    - collect/usb_otg/hs_global.yaml
+OTG_HS_HOST:
+  _include:
+    - patches/usb_otg/hs_v1_f4_host.yaml
+    - collect/usb_otg/hs_host.yaml
+OTG_HS_PWRCLK:
+  _include:
+    - patches/usb_otg/hs_v1_pwrclk.yaml
+
+PWR:
+  CR:
+    _add:
+      ADCDC1:
+        bitOffset: 13
+        bitWidth: 1
+    _modify:
+      MRLVDS:
+        name: MRUDS
+        description: Main regulator in deepsleep under-drive mode
+      LPLVDS:
+        name: LPUDS
+        description: Low-power regulator in deepsleep under-drive mode
+  _include:
+    - patches/pwr/f4.yaml
+    - fields/pwr/pwr_f427_f437_f429_f439.yaml
+
+# Add missing RCC reset/enable bits
+RCC:
+  APB1RSTR:
+    _modify:
+      UART2RST:
+        name: USART2RST
+      UART3RST:
+        name: USART3RST
+  APB1ENR:
+    _modify:
+      UART7ENR:
+        name: UART7EN
+      UART8ENR:
+        name: UART8EN
+  _include:
+    - patches/rcc/sai.yaml
+    - patches/rcc/dma2d_ltdc.yaml
+    - patches/rcc/add_gpiojk.yaml
+    - patches/rcc/rcc_merge_sw_sws.yaml
+    - patches/rcc/rcc_merge_rtcsel.yaml
+    - patches/rcc/rename_plli2scfgr.yaml
+    - fields/rcc/v2/common.yaml
+    - fields/rcc/v2/i2s.yaml
+    - fields/rcc/v2/i2s_pll.yaml
+    - fields/rcc/v2/sai_pllr.yaml
+    - fields/rcc/v2/dckcfgr_timpre.yaml
+    - fields/rcc/v2/dckcfgr_i2s_sai_f4.yaml
+    - fields/rcc/v2/dckcfgr_saidivr.yaml
+
+RNG:
+  _include:
+    - fields/rng/v1.yaml
+
+RTC:
+  _include:
+    - patches/rtc/alarm.yaml
+    - patches/rtc/f4_cr.yaml
+    - patches/rtc/rtc_cr.yaml
+    - fields/rtc/v2/common.yaml
+    - collect/rtc/alarm.yaml
+    - collect/rtc/bkpr.yaml
+
+SAI:
+  _include:
+    - patches/sai/sai_v1.yaml
+    - fields/sai/sai.yaml
+    - collect/sai/ch.yaml
+
+SDIO:
+  _include:
+    - patches/sdio_sdmmc/cardstatus.yaml
+    - fields/sdio/v1-ata.yaml
+    - collect/sdio/resp.yaml
+
+SPI1:
+  _include:
+    - patches/16bit.yaml
+    - patches/spi/dr8.yaml
+    - fields/spi/spi_v1.yaml
+  SR:
+    _modify:
+      # This field has the wrong name in the SVD compared to RM0090
+      TIFRFE:
+        name: FRE
+
+SYSCFG:
+  _include:
+    - patches/syscfg/f4_common.yaml
+    - fields/syscfg/f4/syscfg_f427_f437_f429_f439.yaml
+
+TIM1:
+  _include:
+    - patches/tim/v1/tim1_16bit.yaml
+    - patches/tim/icpsc.yaml
+    - patches/tim/dmab_32.yaml
+    - fields/tim/tim_mms_ts_sms.yaml
+    - fields/tim/v1/tim1.yaml
+    - collect/tim/ccr.yaml
+
+TIM2:
+  _include: patches/tim/tim2_itr1_rmp.yaml
+
+TIM[25]:
+  _include:
+    - patches/tim/v1/tim2_16bit.yaml
+    - patches/tim/icpsc.yaml
+    - patches/tim/tim2_common_32bit.yaml
+    - fields/tim/tim_mms_ts_sms.yaml
+    - fields/tim/v1/tim2.yaml
+    - collect/tim/ccr.yaml
+
+TIM5:
+  _include: collect/tim/tim5_derive.yaml
+
+TIM3:
+  _include:
+    - patches/tim/v1/16bit.yaml
+    - patches/tim/icpsc.yaml
+    - patches/tim/tim_ch_16bit_l.yaml
+    - fields/tim/tim_mms_ts_sms.yaml
+    - fields/tim/v1/tim3.yaml
+    - collect/tim/ccr.yaml
+
+TIM6:
+  _include:
+    - patches/tim/v1/16bit.yaml
+    - fields/tim/v1/tim6.yaml
+
+TIM9:
+  _delete: CR2
+  _include:
+    - patches/tim/v1/16bit.yaml
+    - patches/tim/icpsc.yaml
+    - patches/tim/tim9_ic1f.yaml
+    - fields/tim/v1/tim9.yaml
+    - collect/tim/ccr.yaml
+
+TIM1[01]:
+  _include:
+    - patches/tim/v1/16bit.yaml
+    - patches/tim/tim10_14_missing_opm.yaml
+    - patches/tim/icpsc.yaml
+    - fields/tim/v1/tim10.yaml
+    - collect/tim/ccr.yaml
+
+TIM11:
+  _include: collect/tim/tim11_derive.yaml
+
+UART4:
+  _include:
+    - patches/usart/v1.yaml
+    - patches/usart/f4_add_UART_GTPR.yaml
+    - fields/usart/v2/uart.yaml
+
+UART[4]:
+  _include: collect/usart/v1_v2_derive.yaml
+
+USART1:
+  _include:
+    - patches/usart/v1.yaml
+    - fields/usart/v2/usart.yaml
+
+WWDG:
+  _include:
+    - patches/16bit.yaml
+    - fields/wwdg/wwdg.yaml
+
+# NOTE: Core peripherals (NVIC, MPU, FPU, SCB, etc.) were deleted
+
+_include:
+  - patches/ethernet/mac_regs.yaml
+  - patches/ethernet/mmc.yaml
+  - patches/ethernet/f2_f4.yaml
+  - patches/adc/adc_common_group_name.yaml
+  - patches/tim/group.yaml
+  - fields/eth/eth_dma_common.yaml
+  - fields/eth/eth_dma_mb_edfe_dmarswtr.yaml
+  - fields/eth/eth_mac_common.yaml
+  - fields/eth/eth_mac_cstf.yaml
+  - fields/eth/eth_mmc_common.yaml
+  - fields/eth/eth_mmc_mcfhp_mcp.yaml
+  - patches/dbgmcu/dbgmcu.yaml
+  - patches/ethernet/f4_f7.yaml
+  - fields/eth/eth_ptp_ppsfreq.yaml

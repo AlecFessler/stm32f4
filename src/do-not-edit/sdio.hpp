@@ -151,4 +151,203 @@ constexpr Field<Access::RW> sdio_mask_ccrcfailie{0x40012C3Cu, 0x00000001u, 0};
 constexpr Field<Access::RO> sdio_fifocnt_fifocount{0x40012C48u, 0x00FFFFFFu, 0};
 constexpr Field<Access::RW> sdio_fifo_fifodata{0x40012C80u, 0xFFFFFFFFu, 0};
 
+namespace sdio::bypass {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace sdio::c {
+    constexpr uint32_t clear = 1;
+}
+namespace sdio::ccrcfail {
+    constexpr uint32_t notfailed = 0;
+    constexpr uint32_t failed = 1;
+}
+namespace sdio::ce_atacmd {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace sdio::ceataend {
+    constexpr uint32_t notreceived = 0;
+    constexpr uint32_t received = 1;
+}
+namespace sdio::clken {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace sdio::cmdact {
+    constexpr uint32_t notinprogress = 0;
+    constexpr uint32_t inprogress = 1;
+}
+namespace sdio::cmdrend {
+    constexpr uint32_t notdone = 0;
+    constexpr uint32_t done = 1;
+}
+namespace sdio::cmdsent {
+    constexpr uint32_t notsent = 0;
+    constexpr uint32_t sent = 1;
+}
+namespace sdio::cpsmen {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace sdio::ctimeout {
+    constexpr uint32_t notimeout = 0;
+    constexpr uint32_t timeout = 1;
+}
+namespace sdio::dataend {
+    constexpr uint32_t notdone = 0;
+    constexpr uint32_t done = 1;
+}
+namespace sdio::dbckend {
+    constexpr uint32_t nottransferred = 0;
+    constexpr uint32_t transferred = 1;
+}
+namespace sdio::dcrcfail {
+    constexpr uint32_t notfailed = 0;
+    constexpr uint32_t failed = 1;
+}
+namespace sdio::dmaen {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace sdio::dtdir {
+    constexpr uint32_t controllertocard = 0;
+    constexpr uint32_t cardtocontroller = 1;
+}
+namespace sdio::dten {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace sdio::dtimeout {
+    constexpr uint32_t notimeout = 0;
+    constexpr uint32_t timeout = 1;
+}
+namespace sdio::dtmode {
+    constexpr uint32_t blockmode = 0;
+    constexpr uint32_t streammode = 1;
+}
+namespace sdio::encmdcompl {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace sdio::hwfc_en {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace sdio::ie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace sdio::negedge {
+    constexpr uint32_t rising = 0;
+    constexpr uint32_t falling = 1;
+}
+namespace sdio::nien {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace sdio::pwrctrl {
+    constexpr uint32_t poweroff = 0;
+    constexpr uint32_t poweron = 3;
+}
+namespace sdio::pwrsav {
+    constexpr uint32_t enabled = 0;
+    constexpr uint32_t disabled = 1;
+}
+namespace sdio::rwmod {
+    constexpr uint32_t d2 = 0;
+    constexpr uint32_t ck = 1;
+}
+namespace sdio::rwstart {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace sdio::rwstop {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace sdio::rxact {
+    constexpr uint32_t notinprogress = 0;
+    constexpr uint32_t inprogress = 1;
+}
+namespace sdio::rxdavl {
+    constexpr uint32_t notavailable = 0;
+    constexpr uint32_t available = 1;
+}
+namespace sdio::rxfifoe {
+    constexpr uint32_t notempty = 0;
+    constexpr uint32_t empty = 1;
+}
+namespace sdio::rxfifof {
+    constexpr uint32_t notfull = 0;
+    constexpr uint32_t full = 1;
+}
+namespace sdio::rxfifohf {
+    constexpr uint32_t nothalffull = 0;
+    constexpr uint32_t halffull = 1;
+}
+namespace sdio::rxoverr {
+    constexpr uint32_t nooverrun = 0;
+    constexpr uint32_t overrun = 1;
+}
+namespace sdio::sdioen {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace sdio::sdioit {
+    constexpr uint32_t notreceived = 0;
+    constexpr uint32_t received = 1;
+}
+namespace sdio::sdiosuspend {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace sdio::stbiterr {
+    constexpr uint32_t detected = 0;
+    constexpr uint32_t notdetected = 1;
+}
+namespace sdio::txact {
+    constexpr uint32_t notinprogress = 0;
+    constexpr uint32_t inprogress = 1;
+}
+namespace sdio::txdavl {
+    constexpr uint32_t notavailable = 0;
+    constexpr uint32_t available = 1;
+}
+namespace sdio::txfifoe {
+    constexpr uint32_t notempty = 0;
+    constexpr uint32_t empty = 1;
+}
+namespace sdio::txfifof {
+    constexpr uint32_t notfull = 0;
+    constexpr uint32_t full = 1;
+}
+namespace sdio::txfifohe {
+    constexpr uint32_t nothalfempty = 0;
+    constexpr uint32_t halfempty = 1;
+}
+namespace sdio::txunderr {
+    constexpr uint32_t nounderrun = 0;
+    constexpr uint32_t underrun = 1;
+}
+namespace sdio::waitint {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace sdio::waitpend {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace sdio::waitresp {
+    constexpr uint32_t noresponse = 0;
+    constexpr uint32_t shortresponse = 1;
+    constexpr uint32_t noresponse2 = 2;
+    constexpr uint32_t longresponse = 3;
+}
+namespace sdio::widbus {
+    constexpr uint32_t buswidth1 = 0;
+    constexpr uint32_t buswidth4 = 1;
+    constexpr uint32_t buswidth8 = 2;
+}
+
 #endif // STM32_SDIO_HPP

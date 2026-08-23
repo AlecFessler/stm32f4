@@ -66,4 +66,149 @@ constexpr Field<Access::RW> uart5_cr3_irlp{0x40005014u, 0x00000004u, 2};
 constexpr Field<Access::RW> uart5_cr3_iren{0x40005014u, 0x00000002u, 1};
 constexpr Field<Access::RW> uart5_cr3_eie{0x40005014u, 0x00000001u, 0};
 
+namespace uart5::dmar {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart5::dmat {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart5::eie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart5::fe {
+    constexpr uint32_t noerror = 0;
+    constexpr uint32_t error = 1;
+}
+namespace uart5::hdsel {
+    constexpr uint32_t fullduplex = 0;
+    constexpr uint32_t halfduplex = 1;
+}
+namespace uart5::idle {
+    constexpr uint32_t noidle = 0;
+    constexpr uint32_t idle = 1;
+}
+namespace uart5::idleie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart5::iren {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart5::irlp {
+    constexpr uint32_t normal = 0;
+    constexpr uint32_t lowpower = 1;
+}
+namespace uart5::lbd {
+    constexpr uint32_t notdetected = 0;
+    constexpr uint32_t detected = 1;
+}
+namespace uart5::lbdie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart5::lbdl {
+    constexpr uint32_t lbdl10 = 0;
+    constexpr uint32_t lbdl11 = 1;
+}
+namespace uart5::linen {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart5::m {
+    constexpr uint32_t m8 = 0;
+    constexpr uint32_t m9 = 1;
+}
+namespace uart5::ne {
+    constexpr uint32_t nonoise = 0;
+    constexpr uint32_t noise = 1;
+}
+namespace uart5::nf {
+    constexpr uint32_t nonoise = 0;
+    constexpr uint32_t noise = 1;
+}
+namespace uart5::onebit {
+    constexpr uint32_t sample3 = 0;
+    constexpr uint32_t sample1 = 1;
+}
+namespace uart5::ore {
+    constexpr uint32_t nooverrun = 0;
+    constexpr uint32_t overrun = 1;
+}
+namespace uart5::over8 {
+    constexpr uint32_t oversample16 = 0;
+    constexpr uint32_t oversample8 = 1;
+}
+namespace uart5::pce {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart5::pe {
+    constexpr uint32_t noerror = 0;
+    constexpr uint32_t error = 1;
+}
+namespace uart5::peie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart5::ps {
+    constexpr uint32_t even = 0;
+    constexpr uint32_t odd = 1;
+}
+namespace uart5::re {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart5::rwu {
+    constexpr uint32_t active = 0;
+    constexpr uint32_t mute = 1;
+}
+namespace uart5::rxne {
+    constexpr uint32_t nodata = 0;
+    constexpr uint32_t dataready = 1;
+}
+namespace uart5::rxneie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart5::sbk {
+    constexpr uint32_t nobreak = 0;
+    constexpr uint32_t break_ = 1;
+}
+namespace uart5::stop {
+    constexpr uint32_t stop1 = 0;
+    constexpr uint32_t stop2 = 2;
+}
+namespace uart5::tc {
+    constexpr uint32_t txnotcomplete = 0;
+    constexpr uint32_t txcomplete = 1;
+}
+namespace uart5::tcie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart5::te {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart5::txe {
+    constexpr uint32_t txnotempty = 0;
+    constexpr uint32_t txempty = 1;
+}
+namespace uart5::txeie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart5::ue {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart5::wake {
+    constexpr uint32_t idleline = 0;
+    constexpr uint32_t addressmark = 1;
+}
+
 #endif // STM32_UART5_HPP

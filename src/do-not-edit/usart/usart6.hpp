@@ -80,4 +80,191 @@ constexpr Field<Access::RW> usart6_cr3_eie{0x40011414u, 0x00000001u, 0};
 constexpr Field<Access::RW> usart6_gtpr_gt{0x40011418u, 0x0000FF00u, 8};
 constexpr Field<Access::RW> usart6_gtpr_psc{0x40011418u, 0x000000FFu, 0};
 
+namespace usart6::clken {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace usart6::cpha {
+    constexpr uint32_t first = 0;
+    constexpr uint32_t second = 1;
+}
+namespace usart6::cpol {
+    constexpr uint32_t low = 0;
+    constexpr uint32_t high = 1;
+}
+namespace usart6::cts {
+    constexpr uint32_t notchanged = 0;
+    constexpr uint32_t changed = 1;
+}
+namespace usart6::ctse {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace usart6::ctsie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace usart6::dmar {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace usart6::dmat {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace usart6::eie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace usart6::fe {
+    constexpr uint32_t noerror = 0;
+    constexpr uint32_t error = 1;
+}
+namespace usart6::hdsel {
+    constexpr uint32_t fullduplex = 0;
+    constexpr uint32_t halfduplex = 1;
+}
+namespace usart6::idle {
+    constexpr uint32_t noidle = 0;
+    constexpr uint32_t idle = 1;
+}
+namespace usart6::idleie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace usart6::iren {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace usart6::irlp {
+    constexpr uint32_t normal = 0;
+    constexpr uint32_t lowpower = 1;
+}
+namespace usart6::lbcl {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace usart6::lbd {
+    constexpr uint32_t notdetected = 0;
+    constexpr uint32_t detected = 1;
+}
+namespace usart6::lbdie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace usart6::lbdl {
+    constexpr uint32_t lbdl10 = 0;
+    constexpr uint32_t lbdl11 = 1;
+}
+namespace usart6::linen {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace usart6::m {
+    constexpr uint32_t m8 = 0;
+    constexpr uint32_t m9 = 1;
+}
+namespace usart6::nack {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace usart6::ne {
+    constexpr uint32_t nonoise = 0;
+    constexpr uint32_t noise = 1;
+}
+namespace usart6::nf {
+    constexpr uint32_t nonoise = 0;
+    constexpr uint32_t noise = 1;
+}
+namespace usart6::onebit {
+    constexpr uint32_t sample3 = 0;
+    constexpr uint32_t sample1 = 1;
+}
+namespace usart6::ore {
+    constexpr uint32_t nooverrun = 0;
+    constexpr uint32_t overrun = 1;
+}
+namespace usart6::over8 {
+    constexpr uint32_t oversample16 = 0;
+    constexpr uint32_t oversample8 = 1;
+}
+namespace usart6::pce {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace usart6::pe {
+    constexpr uint32_t noerror = 0;
+    constexpr uint32_t error = 1;
+}
+namespace usart6::peie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace usart6::ps {
+    constexpr uint32_t even = 0;
+    constexpr uint32_t odd = 1;
+}
+namespace usart6::re {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace usart6::rtse {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace usart6::rwu {
+    constexpr uint32_t active = 0;
+    constexpr uint32_t mute = 1;
+}
+namespace usart6::rxne {
+    constexpr uint32_t nodata = 0;
+    constexpr uint32_t dataready = 1;
+}
+namespace usart6::rxneie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace usart6::sbk {
+    constexpr uint32_t nobreak = 0;
+    constexpr uint32_t break_ = 1;
+}
+namespace usart6::scen {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace usart6::stop {
+    constexpr uint32_t stop1 = 0;
+    constexpr uint32_t stop0p5 = 1;
+    constexpr uint32_t stop2 = 2;
+    constexpr uint32_t stop1p5 = 3;
+}
+namespace usart6::tc {
+    constexpr uint32_t txnotcomplete = 0;
+    constexpr uint32_t txcomplete = 1;
+}
+namespace usart6::tcie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace usart6::te {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace usart6::txe {
+    constexpr uint32_t txnotempty = 0;
+    constexpr uint32_t txempty = 1;
+}
+namespace usart6::txeie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace usart6::ue {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace usart6::wake {
+    constexpr uint32_t idleline = 0;
+    constexpr uint32_t addressmark = 1;
+}
+
 #endif // STM32_USART6_HPP

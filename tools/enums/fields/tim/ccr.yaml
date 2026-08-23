@@ -1,0 +1,20 @@
+_include: ccr_common.yaml
+
+CCMR1_Input:
+  "?~CC2S":
+    TI2: [1, "CC2 channel is configured as input, IC2 is mapped on TI2"]
+    TI1: [2, "CC2 channel is configured as input, IC2 is mapped on TI1"]
+    TRC: [3, "CC2 channel is configured as input, IC2 is mapped on TRC"]
+  CC1S:
+    TI1: [1, "CC1 channel is configured as input, IC1 is mapped on TI1"]
+    TI2: [2, "CC1 channel is configured as input, IC1 is mapped on TI2"]
+    TRC: [3, "CC1 channel is configured as input, IC1 is mapped on TRC"]
+"?~CCMR2_Input":
+  CC4S:
+    TI4: [1, "CC4 channel is configured as input, IC4 is mapped on TI4"]
+    TI3: [2, "CC4 channel is configured as input, IC4 is mapped on TI3"]
+    TRC: [3, "CC4 channel is configured as input, IC4 is mapped on TRC"]
+  CC3S:
+    TI3: [1, "CC3 channel is configured as input, IC3 is mapped on TI3"]
+    TI4: [2, "CC3 channel is configured as input, IC3 is mapped on TI4"]
+    TRC: [3, "CC3 channel is configured as input, IC3 is mapped on TRC"]

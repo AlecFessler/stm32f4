@@ -122,4 +122,167 @@ constexpr Field<Access::RO> adc2_jdr3_jdata{0x40012144u, 0x0000FFFFu, 0};
 constexpr Field<Access::RO> adc2_jdr4_jdata{0x40012148u, 0x0000FFFFu, 0};
 constexpr Field<Access::RO> adc2_dr_data{0x4001214Cu, 0x0000FFFFu, 0};
 
+namespace adc2::adon {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace adc2::align {
+    constexpr uint32_t right = 0;
+    constexpr uint32_t left = 1;
+}
+namespace adc2::awd {
+    constexpr uint32_t noevent = 0;
+    constexpr uint32_t event = 1;
+}
+namespace adc2::awden {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace adc2::awdie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace adc2::awdsgl {
+    constexpr uint32_t allchannels = 0;
+    constexpr uint32_t singlechannel = 1;
+}
+namespace adc2::cont {
+    constexpr uint32_t single = 0;
+    constexpr uint32_t continuous = 1;
+}
+namespace adc2::dds {
+    constexpr uint32_t single = 0;
+    constexpr uint32_t continuous = 1;
+}
+namespace adc2::discen {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace adc2::dma {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace adc2::eoc {
+    constexpr uint32_t notcomplete = 0;
+    constexpr uint32_t complete = 1;
+}
+namespace adc2::eocie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace adc2::eocs {
+    constexpr uint32_t eachsequence = 0;
+    constexpr uint32_t eachconversion = 1;
+}
+namespace adc2::exten {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t risingedge = 1;
+    constexpr uint32_t fallingedge = 2;
+    constexpr uint32_t bothedges = 3;
+}
+namespace adc2::extsel {
+    constexpr uint32_t tim1cc1 = 0;
+    constexpr uint32_t tim1cc2 = 1;
+    constexpr uint32_t tim1cc3 = 2;
+    constexpr uint32_t tim2cc2 = 3;
+    constexpr uint32_t tim2cc3 = 4;
+    constexpr uint32_t tim2cc4 = 5;
+    constexpr uint32_t tim2trgo = 6;
+    constexpr uint32_t tim3cc1 = 7;
+    constexpr uint32_t tim3trgo = 8;
+    constexpr uint32_t tim4cc4 = 9;
+    constexpr uint32_t tim5cc1 = 10;
+    constexpr uint32_t tim5cc2 = 11;
+    constexpr uint32_t tim5cc3 = 12;
+    constexpr uint32_t tim8cc1 = 13;
+    constexpr uint32_t tim8trgo = 14;
+    constexpr uint32_t exti11 = 15;
+}
+namespace adc2::jauto {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace adc2::jawden {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace adc2::jdiscen {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace adc2::jeoc {
+    constexpr uint32_t notcomplete = 0;
+    constexpr uint32_t complete = 1;
+}
+namespace adc2::jeocie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace adc2::jexten {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t risingedge = 1;
+    constexpr uint32_t fallingedge = 2;
+    constexpr uint32_t bothedges = 3;
+}
+namespace adc2::jextsel {
+    constexpr uint32_t tim1cc4 = 0;
+    constexpr uint32_t tim1trgo = 1;
+    constexpr uint32_t tim2cc1 = 2;
+    constexpr uint32_t tim2trgo = 3;
+    constexpr uint32_t tim3cc2 = 4;
+    constexpr uint32_t tim3cc4 = 5;
+    constexpr uint32_t tim4cc1 = 6;
+    constexpr uint32_t tim4cc2 = 7;
+    constexpr uint32_t tim4cc3 = 8;
+    constexpr uint32_t tim4trgo = 9;
+    constexpr uint32_t tim5cc4 = 10;
+    constexpr uint32_t tim5trgo = 11;
+    constexpr uint32_t tim8cc2 = 12;
+    constexpr uint32_t tim8cc3 = 13;
+    constexpr uint32_t tim8cc4 = 14;
+    constexpr uint32_t exti15 = 15;
+}
+namespace adc2::jstrt {
+    constexpr uint32_t notstarted = 0;
+    constexpr uint32_t started = 1;
+}
+namespace adc2::jswstart {
+    constexpr uint32_t start = 1;
+}
+namespace adc2::ovr {
+    constexpr uint32_t nooverrun = 0;
+    constexpr uint32_t overrun = 1;
+}
+namespace adc2::ovrie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace adc2::res {
+    constexpr uint32_t twelvebit = 0;
+    constexpr uint32_t tenbit = 1;
+    constexpr uint32_t eightbit = 2;
+    constexpr uint32_t sixbit = 3;
+}
+namespace adc2::scan {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace adc2::smp {
+    constexpr uint32_t cycles3 = 0;
+    constexpr uint32_t cycles15 = 1;
+    constexpr uint32_t cycles28 = 2;
+    constexpr uint32_t cycles56 = 3;
+    constexpr uint32_t cycles84 = 4;
+    constexpr uint32_t cycles112 = 5;
+    constexpr uint32_t cycles144 = 6;
+    constexpr uint32_t cycles480 = 7;
+}
+namespace adc2::strt {
+    constexpr uint32_t notstarted = 0;
+    constexpr uint32_t started = 1;
+}
+namespace adc2::swstart {
+    constexpr uint32_t start = 1;
+}
+
 #endif // STM32_ADC2_HPP

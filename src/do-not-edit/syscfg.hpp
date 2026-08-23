@@ -57,4 +57,41 @@ constexpr Field<Access::RW> syscfg_exticr4_exti12{0x40013814u, 0x0000000Fu, 0};
 constexpr Field<Access::RO> syscfg_cmpcr_ready{0x40013820u, 0x00000100u, 8};
 constexpr Field<Access::RO> syscfg_cmpcr_cmp_pd{0x40013820u, 0x00000001u, 0};
 
+namespace syscfg::cmp_pd {
+    constexpr uint32_t powerdown = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace syscfg::exti0 {
+    constexpr uint32_t pa = 0;
+    constexpr uint32_t pb = 1;
+    constexpr uint32_t pc = 2;
+    constexpr uint32_t pd = 3;
+    constexpr uint32_t pe = 4;
+    constexpr uint32_t pf = 5;
+    constexpr uint32_t pg = 6;
+    constexpr uint32_t ph = 7;
+    constexpr uint32_t pi = 8;
+    constexpr uint32_t pj = 9;
+    constexpr uint32_t pk = 10;
+}
+namespace syscfg::mem_mode {
+    constexpr uint32_t mainflash = 0;
+    constexpr uint32_t systemflash = 1;
+    constexpr uint32_t fsmcbank1 = 2;
+    constexpr uint32_t embeddedsram = 3;
+    constexpr uint32_t fmcsdrambank1 = 4;
+}
+namespace syscfg::mii_rmii_sel {
+    constexpr uint32_t mii = 0;
+    constexpr uint32_t rmii_phy = 1;
+}
+namespace syscfg::ready {
+    constexpr uint32_t notready = 0;
+    constexpr uint32_t ready = 1;
+}
+namespace syscfg::swp_fmc {
+    constexpr uint32_t noswap = 0;
+    constexpr uint32_t swapped = 1;
+}
+
 #endif // STM32_SYSCFG_HPP

@@ -358,4 +358,332 @@ constexpr Field<Access::RW> rcc_dckcfgr_sai1asrc{0x4002388Cu, 0x00300000u, 20};
 constexpr Field<Access::RW> rcc_dckcfgr_sai1bsrc{0x4002388Cu, 0x00C00000u, 22};
 constexpr Field<Access::RW> rcc_dckcfgr_timpre{0x4002388Cu, 0x01000000u, 24};
 
+namespace rcc::bdrst {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace rcc::cssc {
+    constexpr uint32_t clear = 1;
+}
+namespace rcc::cssf {
+    constexpr uint32_t notinterrupted = 0;
+    constexpr uint32_t interrupted = 1;
+}
+namespace rcc::csson {
+    constexpr uint32_t off = 0;
+    constexpr uint32_t on = 1;
+}
+namespace rcc::en {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace rcc::hpre {
+    constexpr uint32_t div1 = -1;
+    constexpr uint32_t div2 = 8;
+    constexpr uint32_t div4 = 9;
+    constexpr uint32_t div8 = 10;
+    constexpr uint32_t div16 = 11;
+    constexpr uint32_t div64 = 12;
+    constexpr uint32_t div128 = 13;
+    constexpr uint32_t div256 = 14;
+    constexpr uint32_t div512 = 15;
+}
+namespace rcc::hsebyp {
+    constexpr uint32_t notbypassed = 0;
+    constexpr uint32_t bypassed = 1;
+}
+namespace rcc::hseon {
+    constexpr uint32_t off = 0;
+    constexpr uint32_t on = 1;
+}
+namespace rcc::hsion {
+    constexpr uint32_t off = 0;
+    constexpr uint32_t on = 1;
+}
+namespace rcc::i2ssrc {
+    constexpr uint32_t plli2s = 0;
+    constexpr uint32_t ckin = 1;
+}
+namespace rcc::lpen {
+    constexpr uint32_t disabledinsleep = 0;
+    constexpr uint32_t enabledinsleep = 1;
+}
+namespace rcc::lsebyp {
+    constexpr uint32_t notbypassed = 0;
+    constexpr uint32_t bypassed = 1;
+}
+namespace rcc::lseon {
+    constexpr uint32_t off = 0;
+    constexpr uint32_t on = 1;
+}
+namespace rcc::lserdy {
+    constexpr uint32_t notready = 0;
+    constexpr uint32_t ready = 1;
+}
+namespace rcc::lsion {
+    constexpr uint32_t off = 0;
+    constexpr uint32_t on = 1;
+}
+namespace rcc::lsirdy {
+    constexpr uint32_t notready = 0;
+    constexpr uint32_t ready = 1;
+}
+namespace rcc::mco1 {
+    constexpr uint32_t hsi = 0;
+    constexpr uint32_t lse = 1;
+    constexpr uint32_t hse = 2;
+    constexpr uint32_t pll = 3;
+}
+namespace rcc::mco2 {
+    constexpr uint32_t sysclk = 0;
+    constexpr uint32_t plli2s = 1;
+    constexpr uint32_t hse = 2;
+    constexpr uint32_t pll = 3;
+}
+namespace rcc::mcopre {
+    constexpr uint32_t div1 = -1;
+    constexpr uint32_t div2 = 4;
+    constexpr uint32_t div3 = 5;
+    constexpr uint32_t div4 = 6;
+    constexpr uint32_t div5 = 7;
+}
+namespace rcc::plldivr {
+    constexpr uint32_t div1 = 0;
+    constexpr uint32_t div2 = 1;
+    constexpr uint32_t div3 = 2;
+    constexpr uint32_t div4 = 3;
+    constexpr uint32_t div5 = 4;
+    constexpr uint32_t div6 = 5;
+    constexpr uint32_t div7 = 6;
+    constexpr uint32_t div8 = 7;
+    constexpr uint32_t div9 = 8;
+    constexpr uint32_t div10 = 9;
+    constexpr uint32_t div11 = 10;
+    constexpr uint32_t div12 = 11;
+    constexpr uint32_t div13 = 12;
+    constexpr uint32_t div14 = 13;
+    constexpr uint32_t div15 = 14;
+    constexpr uint32_t div16 = 15;
+    constexpr uint32_t div17 = 16;
+    constexpr uint32_t div18 = 17;
+    constexpr uint32_t div19 = 18;
+    constexpr uint32_t div20 = 19;
+    constexpr uint32_t div21 = 20;
+    constexpr uint32_t div22 = 21;
+    constexpr uint32_t div23 = 22;
+    constexpr uint32_t div24 = 23;
+    constexpr uint32_t div25 = 24;
+    constexpr uint32_t div26 = 25;
+    constexpr uint32_t div27 = 26;
+    constexpr uint32_t div28 = 27;
+    constexpr uint32_t div29 = 28;
+    constexpr uint32_t div30 = 29;
+    constexpr uint32_t div31 = 30;
+    constexpr uint32_t div32 = 31;
+}
+namespace rcc::plli2sdivq {
+    constexpr uint32_t div1 = 0;
+    constexpr uint32_t div2 = 1;
+    constexpr uint32_t div3 = 2;
+    constexpr uint32_t div4 = 3;
+    constexpr uint32_t div5 = 4;
+    constexpr uint32_t div6 = 5;
+    constexpr uint32_t div7 = 6;
+    constexpr uint32_t div8 = 7;
+    constexpr uint32_t div9 = 8;
+    constexpr uint32_t div10 = 9;
+    constexpr uint32_t div11 = 10;
+    constexpr uint32_t div12 = 11;
+    constexpr uint32_t div13 = 12;
+    constexpr uint32_t div14 = 13;
+    constexpr uint32_t div15 = 14;
+    constexpr uint32_t div16 = 15;
+    constexpr uint32_t div17 = 16;
+    constexpr uint32_t div18 = 17;
+    constexpr uint32_t div19 = 18;
+    constexpr uint32_t div20 = 19;
+    constexpr uint32_t div21 = 20;
+    constexpr uint32_t div22 = 21;
+    constexpr uint32_t div23 = 22;
+    constexpr uint32_t div24 = 23;
+    constexpr uint32_t div25 = 24;
+    constexpr uint32_t div26 = 25;
+    constexpr uint32_t div27 = 26;
+    constexpr uint32_t div28 = 27;
+    constexpr uint32_t div29 = 28;
+    constexpr uint32_t div30 = 29;
+    constexpr uint32_t div31 = 30;
+    constexpr uint32_t div32 = 31;
+}
+namespace rcc::plli2sdivr {
+    constexpr uint32_t div1 = 0;
+    constexpr uint32_t div2 = 1;
+    constexpr uint32_t div3 = 2;
+    constexpr uint32_t div4 = 3;
+    constexpr uint32_t div5 = 4;
+    constexpr uint32_t div6 = 5;
+    constexpr uint32_t div7 = 6;
+    constexpr uint32_t div8 = 7;
+    constexpr uint32_t div9 = 8;
+    constexpr uint32_t div10 = 9;
+    constexpr uint32_t div11 = 10;
+    constexpr uint32_t div12 = 11;
+    constexpr uint32_t div13 = 12;
+    constexpr uint32_t div14 = 13;
+    constexpr uint32_t div15 = 14;
+    constexpr uint32_t div16 = 15;
+    constexpr uint32_t div17 = 16;
+    constexpr uint32_t div18 = 17;
+    constexpr uint32_t div19 = 18;
+    constexpr uint32_t div20 = 19;
+    constexpr uint32_t div21 = 20;
+    constexpr uint32_t div22 = 21;
+    constexpr uint32_t div23 = 22;
+    constexpr uint32_t div24 = 23;
+    constexpr uint32_t div25 = 24;
+    constexpr uint32_t div26 = 25;
+    constexpr uint32_t div27 = 26;
+    constexpr uint32_t div28 = 27;
+    constexpr uint32_t div29 = 28;
+    constexpr uint32_t div30 = 29;
+    constexpr uint32_t div31 = 30;
+    constexpr uint32_t div32 = 31;
+}
+namespace rcc::plli2son {
+    constexpr uint32_t off = 0;
+    constexpr uint32_t on = 1;
+}
+namespace rcc::pllon {
+    constexpr uint32_t off = 0;
+    constexpr uint32_t on = 1;
+}
+namespace rcc::pllp {
+    constexpr uint32_t div2 = 0;
+    constexpr uint32_t div4 = 1;
+    constexpr uint32_t div6 = 2;
+    constexpr uint32_t div8 = 3;
+}
+namespace rcc::pllsaidivq {
+    constexpr uint32_t div1 = 0;
+    constexpr uint32_t div2 = 1;
+    constexpr uint32_t div3 = 2;
+    constexpr uint32_t div4 = 3;
+    constexpr uint32_t div5 = 4;
+    constexpr uint32_t div6 = 5;
+    constexpr uint32_t div7 = 6;
+    constexpr uint32_t div8 = 7;
+    constexpr uint32_t div9 = 8;
+    constexpr uint32_t div10 = 9;
+    constexpr uint32_t div11 = 10;
+    constexpr uint32_t div12 = 11;
+    constexpr uint32_t div13 = 12;
+    constexpr uint32_t div14 = 13;
+    constexpr uint32_t div15 = 14;
+    constexpr uint32_t div16 = 15;
+    constexpr uint32_t div17 = 16;
+    constexpr uint32_t div18 = 17;
+    constexpr uint32_t div19 = 18;
+    constexpr uint32_t div20 = 19;
+    constexpr uint32_t div21 = 20;
+    constexpr uint32_t div22 = 21;
+    constexpr uint32_t div23 = 22;
+    constexpr uint32_t div24 = 23;
+    constexpr uint32_t div25 = 24;
+    constexpr uint32_t div26 = 25;
+    constexpr uint32_t div27 = 26;
+    constexpr uint32_t div28 = 27;
+    constexpr uint32_t div29 = 28;
+    constexpr uint32_t div30 = 29;
+    constexpr uint32_t div31 = 30;
+    constexpr uint32_t div32 = 31;
+}
+namespace rcc::pllsaidivr {
+    constexpr uint32_t div2 = 0;
+    constexpr uint32_t div4 = 1;
+    constexpr uint32_t div8 = 2;
+    constexpr uint32_t div16 = 3;
+}
+namespace rcc::pllsaion {
+    constexpr uint32_t off = 0;
+    constexpr uint32_t on = 1;
+}
+namespace rcc::pllsrc {
+    constexpr uint32_t hsi = 0;
+    constexpr uint32_t hse = 1;
+}
+namespace rcc::ppre {
+    constexpr uint32_t div1 = -1;
+    constexpr uint32_t div2 = 4;
+    constexpr uint32_t div4 = 5;
+    constexpr uint32_t div8 = 6;
+    constexpr uint32_t div16 = 7;
+}
+namespace rcc::rdy {
+    constexpr uint32_t notready = 0;
+    constexpr uint32_t ready = 1;
+}
+namespace rcc::rdyc {
+    constexpr uint32_t clear = 1;
+}
+namespace rcc::rdyf {
+    constexpr uint32_t notinterrupted = 0;
+    constexpr uint32_t interrupted = 1;
+}
+namespace rcc::rdyie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace rcc::rmvf {
+    constexpr uint32_t clear = 1;
+}
+namespace rcc::rst {
+    constexpr uint32_t reset = 1;
+}
+namespace rcc::rstf {
+    constexpr uint32_t noreset = 0;
+    constexpr uint32_t reset = 1;
+}
+namespace rcc::rtcen {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace rcc::rtcsel {
+    constexpr uint32_t noclock = 0;
+    constexpr uint32_t lse = 1;
+    constexpr uint32_t lsi = 2;
+    constexpr uint32_t hse = 3;
+}
+namespace rcc::sai1asrc {
+    constexpr uint32_t pllsai = 0;
+    constexpr uint32_t plli2s = 1;
+    constexpr uint32_t i2s_ckin = 2;
+}
+namespace rcc::sai1bsrc {
+    constexpr uint32_t pllsai = 0;
+    constexpr uint32_t plli2s = 1;
+    constexpr uint32_t i2s_ckin = 2;
+}
+namespace rcc::spreadsel {
+    constexpr uint32_t center = 0;
+    constexpr uint32_t down = 1;
+}
+namespace rcc::sscgen {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace rcc::sw {
+    constexpr uint32_t hsi = 0;
+    constexpr uint32_t hse = 1;
+    constexpr uint32_t pll = 2;
+}
+namespace rcc::sws {
+    constexpr uint32_t hsi = 0;
+    constexpr uint32_t hse = 1;
+    constexpr uint32_t pll = 2;
+}
+namespace rcc::timpre {
+    constexpr uint32_t mul1or2 = 0;
+    constexpr uint32_t mul1or4 = 1;
+}
+
 #endif // STM32_RCC_HPP

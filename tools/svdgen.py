@@ -1,41 +1,11 @@
+import fnmatch
 import re
 import shutil
 import xml.etree.ElementTree as ET
 from collections import defaultdict
 from pathlib import Path
 
-# ---------------------------------------------------------------------------
-# CMSIS-SVD structure  (STM32F429.svd, schemaVersion 1.1, <version> 1.2)
-#
-# <device>                                 attrs: schemaVersion
-#   <name>                                 "STM32F429"
-#   <version> <description>
-#   <addressUnitBits>                      8
-#   <width>                                32
-#   <size> <resetValue> <resetMask>        defaults, inherited when a register omits them
-#   <peripherals>
-#     <peripheral derivedFrom="OTHER">     derivedFrom is an ATTRIBUTE, not a child
-#       <name> <description> <groupName>
-#       <baseAddress>                      hex, e.g. 0x40020400
-#       <addressBlock>                     <offset> <size> <usage>
-#       <registers>
-#         <register>
-#           <name> <displayName> <description>
-#           <addressOffset>                hex, relative to peripheral baseAddress
-#           <size>                         0x20 on this device
-#           <access>                       read-write | read-only | write-only
-#           <resetValue>                   per register, and per instance
-#           <fields>
-#             <field>
-#               <name> <description>
-#               <bitOffset>                DECIMAL
-#               <bitWidth>                 DECIMAL
-#               <access>                   usually ABSENT -> inherit from register
-#
-# Present in this file:  92 peripherals, 1107 registers, 7670 fields,
-#                        1759 <access>, 970 <resetValue>, 33 derivedFrom
-# ---------------------------------------------------------------------------
-
+import yaml
 
 access_str_map = {
     "read-write": "Access::RW",
@@ -44,6 +14,249 @@ access_str_map = {
 }
 
 FIELD_RE = re.compile(r"([A-Za-z_]+?)(\d+)")
+
+# Enum member names come from the vendor patch files and can collide with C++
+# keywords and alternative operator tokens (break, long, short, protected, xor).
+CPP_KEYWORDS = frozenset(
+    [
+        "alignas",
+        "alignof",
+        "and",
+        "and_eq",
+        "asm",
+        "auto",
+        "bitand",
+        "bitor",
+        "bool",
+        "break",
+        "case",
+        "catch",
+        "char",
+        "char8_t",
+        "char16_t",
+        "char32_t",
+        "class",
+        "compl",
+        "concept",
+        "const",
+        "consteval",
+        "constexpr",
+        "constinit",
+        "const_cast",
+        "continue",
+        "co_await",
+        "co_return",
+        "co_yield",
+        "decltype",
+        "default",
+        "delete",
+        "do",
+        "double",
+        "dynamic_cast",
+        "else",
+        "enum",
+        "explicit",
+        "export",
+        "extern",
+        "false",
+        "float",
+        "for",
+        "friend",
+        "goto",
+        "if",
+        "inline",
+        "int",
+        "long",
+        "mutable",
+        "namespace",
+        "new",
+        "noexcept",
+        "not",
+        "not_eq",
+        "nullptr",
+        "operator",
+        "or",
+        "or_eq",
+        "private",
+        "protected",
+        "public",
+        "register",
+        "reinterpret_cast",
+        "requires",
+        "return",
+        "short",
+        "signed",
+        "sizeof",
+        "static",
+        "static_assert",
+        "static_cast",
+        "struct",
+        "switch",
+        "template",
+        "this",
+        "thread_local",
+        "throw",
+        "true",
+        "try",
+        "typedef",
+        "typeid",
+        "typename",
+        "union",
+        "unsigned",
+        "using",
+        "virtual",
+        "void",
+        "volatile",
+        "wchar_t",
+        "while",
+        "xor",
+        "xor_eq",
+    ]
+)
+
+
+def cpp_identifier(name):
+    """Trailing underscore on anything that would otherwise be a keyword."""
+    return f"{name}_" if name in CPP_KEYWORDS else name
+
+
+def load_yaml(path):
+    with open(path) as f:
+        return yaml.safe_load(f) or {}
+
+
+def peripheral_signature(peripheral, derivation_map):
+    """Register layout, for deciding which peripherals share an enum set."""
+    src = resolve(peripheral, derivation_map)
+    return tuple(
+        (
+            register.findtext("name"),
+            register.findtext("addressOffset"),
+            tuple(
+                (f.findtext("name"), f.findtext("bitOffset"), f.findtext("bitWidth"))
+                for f in register.findall("fields/field")
+            ),
+        )
+        for register in src.findall("registers/register")
+    )
+
+
+def load_enum_files(enumdir, peripherals, derivation_map):
+    """peripheral -> frozenset(fields/*.yaml paths) from the device yaml"""
+    device = load_yaml(enumdir / "stm32f429.yaml")
+    names = [p.findtext("name", "MISSING") for p in peripherals]
+
+    # _modify can rename a peripheral, so a yaml key may not be an SVD name
+    renames = {
+        v["name"]: k
+        for k, v in (device.get("_modify") or {}).items()
+        if isinstance(v, dict) and "name" in v
+    }
+
+    files = defaultdict(set)
+    for key, value in device.items():
+        if key.startswith("_") or not isinstance(value, dict):
+            continue
+        includes = value.get("_include", [])
+        includes = [includes] if isinstance(includes, str) else includes
+        # patches/ and collect/ do fixups and array grouping, not enum values
+        paths = {i for i in includes if i.startswith("fields/")}
+        if not paths:
+            continue
+        pattern = renames.get(key, key)
+        # keys are shell globs (OTG_FS_*, GPIO[ABK]), not regexes
+        for name in names:
+            if fnmatch.fnmatchcase(name, pattern):
+                files[name] |= paths
+
+    # The yaml names only what stm32-rs treats as base types, and its derivation
+    # model is not the SVD's (it rebases I2C1/USART1). Propagate by identical
+    # register layout instead: GPIO[ABK] names three ports, eleven share a layout.
+    by_signature = defaultdict(set)
+    for peripheral in peripherals:
+        by_signature[peripheral_signature(peripheral, derivation_map)] |= files[
+            peripheral.findtext("name", "MISSING")
+        ]
+    return {
+        peripheral.findtext("name", "MISSING"): frozenset(
+            by_signature[peripheral_signature(peripheral, derivation_map)]
+        )
+        for peripheral in peripherals
+    }
+
+
+def enum_namespaces(field_glob, spec):
+    """Namespaces for one value set.
+
+    _name wins when the yaml gives one. Otherwise the key is a glob, and it may
+    be a comma-separated list of them (BKP,BK2P) naming several fields that
+    share the same values, so each becomes its own namespace.
+    """
+    if isinstance(spec, dict) and "_name" in spec:
+        return [str(spec["_name"]).lower()]
+    names = []
+    for glob in field_glob.split(","):
+        # globs use * ? [ ] and a leading ?~ for optional-match
+        name = re.sub(r"[^A-Za-z0-9_]", "", glob).lower()
+        if name and name not in names:
+            names.append(name)
+    return names
+
+
+def collect_enum_values(spec):
+    """{ValueName: [value, description]} -> {name: value}, unwrapping the
+    _read / _write variants and skipping directives."""
+    if not isinstance(spec, dict):
+        return {}
+    if "_read" in spec or "_write" in spec:
+        merged = {}
+        for variant in ("_read", "_write"):
+            merged.update(collect_enum_values(spec.get(variant, {})))
+        return merged
+    values = {}
+    for name, entry in spec.items():
+        if name.startswith("_"):
+            continue
+        value = entry[0] if isinstance(entry, list) and entry else entry
+        if isinstance(value, int):
+            values[cpp_identifier(str(name).lower())] = value
+    return values
+
+
+def load_enum_values(enumdir, paths):
+    """-> {namespace: {member: value}}"""
+    out = {}
+    seen = set()
+
+    def visit(rel):
+        if rel in seen:
+            return
+        seen.add(rel)
+        document = load_yaml(enumdir / rel)
+        includes = document.get("_include", [])
+        includes = [includes] if isinstance(includes, str) else includes
+        for include in includes:
+            visit(str(Path(rel).parent / include))
+
+        for register_glob, register_spec in document.items():
+            if register_glob.startswith("_") or not isinstance(register_spec, dict):
+                continue
+            for field_glob, spec in register_spec.items():
+                if field_glob.startswith("_"):
+                    continue
+                # a list here is a bit-range spec, not a set of values
+                values = collect_enum_values(spec)
+                if not values:
+                    continue
+                for namespace in enum_namespaces(field_glob, spec):
+                    if namespace in out and out[namespace] != values:
+                        continue
+                    out[namespace] = values
+
+    for path in sorted(paths):
+        visit(path)
+
+    return out
 
 
 def text(element, tag):
@@ -71,6 +284,16 @@ def build_groups(peripherals, derivation_map):
         src = resolve(peripheral, derivation_map)
         groups[src.findtext("groupName")].append(peripheral.findtext("name", "MISSING"))
     return groups
+
+
+def uniform_groups(groups, enum_files):
+    """Group names whose members all share one enum file set, so the values can
+    live once in the aggregate instead of being repeated per member."""
+    return {
+        group_name
+        for group_name, members in groups.items()
+        if len(members) > 1 and len({enum_files[m] for m in members}) == 1
+    }
 
 
 def sorted_registers(peripheral):
@@ -152,6 +375,18 @@ def field_lines(
     return lines
 
 
+def enum_lines(namespace, values):
+    """namespace gpio::mode {constexpr uint32_t input = 0b00, ...}"""
+    lines = []
+    for name in sorted(values):
+        members = values[name]
+        lines.append(f"namespace {namespace}::{name} {{")
+        for member in sorted(members, key=lambda m: members[m]):
+            lines.append(f"    constexpr uint32_t {member} = {members[member]};")
+        lines.append("}")
+    return lines
+
+
 def struct_lines(peripheral_name, base, registers):
     """Debug-only register overlay, plus offsetof assertions.
 
@@ -199,7 +434,7 @@ def struct_lines(peripheral_name, base, registers):
     return lines, asserts, ok
 
 
-def peripheral_header(peripheral_name, base, src):
+def peripheral_header(peripheral_name, base, src, enums=None):
     """One header: guard, debug struct, Field definitions."""
     guard = f"STM32_{peripheral_name.upper()}_HPP"
     lines = [
@@ -238,11 +473,15 @@ def peripheral_header(peripheral_name, base, src):
         )
     lines.append("")
 
+    if enums:
+        lines.extend(enum_lines(peripheral_name.lower(), enums))
+        lines.append("")
+
     lines.append(f"#endif // {guard}")
     return lines
 
 
-def aggregate_header(group_name, members):
+def aggregate_header(group_name, members, enums=None):
     """Top-level header for a multi-member group: includes its members."""
     guard = f"STM32_{group_name.upper()}_HPP"
     lines = [
@@ -254,6 +493,9 @@ def aggregate_header(group_name, members):
     for member_name in sorted(members):
         lines.append(f'#include "{group_name.lower()}/{member_name.lower()}.hpp"')
     lines.append("")
+    if enums:
+        lines.extend(enum_lines(group_name.lower(), enums))
+        lines.append("")
     lines.append(f"#endif // {guard}")
     return lines
 
@@ -275,24 +517,41 @@ def main():
     root = ET.parse(svddir / "STM32F429.svd").getroot()
     peripherals = root.findall("peripherals/peripheral")
 
+    enumdir = Path(__file__).resolve().parent.parent / "tools" / "enums"
+
     derivation_map = build_derivation_map(peripherals)
     groups = build_groups(peripherals, derivation_map)
+
+    enum_files = load_enum_files(enumdir, peripherals, derivation_map)
+    uniform = uniform_groups(groups, enum_files)
+    enum_cache = {}
+
+    def enums_for(paths):
+        if paths not in enum_cache:
+            enum_cache[paths] = load_enum_values(enumdir, paths)
+        return enum_cache[paths]
 
     for peripheral in peripherals:
         peripheral_name = peripheral.findtext("name", "MISSING")
         base = int(peripheral.findtext("baseAddress", "0"), 0)
         src = resolve(peripheral, derivation_map)
 
-        lines = peripheral_header(peripheral_name, base, src)
+        group_name = src.findtext("groupName")
+        # values shared by the whole group live in the aggregate instead
+        enums = (
+            None if group_name in uniform else enums_for(enum_files[peripheral_name])
+        )
+        lines = peripheral_header(peripheral_name, base, src, enums)
 
-        path = output_path(outdir, groups, src.findtext("groupName"), peripheral_name)
+        path = output_path(outdir, groups, group_name, peripheral_name)
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text("\n".join(lines) + "\n")
 
     for group_name, members in groups.items():
         if len(members) <= 1:
             continue
-        lines = aggregate_header(group_name, members)
+        enums = enums_for(enum_files[members[0]]) if group_name in uniform else None
+        lines = aggregate_header(group_name, members, enums)
         (outdir / f"{group_name.lower()}.hpp").write_text("\n".join(lines) + "\n")
 
 

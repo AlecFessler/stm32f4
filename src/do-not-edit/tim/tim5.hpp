@@ -118,4 +118,251 @@ constexpr Field<Access::RW> tim5_dcr_dba{0x40000C48u, 0x0000001Fu, 0};
 constexpr Field<Access::RW> tim5_dmar_dmab{0x40000C4Cu, 0x0000FFFFu, 0};
 constexpr Field<Access::RW> tim5_or_it4_rmp{0x40000C50u, 0x000000C0u, 6};
 
+namespace tim5::arpe {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace tim5::cc1s {
+    constexpr uint32_t ti1 = 1;
+    constexpr uint32_t ti2 = 2;
+    constexpr uint32_t trc = 3;
+}
+namespace tim5::cc2s {
+    constexpr uint32_t ti2 = 1;
+    constexpr uint32_t ti1 = 2;
+    constexpr uint32_t trc = 3;
+}
+namespace tim5::cc3s {
+    constexpr uint32_t ti3 = 1;
+    constexpr uint32_t ti4 = 2;
+    constexpr uint32_t trc = 3;
+}
+namespace tim5::cc4s {
+    constexpr uint32_t ti4 = 1;
+    constexpr uint32_t ti3 = 2;
+    constexpr uint32_t trc = 3;
+}
+namespace tim5::ccde {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace tim5::ccds {
+    constexpr uint32_t oncompare = 0;
+    constexpr uint32_t onupdate = 1;
+}
+namespace tim5::cce {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace tim5::ccg {
+    constexpr uint32_t trigger = 1;
+}
+namespace tim5::ccie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace tim5::ccif {
+    constexpr uint32_t nomatch = 0;
+    constexpr uint32_t match = 1;
+}
+namespace tim5::ccne {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace tim5::ccof {
+    constexpr uint32_t noovercapture = 0;
+    constexpr uint32_t overcapture = 1;
+}
+namespace tim5::ccp {
+    constexpr uint32_t risingedge = 0;
+    constexpr uint32_t fallingedge = 1;
+}
+namespace tim5::ccs {
+    constexpr uint32_t output = 0;
+}
+namespace tim5::cen {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace tim5::ckd {
+    constexpr uint32_t div1 = 0;
+    constexpr uint32_t div2 = 1;
+    constexpr uint32_t div4 = 2;
+}
+namespace tim5::cms {
+    constexpr uint32_t edgealigned = 0;
+    constexpr uint32_t centeraligned1 = 1;
+    constexpr uint32_t centeraligned2 = 2;
+    constexpr uint32_t centeraligned3 = 3;
+}
+namespace tim5::dir {
+    constexpr uint32_t up = 0;
+    constexpr uint32_t down = 1;
+}
+namespace tim5::ece {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace tim5::etf {
+    constexpr uint32_t nofilter = 0;
+    constexpr uint32_t fck_int_n2 = 1;
+    constexpr uint32_t fck_int_n4 = 2;
+    constexpr uint32_t fck_int_n8 = 3;
+    constexpr uint32_t fdts_div2_n6 = 4;
+    constexpr uint32_t fdts_div2_n8 = 5;
+    constexpr uint32_t fdts_div4_n6 = 6;
+    constexpr uint32_t fdts_div4_n8 = 7;
+    constexpr uint32_t fdts_div8_n6 = 8;
+    constexpr uint32_t fdts_div8_n8 = 9;
+    constexpr uint32_t fdts_div16_n5 = 10;
+    constexpr uint32_t fdts_div16_n6 = 11;
+    constexpr uint32_t fdts_div16_n8 = 12;
+    constexpr uint32_t fdts_div32_n5 = 13;
+    constexpr uint32_t fdts_div32_n6 = 14;
+    constexpr uint32_t fdts_div32_n8 = 15;
+}
+namespace tim5::etp {
+    constexpr uint32_t notinverted = 0;
+    constexpr uint32_t inverted = 1;
+}
+namespace tim5::etps {
+    constexpr uint32_t div1 = 0;
+    constexpr uint32_t div2 = 1;
+    constexpr uint32_t div4 = 2;
+    constexpr uint32_t div8 = 3;
+}
+namespace tim5::icfilter {
+    constexpr uint32_t nofilter = 0;
+    constexpr uint32_t fck_int_n2 = 1;
+    constexpr uint32_t fck_int_n4 = 2;
+    constexpr uint32_t fck_int_n8 = 3;
+    constexpr uint32_t fdts_div2_n6 = 4;
+    constexpr uint32_t fdts_div2_n8 = 5;
+    constexpr uint32_t fdts_div4_n6 = 6;
+    constexpr uint32_t fdts_div4_n8 = 7;
+    constexpr uint32_t fdts_div8_n6 = 8;
+    constexpr uint32_t fdts_div8_n8 = 9;
+    constexpr uint32_t fdts_div16_n5 = 10;
+    constexpr uint32_t fdts_div16_n6 = 11;
+    constexpr uint32_t fdts_div16_n8 = 12;
+    constexpr uint32_t fdts_div32_n5 = 13;
+    constexpr uint32_t fdts_div32_n6 = 14;
+    constexpr uint32_t fdts_div32_n8 = 15;
+}
+namespace tim5::icprescaler {
+    constexpr uint32_t noprescaler = 0;
+    constexpr uint32_t twoevents = 1;
+    constexpr uint32_t fourevents = 2;
+    constexpr uint32_t eightevents = 3;
+}
+namespace tim5::mms {
+    constexpr uint32_t reset = 0;
+    constexpr uint32_t enable = 1;
+    constexpr uint32_t update = 2;
+    constexpr uint32_t comparepulse = 3;
+    constexpr uint32_t compareoc1 = 4;
+    constexpr uint32_t compareoc2 = 5;
+    constexpr uint32_t compareoc3 = 6;
+    constexpr uint32_t compareoc4 = 7;
+}
+namespace tim5::msm {
+    constexpr uint32_t nosync = 0;
+    constexpr uint32_t sync = 1;
+}
+namespace tim5::occe {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace tim5::ocfe {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace tim5::ocm {
+    constexpr uint32_t frozen = 0;
+    constexpr uint32_t activeonmatch = 1;
+    constexpr uint32_t inactiveonmatch = 2;
+    constexpr uint32_t toggle = 3;
+    constexpr uint32_t forceinactive = 4;
+    constexpr uint32_t forceactive = 5;
+    constexpr uint32_t pwmmode1 = 6;
+    constexpr uint32_t pwmmode2 = 7;
+}
+namespace tim5::ocpe {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace tim5::ois {
+    constexpr uint32_t reset = 0;
+    constexpr uint32_t set = 1;
+}
+namespace tim5::oisn {
+    constexpr uint32_t reset = 0;
+    constexpr uint32_t set = 1;
+}
+namespace tim5::opm {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace tim5::sms {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t encoder_mode_1 = 1;
+    constexpr uint32_t encoder_mode_2 = 2;
+    constexpr uint32_t encoder_mode_3 = 3;
+    constexpr uint32_t reset_mode = 4;
+    constexpr uint32_t gated_mode = 5;
+    constexpr uint32_t trigger_mode = 6;
+    constexpr uint32_t ext_clock_mode = 7;
+}
+namespace tim5::tde {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace tim5::tg {
+    constexpr uint32_t trigger = 1;
+}
+namespace tim5::ti1s {
+    constexpr uint32_t normal = 0;
+    constexpr uint32_t xor_ = 1;
+}
+namespace tim5::tie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace tim5::tif {
+    constexpr uint32_t notrigger = 0;
+    constexpr uint32_t trigger = 1;
+}
+namespace tim5::ts {
+    constexpr uint32_t itr0 = 0;
+    constexpr uint32_t itr1 = 1;
+    constexpr uint32_t itr2 = 2;
+    constexpr uint32_t ti1f_ed = 4;
+    constexpr uint32_t ti1fp1 = 5;
+    constexpr uint32_t ti2fp2 = 6;
+    constexpr uint32_t etrf = 7;
+}
+namespace tim5::ude {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace tim5::udis {
+    constexpr uint32_t enabled = 0;
+    constexpr uint32_t disabled = 1;
+}
+namespace tim5::ug {
+    constexpr uint32_t update = 1;
+}
+namespace tim5::uie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace tim5::uif {
+    constexpr uint32_t noupdateoccurred = 0;
+    constexpr uint32_t updatepending = 1;
+}
+namespace tim5::urs {
+    constexpr uint32_t anyevent = 0;
+    constexpr uint32_t counteronly = 1;
+}
+
 #endif // STM32_TIM5_HPP

@@ -63,4 +63,157 @@ constexpr Field<Access::RW> flash_optcr_rdp{0x40023C14u, 0x0000FF00u, 8};
 constexpr Field<Access::RW> flash_optcr_nwrp{0x40023C14u, 0x0FFF0000u, 16};
 constexpr Field<Access::RW> flash_optcr1_nwrp{0x40023C18u, 0x0FFF0000u, 16};
 
+namespace flash::bfb2 {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace flash::bor_lev {
+    constexpr uint32_t bor_off = 0;
+    constexpr uint32_t bor_level1 = 1;
+    constexpr uint32_t bor_level2 = 2;
+    constexpr uint32_t bor_level3 = 3;
+}
+namespace flash::bsy {
+    constexpr uint32_t notbusy = 0;
+    constexpr uint32_t busy = 1;
+}
+namespace flash::db1m {
+    constexpr uint32_t singlebank = 0;
+    constexpr uint32_t dualbank = 1;
+}
+namespace flash::dcen {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace flash::dcrst {
+    constexpr uint32_t noreset = 0;
+    constexpr uint32_t reset = 1;
+}
+namespace flash::eop {
+    constexpr uint32_t inactive = 0;
+    constexpr uint32_t active = 1;
+}
+namespace flash::eopie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace flash::errie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace flash::icen {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace flash::icrst {
+    constexpr uint32_t noreset = 0;
+    constexpr uint32_t reset = 1;
+}
+namespace flash::latency {
+    constexpr uint32_t ws0 = 0;
+    constexpr uint32_t ws1 = 1;
+    constexpr uint32_t ws2 = 2;
+    constexpr uint32_t ws3 = 3;
+    constexpr uint32_t ws4 = 4;
+    constexpr uint32_t ws5 = 5;
+    constexpr uint32_t ws6 = 6;
+    constexpr uint32_t ws7 = 7;
+    constexpr uint32_t ws8 = 8;
+    constexpr uint32_t ws9 = 9;
+    constexpr uint32_t ws10 = 10;
+    constexpr uint32_t ws11 = 11;
+    constexpr uint32_t ws12 = 12;
+    constexpr uint32_t ws13 = 13;
+    constexpr uint32_t ws14 = 14;
+    constexpr uint32_t ws15 = 15;
+}
+namespace flash::lock {
+    constexpr uint32_t unlocked = 0;
+    constexpr uint32_t locked = 1;
+}
+namespace flash::mer {
+    constexpr uint32_t masserase = 1;
+}
+namespace flash::mer1 {
+    constexpr uint32_t masserase = 1;
+}
+namespace flash::nrst_stdby {
+    constexpr uint32_t reset = 0;
+    constexpr uint32_t noreset = 1;
+}
+namespace flash::nrst_stop {
+    constexpr uint32_t reset = 0;
+    constexpr uint32_t noreset = 1;
+}
+namespace flash::nwrp {
+    constexpr uint32_t active = 0;
+    constexpr uint32_t inactive = 1;
+}
+namespace flash::operr {
+    constexpr uint32_t inactive = 0;
+    constexpr uint32_t active = 1;
+}
+namespace flash::optlock {
+    constexpr uint32_t unlocked = 0;
+    constexpr uint32_t locked = 1;
+    constexpr uint32_t set = 1;
+}
+namespace flash::optstrt {
+    constexpr uint32_t complete = 0;
+    constexpr uint32_t requested = 1;
+    constexpr uint32_t set = 1;
+}
+namespace flash::pg {
+    constexpr uint32_t program = 1;
+}
+namespace flash::pgaerr {
+    constexpr uint32_t inactive = 0;
+    constexpr uint32_t active = 1;
+}
+namespace flash::pgperr {
+    constexpr uint32_t inactive = 0;
+    constexpr uint32_t active = 1;
+}
+namespace flash::pgserr {
+    constexpr uint32_t inactive = 0;
+    constexpr uint32_t active = 1;
+}
+namespace flash::prften {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace flash::psize {
+    constexpr uint32_t psize8 = 0;
+    constexpr uint32_t psize16 = 1;
+    constexpr uint32_t psize32 = 2;
+    constexpr uint32_t psize64 = 3;
+}
+namespace flash::rderr {
+    constexpr uint32_t inactive = 0;
+    constexpr uint32_t active = 1;
+}
+namespace flash::rdp {
+    constexpr uint32_t level1 = -1;
+    constexpr uint32_t level0 = 170;
+    constexpr uint32_t level2 = 204;
+}
+namespace flash::ser {
+    constexpr uint32_t sectorerase = 1;
+}
+namespace flash::sprmod {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace flash::strt {
+    constexpr uint32_t start = 1;
+}
+namespace flash::wdg_sw {
+    constexpr uint32_t hardware = 0;
+    constexpr uint32_t software = 1;
+}
+namespace flash::wrperr {
+    constexpr uint32_t inactive = 0;
+    constexpr uint32_t active = 1;
+}
+
 #endif // STM32_FLASH_HPP

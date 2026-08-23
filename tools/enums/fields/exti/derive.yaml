@@ -1,0 +1,6 @@
+EXTICR1:
+  _derive:
+    EXTI[1-3]: EXTI0
+EXTICR[2-4]:
+  _derive:
+    "EXTI?,EXTI1?": EXTICR1.EXTI0

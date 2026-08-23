@@ -46,4 +46,45 @@ constexpr Field<Access::RW> tim7_cnt_cnt{0x40001424u, 0x0000FFFFu, 0};
 constexpr Field<Access::RW> tim7_psc_psc{0x40001428u, 0x0000FFFFu, 0};
 constexpr Field<Access::RW> tim7_arr_arr{0x4000142Cu, 0x0000FFFFu, 0};
 
+namespace tim7::arpe {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace tim7::cen {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace tim7::mms {
+    constexpr uint32_t reset = 0;
+    constexpr uint32_t enable = 1;
+    constexpr uint32_t update = 2;
+}
+namespace tim7::opm {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace tim7::ude {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace tim7::udis {
+    constexpr uint32_t enabled = 0;
+    constexpr uint32_t disabled = 1;
+}
+namespace tim7::ug {
+    constexpr uint32_t update = 1;
+}
+namespace tim7::uie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace tim7::uif {
+    constexpr uint32_t noupdateoccurred = 0;
+    constexpr uint32_t updatepending = 1;
+}
+namespace tim7::urs {
+    constexpr uint32_t anyevent = 0;
+    constexpr uint32_t counteronly = 1;
+}
+
 #endif // STM32_TIM7_HPP

@@ -1,0 +1,42 @@
+# Advanced-control timers TIM1,TIM8.
+
+_include:
+  - ccpc.yaml
+  - bdtr_common.yaml
+
+# Various features not present in other timers
+DIER:
+  COMDE:
+    Disabled: [0, COM DMA request disabled]
+    Enabled: [1, COM DMA request enabled]
+
+SR:
+  "?~SBIF":
+    _read:
+      NoTrigger: [0, No break event occurred]
+      Trigger:
+        [
+          1,
+          "An active level has been detected on the system break input. An interrupt is generated if BIE=1 in the TIMx_DIER register",
+        ]
+    _W0C:
+      Clear: [0, Clear flag]
+  "?~B2IF":
+    _read:
+      NoTrigger: [0, No break event occurred]
+      Trigger:
+        [
+          1,
+          "An active level has been detected on the break 2 input. An interrupt is generated if BIE=1 in the TIMx_DIER register",
+        ]
+    _W0C:
+      Clear: [0, Clear flag]
+
+EGR:
+  "?~B2G":
+    _write:
+      Trigger:
+        [
+          1,
+          A break 2 event is generated. MOE bit is cleared and B2IF flag is set. Related interrupt can occur if enabled,
+        ]

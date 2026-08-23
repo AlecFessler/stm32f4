@@ -190,4 +190,115 @@ constexpr Field<Access::WO> ltdc_l2clutwr_red{0x40016944u, 0x00FF0000u, 16};
 constexpr Field<Access::WO> ltdc_l2clutwr_green{0x40016944u, 0x0000FF00u, 8};
 constexpr Field<Access::WO> ltdc_l2clutwr_blue{0x40016944u, 0x000000FFu, 0};
 
+namespace ltdc::bf1 {
+    constexpr uint32_t constant = 4;
+    constexpr uint32_t pixel = 6;
+}
+namespace ltdc::bf2 {
+    constexpr uint32_t constant = 5;
+    constexpr uint32_t pixel = 7;
+}
+namespace ltdc::cluten {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace ltdc::colken {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace ltdc::den {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace ltdc::depol {
+    constexpr uint32_t activelow = 0;
+    constexpr uint32_t activehigh = 1;
+}
+namespace ltdc::fuie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace ltdc::fuif {
+    constexpr uint32_t nounderrun = 0;
+    constexpr uint32_t underrun = 1;
+}
+namespace ltdc::hdes {
+    constexpr uint32_t notactive = 0;
+    constexpr uint32_t active = 1;
+}
+namespace ltdc::hspol {
+    constexpr uint32_t activelow = 0;
+    constexpr uint32_t activehigh = 1;
+}
+namespace ltdc::hsyncs {
+    constexpr uint32_t notactive = 0;
+    constexpr uint32_t active = 1;
+}
+namespace ltdc::imr {
+    constexpr uint32_t noeffect = 0;
+    constexpr uint32_t reload = 1;
+}
+namespace ltdc::len {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace ltdc::lie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace ltdc::lif {
+    constexpr uint32_t notreached = 0;
+    constexpr uint32_t reached = 1;
+}
+namespace ltdc::ltdcen {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace ltdc::pcpol {
+    constexpr uint32_t risingedge = 0;
+    constexpr uint32_t fallingedge = 1;
+}
+namespace ltdc::pf {
+    constexpr uint32_t argb8888 = 0;
+    constexpr uint32_t rgb888 = 1;
+    constexpr uint32_t rgb565 = 2;
+    constexpr uint32_t argb1555 = 3;
+    constexpr uint32_t argb4444 = 4;
+    constexpr uint32_t l8 = 5;
+    constexpr uint32_t al44 = 6;
+    constexpr uint32_t al88 = 7;
+}
+namespace ltdc::rrie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace ltdc::rrif {
+    constexpr uint32_t noreload = 0;
+    constexpr uint32_t reload = 1;
+}
+namespace ltdc::terrie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace ltdc::terrif {
+    constexpr uint32_t noerror = 0;
+    constexpr uint32_t error = 1;
+}
+namespace ltdc::vbr {
+    constexpr uint32_t noeffect = 0;
+    constexpr uint32_t reload = 1;
+}
+namespace ltdc::vdes {
+    constexpr uint32_t notactive = 0;
+    constexpr uint32_t active = 1;
+}
+namespace ltdc::vspol {
+    constexpr uint32_t activelow = 0;
+    constexpr uint32_t activehigh = 1;
+}
+namespace ltdc::vsyncs {
+    constexpr uint32_t notactive = 0;
+    constexpr uint32_t active = 1;
+}
+
 #endif // STM32_LTDC_HPP

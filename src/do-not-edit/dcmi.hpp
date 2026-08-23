@@ -89,4 +89,139 @@ constexpr Field<Access::RO> dcmi_dr_byte[4] = {
     {0x50050028u, 0xFF000000u, 24},
 };
 
+namespace dcmi::capture {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace dcmi::cm {
+    constexpr uint32_t continuous = 0;
+    constexpr uint32_t snapshot = 1;
+}
+namespace dcmi::crop {
+    constexpr uint32_t full = 0;
+    constexpr uint32_t cropped = 1;
+}
+namespace dcmi::edm {
+    constexpr uint32_t bitwidth8 = 0;
+    constexpr uint32_t bitwidth10 = 1;
+    constexpr uint32_t bitwidth12 = 2;
+    constexpr uint32_t bitwidth14 = 3;
+}
+namespace dcmi::enable {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace dcmi::err_ie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace dcmi::err_isc {
+    constexpr uint32_t clear = 1;
+}
+namespace dcmi::err_mis {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace dcmi::err_ris {
+    constexpr uint32_t noerror = 0;
+    constexpr uint32_t synchronizationerror = 1;
+}
+namespace dcmi::ess {
+    constexpr uint32_t hardware = 0;
+    constexpr uint32_t embedded = 1;
+}
+namespace dcmi::fcrc {
+    constexpr uint32_t all = 0;
+    constexpr uint32_t alternate = 1;
+    constexpr uint32_t oneoffour = 2;
+}
+namespace dcmi::fne {
+    constexpr uint32_t notempty = 0;
+    constexpr uint32_t empty = 1;
+}
+namespace dcmi::frame_ie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace dcmi::frame_isc {
+    constexpr uint32_t clear = 1;
+}
+namespace dcmi::frame_mis {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace dcmi::frame_ris {
+    constexpr uint32_t nonewcapture = 0;
+    constexpr uint32_t framecaptured = 1;
+}
+namespace dcmi::hspol {
+    constexpr uint32_t activelow = 0;
+    constexpr uint32_t activehigh = 1;
+}
+namespace dcmi::hsync {
+    constexpr uint32_t activeline = 0;
+    constexpr uint32_t betweenlines = 1;
+}
+namespace dcmi::jpeg {
+    constexpr uint32_t uncompressed = 0;
+    constexpr uint32_t jpeg = 1;
+}
+namespace dcmi::line_ie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace dcmi::line_isc {
+    constexpr uint32_t clear = 1;
+}
+namespace dcmi::line_mis {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace dcmi::line_ris {
+    constexpr uint32_t cleared = 0;
+    constexpr uint32_t set = 1;
+}
+namespace dcmi::ovr_ie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace dcmi::ovr_isc {
+    constexpr uint32_t clear = 1;
+}
+namespace dcmi::ovr_mis {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace dcmi::ovr_ris {
+    constexpr uint32_t nooverrun = 0;
+    constexpr uint32_t overrunoccured = 1;
+}
+namespace dcmi::pckpol {
+    constexpr uint32_t fallingedge = 0;
+    constexpr uint32_t risingedge = 1;
+}
+namespace dcmi::vspol {
+    constexpr uint32_t activelow = 0;
+    constexpr uint32_t activehigh = 1;
+}
+namespace dcmi::vsync {
+    constexpr uint32_t activeframe = 0;
+    constexpr uint32_t betweenframes = 1;
+}
+namespace dcmi::vsync_ie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace dcmi::vsync_isc {
+    constexpr uint32_t clear = 1;
+}
+namespace dcmi::vsync_mis {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace dcmi::vsync_ris {
+    constexpr uint32_t cleared = 0;
+    constexpr uint32_t set = 1;
+}
+
 #endif // STM32_DCMI_HPP

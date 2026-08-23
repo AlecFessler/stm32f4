@@ -43,4 +43,98 @@ constexpr Field<Access::RO> pwr_csr_odrdy{0x40007004u, 0x00010000u, 16};
 constexpr Field<Access::RO> pwr_csr_odswrdy{0x40007004u, 0x00020000u, 17};
 constexpr Field<Access::RW> pwr_csr_udrdy{0x40007004u, 0x000C0000u, 18};
 
+namespace pwr::bre {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace pwr::brr {
+    constexpr uint32_t notready = 0;
+    constexpr uint32_t ready = 1;
+}
+namespace pwr::csbf {
+    constexpr uint32_t zero = 0;
+    constexpr uint32_t clear = 1;
+}
+namespace pwr::cwuf {
+    constexpr uint32_t zero = 0;
+    constexpr uint32_t clear = 1;
+}
+namespace pwr::dbp {
+    constexpr uint32_t protected_ = 0;
+    constexpr uint32_t writable = 1;
+}
+namespace pwr::ewup {
+    constexpr uint32_t gpio = 0;
+    constexpr uint32_t wakeup = 1;
+}
+namespace pwr::fpds {
+    constexpr uint32_t idle = 0;
+    constexpr uint32_t powerdown = 1;
+}
+namespace pwr::lpds {
+    constexpr uint32_t main = 0;
+    constexpr uint32_t lowpower = 1;
+}
+namespace pwr::lpuds {
+    constexpr uint32_t on = 0;
+    constexpr uint32_t underdrive = 1;
+}
+namespace pwr::mruds {
+    constexpr uint32_t on = 0;
+    constexpr uint32_t underdrive = 1;
+}
+namespace pwr::oden {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace pwr::odrdy {
+    constexpr uint32_t notready = 0;
+    constexpr uint32_t ready = 1;
+}
+namespace pwr::odswen {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace pwr::odswrdy {
+    constexpr uint32_t notready = 0;
+    constexpr uint32_t ready = 1;
+}
+namespace pwr::pdds {
+    constexpr uint32_t enterstop = 0;
+    constexpr uint32_t enterstandby = 1;
+}
+namespace pwr::pvde {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace pwr::pvdo {
+    constexpr uint32_t higher = 0;
+    constexpr uint32_t lower = 1;
+}
+namespace pwr::sbf {
+    constexpr uint32_t instandby = 0;
+    constexpr uint32_t notinstandby = 1;
+}
+namespace pwr::uden {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 3;
+}
+namespace pwr::udrdy {
+    constexpr uint32_t notready = 0;
+    constexpr uint32_t ready = 3;
+}
+namespace pwr::vos {
+    constexpr uint32_t scale3 = 1;
+    constexpr uint32_t scale2 = 2;
+    constexpr uint32_t scale1 = 3;
+}
+namespace pwr::vosrdy {
+    constexpr uint32_t notready = 0;
+    constexpr uint32_t ready = 1;
+}
+namespace pwr::wuf {
+    constexpr uint32_t notoccurred = 0;
+    constexpr uint32_t occurred = 1;
+}
+
 #endif // STM32_PWR_HPP

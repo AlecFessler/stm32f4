@@ -1,0 +1,22 @@
+_include:
+  - 8bit.yaml
+  - 12bit.yaml
+  - wavegen.yaml
+
+CR:
+  EN?:
+    Disabled: [0, DAC channel X disabled]
+    Enabled: [1, DAC channel X enabled]
+  BOFF?:
+    Enabled: [0, DAC channel X output buffer enabled]
+    Disabled: [1, DAC channel X output buffer disabled]
+  TEN?:
+    Disabled: [0, DAC channel X trigger disabled]
+    Enabled: [1, DAC channel X trigger enabled]
+  DMAEN?:
+    Disabled: [0, DAC channel X DMA mode disabled]
+    Enabled: [1, DAC channel X DMA mode enabled]
+SWTRIGR:
+  SWTRIG?:
+    Disabled: [0, DAC channel X software trigger disabled]
+    Enabled: [1, DAC channel X software trigger enabled]

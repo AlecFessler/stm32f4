@@ -29,4 +29,37 @@ constexpr Field<Access::RO> rng_sr_cecs{0x50060804u, 0x00000002u, 1};
 constexpr Field<Access::RO> rng_sr_drdy{0x50060804u, 0x00000001u, 0};
 constexpr Field<Access::RO> rng_dr_rndata{0x50060808u, 0xFFFFFFFFu, 0};
 
+namespace rng::cecs {
+    constexpr uint32_t correct = 0;
+    constexpr uint32_t slow = 1;
+}
+namespace rng::ced {
+    constexpr uint32_t enabled = 0;
+    constexpr uint32_t disabled = 1;
+}
+namespace rng::ceis {
+    constexpr uint32_t correct = 0;
+    constexpr uint32_t slow = 1;
+}
+namespace rng::drdy {
+    constexpr uint32_t invalid = 0;
+    constexpr uint32_t valid = 1;
+}
+namespace rng::ie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace rng::rngen {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace rng::secs {
+    constexpr uint32_t nofault = 0;
+    constexpr uint32_t fault = 1;
+}
+namespace rng::seis {
+    constexpr uint32_t nofault = 0;
+    constexpr uint32_t fault = 1;
+}
+
 #endif // STM32_RNG_HPP

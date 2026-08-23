@@ -28,4 +28,19 @@ constexpr Field<Access::RW> iwdg_rlr_rl{0x40003008u, 0x00000FFFu, 0};
 constexpr Field<Access::RO> iwdg_sr_rvu{0x4000300Cu, 0x00000002u, 1};
 constexpr Field<Access::RO> iwdg_sr_pvu{0x4000300Cu, 0x00000001u, 0};
 
+namespace iwdg::key {
+    constexpr uint32_t unlock = 21845;
+    constexpr uint32_t feed = 43690;
+    constexpr uint32_t start = 52428;
+}
+namespace iwdg::pr {
+    constexpr uint32_t divideby256 = -1;
+    constexpr uint32_t divideby4 = 0;
+    constexpr uint32_t divideby8 = 1;
+    constexpr uint32_t divideby16 = 2;
+    constexpr uint32_t divideby32 = 3;
+    constexpr uint32_t divideby64 = 4;
+    constexpr uint32_t divideby128 = 5;
+}
+
 #endif // STM32_IWDG_HPP

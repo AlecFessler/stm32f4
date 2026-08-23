@@ -80,4 +80,191 @@ constexpr Field<Access::RW> uart7_cr3_eie{0x40007814u, 0x00000001u, 0};
 constexpr Field<Access::RW> uart7_gtpr_gt{0x40007818u, 0x0000FF00u, 8};
 constexpr Field<Access::RW> uart7_gtpr_psc{0x40007818u, 0x000000FFu, 0};
 
+namespace uart7::clken {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart7::cpha {
+    constexpr uint32_t first = 0;
+    constexpr uint32_t second = 1;
+}
+namespace uart7::cpol {
+    constexpr uint32_t low = 0;
+    constexpr uint32_t high = 1;
+}
+namespace uart7::cts {
+    constexpr uint32_t notchanged = 0;
+    constexpr uint32_t changed = 1;
+}
+namespace uart7::ctse {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart7::ctsie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart7::dmar {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart7::dmat {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart7::eie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart7::fe {
+    constexpr uint32_t noerror = 0;
+    constexpr uint32_t error = 1;
+}
+namespace uart7::hdsel {
+    constexpr uint32_t fullduplex = 0;
+    constexpr uint32_t halfduplex = 1;
+}
+namespace uart7::idle {
+    constexpr uint32_t noidle = 0;
+    constexpr uint32_t idle = 1;
+}
+namespace uart7::idleie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart7::iren {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart7::irlp {
+    constexpr uint32_t normal = 0;
+    constexpr uint32_t lowpower = 1;
+}
+namespace uart7::lbcl {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart7::lbd {
+    constexpr uint32_t notdetected = 0;
+    constexpr uint32_t detected = 1;
+}
+namespace uart7::lbdie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart7::lbdl {
+    constexpr uint32_t lbdl10 = 0;
+    constexpr uint32_t lbdl11 = 1;
+}
+namespace uart7::linen {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart7::m {
+    constexpr uint32_t m8 = 0;
+    constexpr uint32_t m9 = 1;
+}
+namespace uart7::nack {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart7::ne {
+    constexpr uint32_t nonoise = 0;
+    constexpr uint32_t noise = 1;
+}
+namespace uart7::nf {
+    constexpr uint32_t nonoise = 0;
+    constexpr uint32_t noise = 1;
+}
+namespace uart7::onebit {
+    constexpr uint32_t sample3 = 0;
+    constexpr uint32_t sample1 = 1;
+}
+namespace uart7::ore {
+    constexpr uint32_t nooverrun = 0;
+    constexpr uint32_t overrun = 1;
+}
+namespace uart7::over8 {
+    constexpr uint32_t oversample16 = 0;
+    constexpr uint32_t oversample8 = 1;
+}
+namespace uart7::pce {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart7::pe {
+    constexpr uint32_t noerror = 0;
+    constexpr uint32_t error = 1;
+}
+namespace uart7::peie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart7::ps {
+    constexpr uint32_t even = 0;
+    constexpr uint32_t odd = 1;
+}
+namespace uart7::re {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart7::rtse {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart7::rwu {
+    constexpr uint32_t active = 0;
+    constexpr uint32_t mute = 1;
+}
+namespace uart7::rxne {
+    constexpr uint32_t nodata = 0;
+    constexpr uint32_t dataready = 1;
+}
+namespace uart7::rxneie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart7::sbk {
+    constexpr uint32_t nobreak = 0;
+    constexpr uint32_t break_ = 1;
+}
+namespace uart7::scen {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart7::stop {
+    constexpr uint32_t stop1 = 0;
+    constexpr uint32_t stop0p5 = 1;
+    constexpr uint32_t stop2 = 2;
+    constexpr uint32_t stop1p5 = 3;
+}
+namespace uart7::tc {
+    constexpr uint32_t txnotcomplete = 0;
+    constexpr uint32_t txcomplete = 1;
+}
+namespace uart7::tcie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart7::te {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart7::txe {
+    constexpr uint32_t txnotempty = 0;
+    constexpr uint32_t txempty = 1;
+}
+namespace uart7::txeie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart7::ue {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace uart7::wake {
+    constexpr uint32_t idleline = 0;
+    constexpr uint32_t addressmark = 1;
+}
+
 #endif // STM32_UART7_HPP

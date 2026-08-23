@@ -46,4 +46,45 @@ constexpr Field<Access::RW> tim6_cnt_cnt{0x40001024u, 0x0000FFFFu, 0};
 constexpr Field<Access::RW> tim6_psc_psc{0x40001028u, 0x0000FFFFu, 0};
 constexpr Field<Access::RW> tim6_arr_arr{0x4000102Cu, 0x0000FFFFu, 0};
 
+namespace tim6::arpe {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace tim6::cen {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace tim6::mms {
+    constexpr uint32_t reset = 0;
+    constexpr uint32_t enable = 1;
+    constexpr uint32_t update = 2;
+}
+namespace tim6::opm {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace tim6::ude {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace tim6::udis {
+    constexpr uint32_t enabled = 0;
+    constexpr uint32_t disabled = 1;
+}
+namespace tim6::ug {
+    constexpr uint32_t update = 1;
+}
+namespace tim6::uie {
+    constexpr uint32_t disabled = 0;
+    constexpr uint32_t enabled = 1;
+}
+namespace tim6::uif {
+    constexpr uint32_t noupdateoccurred = 0;
+    constexpr uint32_t updatepending = 1;
+}
+namespace tim6::urs {
+    constexpr uint32_t anyevent = 0;
+    constexpr uint32_t counteronly = 1;
+}
+
 #endif // STM32_TIM6_HPP
