@@ -119,85 +119,105 @@ static_assert(offsetof(Dma2Regs, s7m0ar) == 196);
 static_assert(offsetof(Dma2Regs, s7m1ar) == 200);
 static_assert(offsetof(Dma2Regs, s7fcr) == 204);
 
-constexpr Field<Access::RO> dma2_lisr_tcif3{0x40026400u, 0x08000000u, 27};
-constexpr Field<Access::RO> dma2_lisr_htif3{0x40026400u, 0x04000000u, 26};
-constexpr Field<Access::RO> dma2_lisr_teif3{0x40026400u, 0x02000000u, 25};
-constexpr Field<Access::RO> dma2_lisr_dmeif3{0x40026400u, 0x01000000u, 24};
-constexpr Field<Access::RO> dma2_lisr_feif3{0x40026400u, 0x00400000u, 22};
-constexpr Field<Access::RO> dma2_lisr_tcif2{0x40026400u, 0x00200000u, 21};
-constexpr Field<Access::RO> dma2_lisr_htif2{0x40026400u, 0x00100000u, 20};
-constexpr Field<Access::RO> dma2_lisr_teif2{0x40026400u, 0x00080000u, 19};
-constexpr Field<Access::RO> dma2_lisr_dmeif2{0x40026400u, 0x00040000u, 18};
-constexpr Field<Access::RO> dma2_lisr_feif2{0x40026400u, 0x00010000u, 16};
-constexpr Field<Access::RO> dma2_lisr_tcif1{0x40026400u, 0x00000800u, 11};
-constexpr Field<Access::RO> dma2_lisr_htif1{0x40026400u, 0x00000400u, 10};
-constexpr Field<Access::RO> dma2_lisr_teif1{0x40026400u, 0x00000200u, 9};
-constexpr Field<Access::RO> dma2_lisr_dmeif1{0x40026400u, 0x00000100u, 8};
-constexpr Field<Access::RO> dma2_lisr_feif1{0x40026400u, 0x00000040u, 6};
-constexpr Field<Access::RO> dma2_lisr_tcif0{0x40026400u, 0x00000020u, 5};
-constexpr Field<Access::RO> dma2_lisr_htif0{0x40026400u, 0x00000010u, 4};
-constexpr Field<Access::RO> dma2_lisr_teif0{0x40026400u, 0x00000008u, 3};
-constexpr Field<Access::RO> dma2_lisr_dmeif0{0x40026400u, 0x00000004u, 2};
-constexpr Field<Access::RO> dma2_lisr_feif0{0x40026400u, 0x00000001u, 0};
+constexpr Field<Access::RO> dma2_lisr_tcif[4] = {
+    {0x40026400u, 0x00000020u, 5},
+    {0x40026400u, 0x00000800u, 11},
+    {0x40026400u, 0x00200000u, 21},
+    {0x40026400u, 0x08000000u, 27},
+};
+constexpr Field<Access::RO> dma2_lisr_htif[4] = {
+    {0x40026400u, 0x00000010u, 4},
+    {0x40026400u, 0x00000400u, 10},
+    {0x40026400u, 0x00100000u, 20},
+    {0x40026400u, 0x04000000u, 26},
+};
+constexpr Field<Access::RO> dma2_lisr_teif[4] = {
+    {0x40026400u, 0x00000008u, 3},
+    {0x40026400u, 0x00000200u, 9},
+    {0x40026400u, 0x00080000u, 19},
+    {0x40026400u, 0x02000000u, 25},
+};
+constexpr Field<Access::RO> dma2_lisr_dmeif[4] = {
+    {0x40026400u, 0x00000004u, 2},
+    {0x40026400u, 0x00000100u, 8},
+    {0x40026400u, 0x00040000u, 18},
+    {0x40026400u, 0x01000000u, 24},
+};
+constexpr Field<Access::RO> dma2_lisr_feif[4] = {
+    {0x40026400u, 0x00000001u, 0},
+    {0x40026400u, 0x00000040u, 6},
+    {0x40026400u, 0x00010000u, 16},
+    {0x40026400u, 0x00400000u, 22},
+};
 constexpr Field<Access::RO> dma2_hisr_tcif7{0x40026404u, 0x08000000u, 27};
-constexpr Field<Access::RO> dma2_hisr_htif7{0x40026404u, 0x04000000u, 26};
-constexpr Field<Access::RO> dma2_hisr_teif7{0x40026404u, 0x02000000u, 25};
-constexpr Field<Access::RO> dma2_hisr_dmeif7{0x40026404u, 0x01000000u, 24};
-constexpr Field<Access::RO> dma2_hisr_feif7{0x40026404u, 0x00400000u, 22};
 constexpr Field<Access::RO> dma2_hisr_tcif6{0x40026404u, 0x00200000u, 21};
-constexpr Field<Access::RO> dma2_hisr_htif6{0x40026404u, 0x00100000u, 20};
-constexpr Field<Access::RO> dma2_hisr_teif6{0x40026404u, 0x00080000u, 19};
-constexpr Field<Access::RO> dma2_hisr_dmeif6{0x40026404u, 0x00040000u, 18};
-constexpr Field<Access::RO> dma2_hisr_feif6{0x40026404u, 0x00010000u, 16};
 constexpr Field<Access::RO> dma2_hisr_tcif5{0x40026404u, 0x00000800u, 11};
-constexpr Field<Access::RO> dma2_hisr_htif5{0x40026404u, 0x00000400u, 10};
-constexpr Field<Access::RO> dma2_hisr_teif5{0x40026404u, 0x00000200u, 9};
-constexpr Field<Access::RO> dma2_hisr_dmeif5{0x40026404u, 0x00000100u, 8};
-constexpr Field<Access::RO> dma2_hisr_feif5{0x40026404u, 0x00000040u, 6};
 constexpr Field<Access::RO> dma2_hisr_tcif4{0x40026404u, 0x00000020u, 5};
+constexpr Field<Access::RO> dma2_hisr_htif7{0x40026404u, 0x04000000u, 26};
+constexpr Field<Access::RO> dma2_hisr_htif6{0x40026404u, 0x00100000u, 20};
+constexpr Field<Access::RO> dma2_hisr_htif5{0x40026404u, 0x00000400u, 10};
 constexpr Field<Access::RO> dma2_hisr_htif4{0x40026404u, 0x00000010u, 4};
+constexpr Field<Access::RO> dma2_hisr_teif7{0x40026404u, 0x02000000u, 25};
+constexpr Field<Access::RO> dma2_hisr_teif6{0x40026404u, 0x00080000u, 19};
+constexpr Field<Access::RO> dma2_hisr_teif5{0x40026404u, 0x00000200u, 9};
 constexpr Field<Access::RO> dma2_hisr_teif4{0x40026404u, 0x00000008u, 3};
+constexpr Field<Access::RO> dma2_hisr_dmeif7{0x40026404u, 0x01000000u, 24};
+constexpr Field<Access::RO> dma2_hisr_dmeif6{0x40026404u, 0x00040000u, 18};
+constexpr Field<Access::RO> dma2_hisr_dmeif5{0x40026404u, 0x00000100u, 8};
 constexpr Field<Access::RO> dma2_hisr_dmeif4{0x40026404u, 0x00000004u, 2};
+constexpr Field<Access::RO> dma2_hisr_feif7{0x40026404u, 0x00400000u, 22};
+constexpr Field<Access::RO> dma2_hisr_feif6{0x40026404u, 0x00010000u, 16};
+constexpr Field<Access::RO> dma2_hisr_feif5{0x40026404u, 0x00000040u, 6};
 constexpr Field<Access::RO> dma2_hisr_feif4{0x40026404u, 0x00000001u, 0};
-constexpr Field<Access::RW> dma2_lifcr_ctcif3{0x40026408u, 0x08000000u, 27};
-constexpr Field<Access::RW> dma2_lifcr_chtif3{0x40026408u, 0x04000000u, 26};
-constexpr Field<Access::RW> dma2_lifcr_cteif3{0x40026408u, 0x02000000u, 25};
-constexpr Field<Access::RW> dma2_lifcr_cdmeif3{0x40026408u, 0x01000000u, 24};
-constexpr Field<Access::RW> dma2_lifcr_cfeif3{0x40026408u, 0x00400000u, 22};
-constexpr Field<Access::RW> dma2_lifcr_ctcif2{0x40026408u, 0x00200000u, 21};
-constexpr Field<Access::RW> dma2_lifcr_chtif2{0x40026408u, 0x00100000u, 20};
-constexpr Field<Access::RW> dma2_lifcr_cteif2{0x40026408u, 0x00080000u, 19};
-constexpr Field<Access::RW> dma2_lifcr_cdmeif2{0x40026408u, 0x00040000u, 18};
-constexpr Field<Access::RW> dma2_lifcr_cfeif2{0x40026408u, 0x00010000u, 16};
-constexpr Field<Access::RW> dma2_lifcr_ctcif1{0x40026408u, 0x00000800u, 11};
-constexpr Field<Access::RW> dma2_lifcr_chtif1{0x40026408u, 0x00000400u, 10};
-constexpr Field<Access::RW> dma2_lifcr_cteif1{0x40026408u, 0x00000200u, 9};
-constexpr Field<Access::RW> dma2_lifcr_cdmeif1{0x40026408u, 0x00000100u, 8};
-constexpr Field<Access::RW> dma2_lifcr_cfeif1{0x40026408u, 0x00000040u, 6};
-constexpr Field<Access::RW> dma2_lifcr_ctcif0{0x40026408u, 0x00000020u, 5};
-constexpr Field<Access::RW> dma2_lifcr_chtif0{0x40026408u, 0x00000010u, 4};
-constexpr Field<Access::RW> dma2_lifcr_cteif0{0x40026408u, 0x00000008u, 3};
-constexpr Field<Access::RW> dma2_lifcr_cdmeif0{0x40026408u, 0x00000004u, 2};
-constexpr Field<Access::RW> dma2_lifcr_cfeif0{0x40026408u, 0x00000001u, 0};
+constexpr Field<Access::RW> dma2_lifcr_ctcif[4] = {
+    {0x40026408u, 0x00000020u, 5},
+    {0x40026408u, 0x00000800u, 11},
+    {0x40026408u, 0x00200000u, 21},
+    {0x40026408u, 0x08000000u, 27},
+};
+constexpr Field<Access::RW> dma2_lifcr_chtif[4] = {
+    {0x40026408u, 0x00000010u, 4},
+    {0x40026408u, 0x00000400u, 10},
+    {0x40026408u, 0x00100000u, 20},
+    {0x40026408u, 0x04000000u, 26},
+};
+constexpr Field<Access::RW> dma2_lifcr_cteif[4] = {
+    {0x40026408u, 0x00000008u, 3},
+    {0x40026408u, 0x00000200u, 9},
+    {0x40026408u, 0x00080000u, 19},
+    {0x40026408u, 0x02000000u, 25},
+};
+constexpr Field<Access::RW> dma2_lifcr_cdmeif[4] = {
+    {0x40026408u, 0x00000004u, 2},
+    {0x40026408u, 0x00000100u, 8},
+    {0x40026408u, 0x00040000u, 18},
+    {0x40026408u, 0x01000000u, 24},
+};
+constexpr Field<Access::RW> dma2_lifcr_cfeif[4] = {
+    {0x40026408u, 0x00000001u, 0},
+    {0x40026408u, 0x00000040u, 6},
+    {0x40026408u, 0x00010000u, 16},
+    {0x40026408u, 0x00400000u, 22},
+};
 constexpr Field<Access::RW> dma2_hifcr_ctcif7{0x4002640Cu, 0x08000000u, 27};
-constexpr Field<Access::RW> dma2_hifcr_chtif7{0x4002640Cu, 0x04000000u, 26};
-constexpr Field<Access::RW> dma2_hifcr_cteif7{0x4002640Cu, 0x02000000u, 25};
-constexpr Field<Access::RW> dma2_hifcr_cdmeif7{0x4002640Cu, 0x01000000u, 24};
-constexpr Field<Access::RW> dma2_hifcr_cfeif7{0x4002640Cu, 0x00400000u, 22};
 constexpr Field<Access::RW> dma2_hifcr_ctcif6{0x4002640Cu, 0x00200000u, 21};
-constexpr Field<Access::RW> dma2_hifcr_chtif6{0x4002640Cu, 0x00100000u, 20};
-constexpr Field<Access::RW> dma2_hifcr_cteif6{0x4002640Cu, 0x00080000u, 19};
-constexpr Field<Access::RW> dma2_hifcr_cdmeif6{0x4002640Cu, 0x00040000u, 18};
-constexpr Field<Access::RW> dma2_hifcr_cfeif6{0x4002640Cu, 0x00010000u, 16};
 constexpr Field<Access::RW> dma2_hifcr_ctcif5{0x4002640Cu, 0x00000800u, 11};
-constexpr Field<Access::RW> dma2_hifcr_chtif5{0x4002640Cu, 0x00000400u, 10};
-constexpr Field<Access::RW> dma2_hifcr_cteif5{0x4002640Cu, 0x00000200u, 9};
-constexpr Field<Access::RW> dma2_hifcr_cdmeif5{0x4002640Cu, 0x00000100u, 8};
-constexpr Field<Access::RW> dma2_hifcr_cfeif5{0x4002640Cu, 0x00000040u, 6};
 constexpr Field<Access::RW> dma2_hifcr_ctcif4{0x4002640Cu, 0x00000020u, 5};
+constexpr Field<Access::RW> dma2_hifcr_chtif7{0x4002640Cu, 0x04000000u, 26};
+constexpr Field<Access::RW> dma2_hifcr_chtif6{0x4002640Cu, 0x00100000u, 20};
+constexpr Field<Access::RW> dma2_hifcr_chtif5{0x4002640Cu, 0x00000400u, 10};
 constexpr Field<Access::RW> dma2_hifcr_chtif4{0x4002640Cu, 0x00000010u, 4};
+constexpr Field<Access::RW> dma2_hifcr_cteif7{0x4002640Cu, 0x02000000u, 25};
+constexpr Field<Access::RW> dma2_hifcr_cteif6{0x4002640Cu, 0x00080000u, 19};
+constexpr Field<Access::RW> dma2_hifcr_cteif5{0x4002640Cu, 0x00000200u, 9};
 constexpr Field<Access::RW> dma2_hifcr_cteif4{0x4002640Cu, 0x00000008u, 3};
+constexpr Field<Access::RW> dma2_hifcr_cdmeif7{0x4002640Cu, 0x01000000u, 24};
+constexpr Field<Access::RW> dma2_hifcr_cdmeif6{0x4002640Cu, 0x00040000u, 18};
+constexpr Field<Access::RW> dma2_hifcr_cdmeif5{0x4002640Cu, 0x00000100u, 8};
 constexpr Field<Access::RW> dma2_hifcr_cdmeif4{0x4002640Cu, 0x00000004u, 2};
+constexpr Field<Access::RW> dma2_hifcr_cfeif7{0x4002640Cu, 0x00400000u, 22};
+constexpr Field<Access::RW> dma2_hifcr_cfeif6{0x4002640Cu, 0x00010000u, 16};
+constexpr Field<Access::RW> dma2_hifcr_cfeif5{0x4002640Cu, 0x00000040u, 6};
 constexpr Field<Access::RW> dma2_hifcr_cfeif4{0x4002640Cu, 0x00000001u, 0};
 constexpr Field<Access::RW> dma2_s0cr_chsel{0x40026410u, 0x0E000000u, 25};
 constexpr Field<Access::RW> dma2_s0cr_mburst{0x40026410u, 0x01800000u, 23};

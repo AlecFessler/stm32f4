@@ -1,4 +1,6 @@
+import re
 import xml.etree.ElementTree as ET
+from collections import defaultdict
 from pathlib import Path
 
 # ---------------------------------------------------------------------------
@@ -43,6 +45,8 @@ access_str_map = {
     "read-only": "Access::RO",
     "write-only": "Access::WO",
 }
+
+FIELD_RE = re.compile(r"([A-Za-z_]+?)(\d+)")
 
 
 def main():
@@ -128,17 +132,66 @@ def main():
                     raise Overlap("skipping", peripheral_name)
 
                 file_lines.append(
-                    f"    volatile uint{size}_t {register_name_lower}; // {register_description}"
+                    f"    volatile uint{size}_t {register_name_lower};"
+                    f" // {register_description}"
                 )
                 static_asserts.append(
-                    f"static_assert(offsetof({peripheral_name_capped}Regs, {register_name_lower}) == {offset});"
+                    f"static_assert("
+                    f"offsetof({peripheral_name_capped}Regs, {register_name_lower})"
+                    f" == {offset});"
                 )
 
                 prev_offset = offset
                 prev_size_bytes = size // 8
 
                 fields = register.findall("fields/field")
+
+                # first pass: collect fields with trailing digits into groups
+                families = defaultdict(dict)
+                singles = []
                 for field in fields:
+                    field_name = str.upper(field.findtext("name", "MISSING"))
+                    match = FIELD_RE.fullmatch(field_name)
+                    if match:
+                        name_prefix, group_idx = match.group(1), int(match.group(2))
+                        families[name_prefix][group_idx] = field
+                    else:
+                        singles.append(field)
+
+                # second pass: reject groups that don't have >= 4 members
+                # or groups that don't start at 0 and increment contiguously
+                arrays = {}
+                for name_prefix, members in families.items():
+                    if len(members) >= 4 and set(members) == set(range(len(members))):
+                        arrays[name_prefix] = members
+                    else:
+                        singles.extend(members.values())
+
+                # third pass: emit arrays of Fields for groups
+                for name_prefix, members in arrays.items():
+                    name_prefix_lower = str.lower(name_prefix)
+                    array_access = (
+                        members[0].findtext("access") or register_access or "read-write"
+                    )
+                    field_defs.append(
+                        f"constexpr Field<{access_str_map[array_access]}> "
+                        f"{peripheral_name_lower}_{register_name_lower}_{name_prefix_lower}"
+                        f"[{len(members)}] = {{"
+                    )
+                    for group_idx in range(len(members)):
+                        member = members[group_idx]
+                        bit_offset = int(member.findtext("bitOffset", "0"), 0)
+                        bit_width = int(member.findtext("bitWidth", "0"), 0)
+                        mask = ((1 << bit_width) - 1) << bit_offset
+                        field_defs.append(
+                            f"    {{0x{register_base:08X}u, "
+                            f"0x{mask:08X}u, "
+                            f"{bit_offset}}},"
+                        )
+                    field_defs.append("};")
+
+                # continued third pass: emit scalars for the rest
+                for field in singles:
                     field_name = str.upper(field.findtext("name", "MISSING"))
                     field_name_lower = str.lower(field_name)
                     bit_offset = int(field.findtext("bitOffset", "0"), 0)
@@ -149,7 +202,11 @@ def main():
                     mask = ((1 << bit_width) - 1) << bit_offset
 
                     field_defs.append(
-                        f"constexpr Field<{access_str_map[field_access]}> {peripheral_name_lower}_{register_name_lower}_{field_name_lower}{{0x{register_base:08X}u, 0x{mask:08X}u, {bit_offset}}};"
+                        f"constexpr Field<{access_str_map[field_access]}> "
+                        f"{peripheral_name_lower}_{register_name_lower}_{field_name_lower}"
+                        f"{{0x{register_base:08X}u, "
+                        f"0x{mask:08X}u, "
+                        f"{bit_offset}}};"
                     )
 
             file_lines.append("};\n")

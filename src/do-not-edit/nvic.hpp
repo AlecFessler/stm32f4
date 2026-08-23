@@ -107,89 +107,131 @@ constexpr Field<Access::RW> nvic_icpr2_clrpend{0xE000E288u, 0xFFFFFFFFu, 0};
 constexpr Field<Access::RO> nvic_iabr0_active{0xE000E300u, 0xFFFFFFFFu, 0};
 constexpr Field<Access::RO> nvic_iabr1_active{0xE000E304u, 0xFFFFFFFFu, 0};
 constexpr Field<Access::RO> nvic_iabr2_active{0xE000E308u, 0xFFFFFFFFu, 0};
-constexpr Field<Access::RW> nvic_ipr0_ipr_n0{0xE000E400u, 0x000000FFu, 0};
-constexpr Field<Access::RW> nvic_ipr0_ipr_n1{0xE000E400u, 0x0000FF00u, 8};
-constexpr Field<Access::RW> nvic_ipr0_ipr_n2{0xE000E400u, 0x00FF0000u, 16};
-constexpr Field<Access::RW> nvic_ipr0_ipr_n3{0xE000E400u, 0xFF000000u, 24};
-constexpr Field<Access::RW> nvic_ipr1_ipr_n0{0xE000E404u, 0x000000FFu, 0};
-constexpr Field<Access::RW> nvic_ipr1_ipr_n1{0xE000E404u, 0x0000FF00u, 8};
-constexpr Field<Access::RW> nvic_ipr1_ipr_n2{0xE000E404u, 0x00FF0000u, 16};
-constexpr Field<Access::RW> nvic_ipr1_ipr_n3{0xE000E404u, 0xFF000000u, 24};
-constexpr Field<Access::RW> nvic_ipr2_ipr_n0{0xE000E408u, 0x000000FFu, 0};
-constexpr Field<Access::RW> nvic_ipr2_ipr_n1{0xE000E408u, 0x0000FF00u, 8};
-constexpr Field<Access::RW> nvic_ipr2_ipr_n2{0xE000E408u, 0x00FF0000u, 16};
-constexpr Field<Access::RW> nvic_ipr2_ipr_n3{0xE000E408u, 0xFF000000u, 24};
-constexpr Field<Access::RW> nvic_ipr3_ipr_n0{0xE000E40Cu, 0x000000FFu, 0};
-constexpr Field<Access::RW> nvic_ipr3_ipr_n1{0xE000E40Cu, 0x0000FF00u, 8};
-constexpr Field<Access::RW> nvic_ipr3_ipr_n2{0xE000E40Cu, 0x00FF0000u, 16};
-constexpr Field<Access::RW> nvic_ipr3_ipr_n3{0xE000E40Cu, 0xFF000000u, 24};
-constexpr Field<Access::RW> nvic_ipr4_ipr_n0{0xE000E410u, 0x000000FFu, 0};
-constexpr Field<Access::RW> nvic_ipr4_ipr_n1{0xE000E410u, 0x0000FF00u, 8};
-constexpr Field<Access::RW> nvic_ipr4_ipr_n2{0xE000E410u, 0x00FF0000u, 16};
-constexpr Field<Access::RW> nvic_ipr4_ipr_n3{0xE000E410u, 0xFF000000u, 24};
-constexpr Field<Access::RW> nvic_ipr5_ipr_n0{0xE000E414u, 0x000000FFu, 0};
-constexpr Field<Access::RW> nvic_ipr5_ipr_n1{0xE000E414u, 0x0000FF00u, 8};
-constexpr Field<Access::RW> nvic_ipr5_ipr_n2{0xE000E414u, 0x00FF0000u, 16};
-constexpr Field<Access::RW> nvic_ipr5_ipr_n3{0xE000E414u, 0xFF000000u, 24};
-constexpr Field<Access::RW> nvic_ipr6_ipr_n0{0xE000E418u, 0x000000FFu, 0};
-constexpr Field<Access::RW> nvic_ipr6_ipr_n1{0xE000E418u, 0x0000FF00u, 8};
-constexpr Field<Access::RW> nvic_ipr6_ipr_n2{0xE000E418u, 0x00FF0000u, 16};
-constexpr Field<Access::RW> nvic_ipr6_ipr_n3{0xE000E418u, 0xFF000000u, 24};
-constexpr Field<Access::RW> nvic_ipr7_ipr_n0{0xE000E41Cu, 0x000000FFu, 0};
-constexpr Field<Access::RW> nvic_ipr7_ipr_n1{0xE000E41Cu, 0x0000FF00u, 8};
-constexpr Field<Access::RW> nvic_ipr7_ipr_n2{0xE000E41Cu, 0x00FF0000u, 16};
-constexpr Field<Access::RW> nvic_ipr7_ipr_n3{0xE000E41Cu, 0xFF000000u, 24};
-constexpr Field<Access::RW> nvic_ipr8_ipr_n0{0xE000E420u, 0x000000FFu, 0};
-constexpr Field<Access::RW> nvic_ipr8_ipr_n1{0xE000E420u, 0x0000FF00u, 8};
-constexpr Field<Access::RW> nvic_ipr8_ipr_n2{0xE000E420u, 0x00FF0000u, 16};
-constexpr Field<Access::RW> nvic_ipr8_ipr_n3{0xE000E420u, 0xFF000000u, 24};
-constexpr Field<Access::RW> nvic_ipr9_ipr_n0{0xE000E424u, 0x000000FFu, 0};
-constexpr Field<Access::RW> nvic_ipr9_ipr_n1{0xE000E424u, 0x0000FF00u, 8};
-constexpr Field<Access::RW> nvic_ipr9_ipr_n2{0xE000E424u, 0x00FF0000u, 16};
-constexpr Field<Access::RW> nvic_ipr9_ipr_n3{0xE000E424u, 0xFF000000u, 24};
-constexpr Field<Access::RW> nvic_ipr10_ipr_n0{0xE000E428u, 0x000000FFu, 0};
-constexpr Field<Access::RW> nvic_ipr10_ipr_n1{0xE000E428u, 0x0000FF00u, 8};
-constexpr Field<Access::RW> nvic_ipr10_ipr_n2{0xE000E428u, 0x00FF0000u, 16};
-constexpr Field<Access::RW> nvic_ipr10_ipr_n3{0xE000E428u, 0xFF000000u, 24};
-constexpr Field<Access::RW> nvic_ipr11_ipr_n0{0xE000E42Cu, 0x000000FFu, 0};
-constexpr Field<Access::RW> nvic_ipr11_ipr_n1{0xE000E42Cu, 0x0000FF00u, 8};
-constexpr Field<Access::RW> nvic_ipr11_ipr_n2{0xE000E42Cu, 0x00FF0000u, 16};
-constexpr Field<Access::RW> nvic_ipr11_ipr_n3{0xE000E42Cu, 0xFF000000u, 24};
-constexpr Field<Access::RW> nvic_ipr12_ipr_n0{0xE000E430u, 0x000000FFu, 0};
-constexpr Field<Access::RW> nvic_ipr12_ipr_n1{0xE000E430u, 0x0000FF00u, 8};
-constexpr Field<Access::RW> nvic_ipr12_ipr_n2{0xE000E430u, 0x00FF0000u, 16};
-constexpr Field<Access::RW> nvic_ipr12_ipr_n3{0xE000E430u, 0xFF000000u, 24};
-constexpr Field<Access::RW> nvic_ipr13_ipr_n0{0xE000E434u, 0x000000FFu, 0};
-constexpr Field<Access::RW> nvic_ipr13_ipr_n1{0xE000E434u, 0x0000FF00u, 8};
-constexpr Field<Access::RW> nvic_ipr13_ipr_n2{0xE000E434u, 0x00FF0000u, 16};
-constexpr Field<Access::RW> nvic_ipr13_ipr_n3{0xE000E434u, 0xFF000000u, 24};
-constexpr Field<Access::RW> nvic_ipr14_ipr_n0{0xE000E438u, 0x000000FFu, 0};
-constexpr Field<Access::RW> nvic_ipr14_ipr_n1{0xE000E438u, 0x0000FF00u, 8};
-constexpr Field<Access::RW> nvic_ipr14_ipr_n2{0xE000E438u, 0x00FF0000u, 16};
-constexpr Field<Access::RW> nvic_ipr14_ipr_n3{0xE000E438u, 0xFF000000u, 24};
-constexpr Field<Access::RW> nvic_ipr15_ipr_n0{0xE000E43Cu, 0x000000FFu, 0};
-constexpr Field<Access::RW> nvic_ipr15_ipr_n1{0xE000E43Cu, 0x0000FF00u, 8};
-constexpr Field<Access::RW> nvic_ipr15_ipr_n2{0xE000E43Cu, 0x00FF0000u, 16};
-constexpr Field<Access::RW> nvic_ipr15_ipr_n3{0xE000E43Cu, 0xFF000000u, 24};
-constexpr Field<Access::RW> nvic_ipr16_ipr_n0{0xE000E440u, 0x000000FFu, 0};
-constexpr Field<Access::RW> nvic_ipr16_ipr_n1{0xE000E440u, 0x0000FF00u, 8};
-constexpr Field<Access::RW> nvic_ipr16_ipr_n2{0xE000E440u, 0x00FF0000u, 16};
-constexpr Field<Access::RW> nvic_ipr16_ipr_n3{0xE000E440u, 0xFF000000u, 24};
-constexpr Field<Access::RW> nvic_ipr17_ipr_n0{0xE000E444u, 0x000000FFu, 0};
-constexpr Field<Access::RW> nvic_ipr17_ipr_n1{0xE000E444u, 0x0000FF00u, 8};
-constexpr Field<Access::RW> nvic_ipr17_ipr_n2{0xE000E444u, 0x00FF0000u, 16};
-constexpr Field<Access::RW> nvic_ipr17_ipr_n3{0xE000E444u, 0xFF000000u, 24};
-constexpr Field<Access::RW> nvic_ipr18_ipr_n0{0xE000E448u, 0x000000FFu, 0};
-constexpr Field<Access::RW> nvic_ipr18_ipr_n1{0xE000E448u, 0x0000FF00u, 8};
-constexpr Field<Access::RW> nvic_ipr18_ipr_n2{0xE000E448u, 0x00FF0000u, 16};
-constexpr Field<Access::RW> nvic_ipr18_ipr_n3{0xE000E448u, 0xFF000000u, 24};
-constexpr Field<Access::RW> nvic_ipr19_ipr_n0{0xE000E44Cu, 0x000000FFu, 0};
-constexpr Field<Access::RW> nvic_ipr19_ipr_n1{0xE000E44Cu, 0x0000FF00u, 8};
-constexpr Field<Access::RW> nvic_ipr19_ipr_n2{0xE000E44Cu, 0x00FF0000u, 16};
-constexpr Field<Access::RW> nvic_ipr19_ipr_n3{0xE000E44Cu, 0xFF000000u, 24};
-constexpr Field<Access::RW> nvic_ipr20_ipr_n0{0xE000E450u, 0x000000FFu, 0};
-constexpr Field<Access::RW> nvic_ipr20_ipr_n1{0xE000E450u, 0x0000FF00u, 8};
-constexpr Field<Access::RW> nvic_ipr20_ipr_n2{0xE000E450u, 0x00FF0000u, 16};
-constexpr Field<Access::RW> nvic_ipr20_ipr_n3{0xE000E450u, 0xFF000000u, 24};
+constexpr Field<Access::RW> nvic_ipr0_ipr_n[4] = {
+    {0xE000E400u, 0x000000FFu, 0},
+    {0xE000E400u, 0x0000FF00u, 8},
+    {0xE000E400u, 0x00FF0000u, 16},
+    {0xE000E400u, 0xFF000000u, 24},
+};
+constexpr Field<Access::RW> nvic_ipr1_ipr_n[4] = {
+    {0xE000E404u, 0x000000FFu, 0},
+    {0xE000E404u, 0x0000FF00u, 8},
+    {0xE000E404u, 0x00FF0000u, 16},
+    {0xE000E404u, 0xFF000000u, 24},
+};
+constexpr Field<Access::RW> nvic_ipr2_ipr_n[4] = {
+    {0xE000E408u, 0x000000FFu, 0},
+    {0xE000E408u, 0x0000FF00u, 8},
+    {0xE000E408u, 0x00FF0000u, 16},
+    {0xE000E408u, 0xFF000000u, 24},
+};
+constexpr Field<Access::RW> nvic_ipr3_ipr_n[4] = {
+    {0xE000E40Cu, 0x000000FFu, 0},
+    {0xE000E40Cu, 0x0000FF00u, 8},
+    {0xE000E40Cu, 0x00FF0000u, 16},
+    {0xE000E40Cu, 0xFF000000u, 24},
+};
+constexpr Field<Access::RW> nvic_ipr4_ipr_n[4] = {
+    {0xE000E410u, 0x000000FFu, 0},
+    {0xE000E410u, 0x0000FF00u, 8},
+    {0xE000E410u, 0x00FF0000u, 16},
+    {0xE000E410u, 0xFF000000u, 24},
+};
+constexpr Field<Access::RW> nvic_ipr5_ipr_n[4] = {
+    {0xE000E414u, 0x000000FFu, 0},
+    {0xE000E414u, 0x0000FF00u, 8},
+    {0xE000E414u, 0x00FF0000u, 16},
+    {0xE000E414u, 0xFF000000u, 24},
+};
+constexpr Field<Access::RW> nvic_ipr6_ipr_n[4] = {
+    {0xE000E418u, 0x000000FFu, 0},
+    {0xE000E418u, 0x0000FF00u, 8},
+    {0xE000E418u, 0x00FF0000u, 16},
+    {0xE000E418u, 0xFF000000u, 24},
+};
+constexpr Field<Access::RW> nvic_ipr7_ipr_n[4] = {
+    {0xE000E41Cu, 0x000000FFu, 0},
+    {0xE000E41Cu, 0x0000FF00u, 8},
+    {0xE000E41Cu, 0x00FF0000u, 16},
+    {0xE000E41Cu, 0xFF000000u, 24},
+};
+constexpr Field<Access::RW> nvic_ipr8_ipr_n[4] = {
+    {0xE000E420u, 0x000000FFu, 0},
+    {0xE000E420u, 0x0000FF00u, 8},
+    {0xE000E420u, 0x00FF0000u, 16},
+    {0xE000E420u, 0xFF000000u, 24},
+};
+constexpr Field<Access::RW> nvic_ipr9_ipr_n[4] = {
+    {0xE000E424u, 0x000000FFu, 0},
+    {0xE000E424u, 0x0000FF00u, 8},
+    {0xE000E424u, 0x00FF0000u, 16},
+    {0xE000E424u, 0xFF000000u, 24},
+};
+constexpr Field<Access::RW> nvic_ipr10_ipr_n[4] = {
+    {0xE000E428u, 0x000000FFu, 0},
+    {0xE000E428u, 0x0000FF00u, 8},
+    {0xE000E428u, 0x00FF0000u, 16},
+    {0xE000E428u, 0xFF000000u, 24},
+};
+constexpr Field<Access::RW> nvic_ipr11_ipr_n[4] = {
+    {0xE000E42Cu, 0x000000FFu, 0},
+    {0xE000E42Cu, 0x0000FF00u, 8},
+    {0xE000E42Cu, 0x00FF0000u, 16},
+    {0xE000E42Cu, 0xFF000000u, 24},
+};
+constexpr Field<Access::RW> nvic_ipr12_ipr_n[4] = {
+    {0xE000E430u, 0x000000FFu, 0},
+    {0xE000E430u, 0x0000FF00u, 8},
+    {0xE000E430u, 0x00FF0000u, 16},
+    {0xE000E430u, 0xFF000000u, 24},
+};
+constexpr Field<Access::RW> nvic_ipr13_ipr_n[4] = {
+    {0xE000E434u, 0x000000FFu, 0},
+    {0xE000E434u, 0x0000FF00u, 8},
+    {0xE000E434u, 0x00FF0000u, 16},
+    {0xE000E434u, 0xFF000000u, 24},
+};
+constexpr Field<Access::RW> nvic_ipr14_ipr_n[4] = {
+    {0xE000E438u, 0x000000FFu, 0},
+    {0xE000E438u, 0x0000FF00u, 8},
+    {0xE000E438u, 0x00FF0000u, 16},
+    {0xE000E438u, 0xFF000000u, 24},
+};
+constexpr Field<Access::RW> nvic_ipr15_ipr_n[4] = {
+    {0xE000E43Cu, 0x000000FFu, 0},
+    {0xE000E43Cu, 0x0000FF00u, 8},
+    {0xE000E43Cu, 0x00FF0000u, 16},
+    {0xE000E43Cu, 0xFF000000u, 24},
+};
+constexpr Field<Access::RW> nvic_ipr16_ipr_n[4] = {
+    {0xE000E440u, 0x000000FFu, 0},
+    {0xE000E440u, 0x0000FF00u, 8},
+    {0xE000E440u, 0x00FF0000u, 16},
+    {0xE000E440u, 0xFF000000u, 24},
+};
+constexpr Field<Access::RW> nvic_ipr17_ipr_n[4] = {
+    {0xE000E444u, 0x000000FFu, 0},
+    {0xE000E444u, 0x0000FF00u, 8},
+    {0xE000E444u, 0x00FF0000u, 16},
+    {0xE000E444u, 0xFF000000u, 24},
+};
+constexpr Field<Access::RW> nvic_ipr18_ipr_n[4] = {
+    {0xE000E448u, 0x000000FFu, 0},
+    {0xE000E448u, 0x0000FF00u, 8},
+    {0xE000E448u, 0x00FF0000u, 16},
+    {0xE000E448u, 0xFF000000u, 24},
+};
+constexpr Field<Access::RW> nvic_ipr19_ipr_n[4] = {
+    {0xE000E44Cu, 0x000000FFu, 0},
+    {0xE000E44Cu, 0x0000FF00u, 8},
+    {0xE000E44Cu, 0x00FF0000u, 16},
+    {0xE000E44Cu, 0xFF000000u, 24},
+};
+constexpr Field<Access::RW> nvic_ipr20_ipr_n[4] = {
+    {0xE000E450u, 0x000000FFu, 0},
+    {0xE000E450u, 0x0000FF00u, 8},
+    {0xE000E450u, 0x00FF0000u, 16},
+    {0xE000E450u, 0xFF000000u, 24},
+};
 
 #endif // NVIC_HPP

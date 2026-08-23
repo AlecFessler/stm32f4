@@ -83,9 +83,11 @@ constexpr Field<Access::RW> dcmi_cwstrt_vst{0x50050020u, 0x1FFF0000u, 16};
 constexpr Field<Access::RW> dcmi_cwstrt_hoffcnt{0x50050020u, 0x00003FFFu, 0};
 constexpr Field<Access::RW> dcmi_cwsize_vline{0x50050024u, 0x3FFF0000u, 16};
 constexpr Field<Access::RW> dcmi_cwsize_capcnt{0x50050024u, 0x00003FFFu, 0};
-constexpr Field<Access::RO> dcmi_dr_byte3{0x50050028u, 0xFF000000u, 24};
-constexpr Field<Access::RO> dcmi_dr_byte2{0x50050028u, 0x00FF0000u, 16};
-constexpr Field<Access::RO> dcmi_dr_byte1{0x50050028u, 0x0000FF00u, 8};
-constexpr Field<Access::RO> dcmi_dr_byte0{0x50050028u, 0x000000FFu, 0};
+constexpr Field<Access::RO> dcmi_dr_byte[4] = {
+    {0x50050028u, 0x000000FFu, 0},
+    {0x50050028u, 0x0000FF00u, 8},
+    {0x50050028u, 0x00FF0000u, 16},
+    {0x50050028u, 0xFF000000u, 24},
+};
 
 #endif // DCMI_HPP

@@ -37,10 +37,12 @@ constexpr Field<Access::RW> syscfg_pmc_mii_rmii_sel{0x40013804u, 0x00800000u, 23
 constexpr Field<Access::RW> syscfg_pmc_adc1dc2{0x40013804u, 0x00010000u, 16};
 constexpr Field<Access::RW> syscfg_pmc_adc2dc2{0x40013804u, 0x00020000u, 17};
 constexpr Field<Access::RW> syscfg_pmc_adc3dc2{0x40013804u, 0x00040000u, 18};
-constexpr Field<Access::RW> syscfg_exticr1_exti3{0x40013808u, 0x0000F000u, 12};
-constexpr Field<Access::RW> syscfg_exticr1_exti2{0x40013808u, 0x00000F00u, 8};
-constexpr Field<Access::RW> syscfg_exticr1_exti1{0x40013808u, 0x000000F0u, 4};
-constexpr Field<Access::RW> syscfg_exticr1_exti0{0x40013808u, 0x0000000Fu, 0};
+constexpr Field<Access::RW> syscfg_exticr1_exti[4] = {
+    {0x40013808u, 0x0000000Fu, 0},
+    {0x40013808u, 0x000000F0u, 4},
+    {0x40013808u, 0x00000F00u, 8},
+    {0x40013808u, 0x0000F000u, 12},
+};
 constexpr Field<Access::RW> syscfg_exticr2_exti7{0x4001380Cu, 0x0000F000u, 12};
 constexpr Field<Access::RW> syscfg_exticr2_exti6{0x4001380Cu, 0x00000F00u, 8};
 constexpr Field<Access::RW> syscfg_exticr2_exti5{0x4001380Cu, 0x000000F0u, 4};

@@ -88,12 +88,12 @@ static_assert(offsetof(CrypRegs, csgcm6r) == 136);
 static_assert(offsetof(CrypRegs, csgcm7r) == 140);
 
 constexpr Field<Access::RW> cryp_cr_algodir{0x50060000u, 0x00000004u, 2};
-constexpr Field<Access::RW> cryp_cr_algomode0{0x50060000u, 0x00000038u, 3};
 constexpr Field<Access::RW> cryp_cr_datatype{0x50060000u, 0x000000C0u, 6};
 constexpr Field<Access::RW> cryp_cr_keysize{0x50060000u, 0x00000300u, 8};
 constexpr Field<Access::WO> cryp_cr_fflush{0x50060000u, 0x00004000u, 14};
 constexpr Field<Access::RW> cryp_cr_crypen{0x50060000u, 0x00008000u, 15};
 constexpr Field<Access::RW> cryp_cr_gcm_ccmph{0x50060000u, 0x00030000u, 16};
+constexpr Field<Access::RW> cryp_cr_algomode0{0x50060000u, 0x00000038u, 3};
 constexpr Field<Access::RW> cryp_cr_algomode3{0x50060000u, 0x00080000u, 19};
 constexpr Field<Access::RO> cryp_sr_busy{0x50060004u, 0x00000010u, 4};
 constexpr Field<Access::RO> cryp_sr_offu{0x50060004u, 0x00000008u, 3};
@@ -334,70 +334,74 @@ constexpr Field<Access::WO> cryp_k3lr_b60{0x50060038u, 0x10000000u, 28};
 constexpr Field<Access::WO> cryp_k3lr_b61{0x50060038u, 0x20000000u, 29};
 constexpr Field<Access::WO> cryp_k3lr_b62{0x50060038u, 0x40000000u, 30};
 constexpr Field<Access::WO> cryp_k3lr_b63{0x50060038u, 0x80000000u, 31};
-constexpr Field<Access::WO> cryp_k3rr_b0{0x5006003Cu, 0x00000001u, 0};
-constexpr Field<Access::WO> cryp_k3rr_b1{0x5006003Cu, 0x00000002u, 1};
-constexpr Field<Access::WO> cryp_k3rr_b2{0x5006003Cu, 0x00000004u, 2};
-constexpr Field<Access::WO> cryp_k3rr_b3{0x5006003Cu, 0x00000008u, 3};
-constexpr Field<Access::WO> cryp_k3rr_b4{0x5006003Cu, 0x00000010u, 4};
-constexpr Field<Access::WO> cryp_k3rr_b5{0x5006003Cu, 0x00000020u, 5};
-constexpr Field<Access::WO> cryp_k3rr_b6{0x5006003Cu, 0x00000040u, 6};
-constexpr Field<Access::WO> cryp_k3rr_b7{0x5006003Cu, 0x00000080u, 7};
-constexpr Field<Access::WO> cryp_k3rr_b8{0x5006003Cu, 0x00000100u, 8};
-constexpr Field<Access::WO> cryp_k3rr_b9{0x5006003Cu, 0x00000200u, 9};
-constexpr Field<Access::WO> cryp_k3rr_b10{0x5006003Cu, 0x00000400u, 10};
-constexpr Field<Access::WO> cryp_k3rr_b11{0x5006003Cu, 0x00000800u, 11};
-constexpr Field<Access::WO> cryp_k3rr_b12{0x5006003Cu, 0x00001000u, 12};
-constexpr Field<Access::WO> cryp_k3rr_b13{0x5006003Cu, 0x00002000u, 13};
-constexpr Field<Access::WO> cryp_k3rr_b14{0x5006003Cu, 0x00004000u, 14};
-constexpr Field<Access::WO> cryp_k3rr_b15{0x5006003Cu, 0x00008000u, 15};
-constexpr Field<Access::WO> cryp_k3rr_b16{0x5006003Cu, 0x00010000u, 16};
-constexpr Field<Access::WO> cryp_k3rr_b17{0x5006003Cu, 0x00020000u, 17};
-constexpr Field<Access::WO> cryp_k3rr_b18{0x5006003Cu, 0x00040000u, 18};
-constexpr Field<Access::WO> cryp_k3rr_b19{0x5006003Cu, 0x00080000u, 19};
-constexpr Field<Access::WO> cryp_k3rr_b20{0x5006003Cu, 0x00100000u, 20};
-constexpr Field<Access::WO> cryp_k3rr_b21{0x5006003Cu, 0x00200000u, 21};
-constexpr Field<Access::WO> cryp_k3rr_b22{0x5006003Cu, 0x00400000u, 22};
-constexpr Field<Access::WO> cryp_k3rr_b23{0x5006003Cu, 0x00800000u, 23};
-constexpr Field<Access::WO> cryp_k3rr_b24{0x5006003Cu, 0x01000000u, 24};
-constexpr Field<Access::WO> cryp_k3rr_b25{0x5006003Cu, 0x02000000u, 25};
-constexpr Field<Access::WO> cryp_k3rr_b26{0x5006003Cu, 0x04000000u, 26};
-constexpr Field<Access::WO> cryp_k3rr_b27{0x5006003Cu, 0x08000000u, 27};
-constexpr Field<Access::WO> cryp_k3rr_b28{0x5006003Cu, 0x10000000u, 28};
-constexpr Field<Access::WO> cryp_k3rr_b29{0x5006003Cu, 0x20000000u, 29};
-constexpr Field<Access::WO> cryp_k3rr_b30{0x5006003Cu, 0x40000000u, 30};
-constexpr Field<Access::WO> cryp_k3rr_b31{0x5006003Cu, 0x80000000u, 31};
-constexpr Field<Access::RW> cryp_iv0lr_iv31{0x50060040u, 0x00000001u, 0};
-constexpr Field<Access::RW> cryp_iv0lr_iv30{0x50060040u, 0x00000002u, 1};
-constexpr Field<Access::RW> cryp_iv0lr_iv29{0x50060040u, 0x00000004u, 2};
-constexpr Field<Access::RW> cryp_iv0lr_iv28{0x50060040u, 0x00000008u, 3};
-constexpr Field<Access::RW> cryp_iv0lr_iv27{0x50060040u, 0x00000010u, 4};
-constexpr Field<Access::RW> cryp_iv0lr_iv26{0x50060040u, 0x00000020u, 5};
-constexpr Field<Access::RW> cryp_iv0lr_iv25{0x50060040u, 0x00000040u, 6};
-constexpr Field<Access::RW> cryp_iv0lr_iv24{0x50060040u, 0x00000080u, 7};
-constexpr Field<Access::RW> cryp_iv0lr_iv23{0x50060040u, 0x00000100u, 8};
-constexpr Field<Access::RW> cryp_iv0lr_iv22{0x50060040u, 0x00000200u, 9};
-constexpr Field<Access::RW> cryp_iv0lr_iv21{0x50060040u, 0x00000400u, 10};
-constexpr Field<Access::RW> cryp_iv0lr_iv20{0x50060040u, 0x00000800u, 11};
-constexpr Field<Access::RW> cryp_iv0lr_iv19{0x50060040u, 0x00001000u, 12};
-constexpr Field<Access::RW> cryp_iv0lr_iv18{0x50060040u, 0x00002000u, 13};
-constexpr Field<Access::RW> cryp_iv0lr_iv17{0x50060040u, 0x00004000u, 14};
-constexpr Field<Access::RW> cryp_iv0lr_iv16{0x50060040u, 0x00008000u, 15};
-constexpr Field<Access::RW> cryp_iv0lr_iv15{0x50060040u, 0x00010000u, 16};
-constexpr Field<Access::RW> cryp_iv0lr_iv14{0x50060040u, 0x00020000u, 17};
-constexpr Field<Access::RW> cryp_iv0lr_iv13{0x50060040u, 0x00040000u, 18};
-constexpr Field<Access::RW> cryp_iv0lr_iv12{0x50060040u, 0x00080000u, 19};
-constexpr Field<Access::RW> cryp_iv0lr_iv11{0x50060040u, 0x00100000u, 20};
-constexpr Field<Access::RW> cryp_iv0lr_iv10{0x50060040u, 0x00200000u, 21};
-constexpr Field<Access::RW> cryp_iv0lr_iv9{0x50060040u, 0x00400000u, 22};
-constexpr Field<Access::RW> cryp_iv0lr_iv8{0x50060040u, 0x00800000u, 23};
-constexpr Field<Access::RW> cryp_iv0lr_iv7{0x50060040u, 0x01000000u, 24};
-constexpr Field<Access::RW> cryp_iv0lr_iv6{0x50060040u, 0x02000000u, 25};
-constexpr Field<Access::RW> cryp_iv0lr_iv5{0x50060040u, 0x04000000u, 26};
-constexpr Field<Access::RW> cryp_iv0lr_iv4{0x50060040u, 0x08000000u, 27};
-constexpr Field<Access::RW> cryp_iv0lr_iv3{0x50060040u, 0x10000000u, 28};
-constexpr Field<Access::RW> cryp_iv0lr_iv2{0x50060040u, 0x20000000u, 29};
-constexpr Field<Access::RW> cryp_iv0lr_iv1{0x50060040u, 0x40000000u, 30};
-constexpr Field<Access::RW> cryp_iv0lr_iv0{0x50060040u, 0x80000000u, 31};
+constexpr Field<Access::WO> cryp_k3rr_b[32] = {
+    {0x5006003Cu, 0x00000001u, 0},
+    {0x5006003Cu, 0x00000002u, 1},
+    {0x5006003Cu, 0x00000004u, 2},
+    {0x5006003Cu, 0x00000008u, 3},
+    {0x5006003Cu, 0x00000010u, 4},
+    {0x5006003Cu, 0x00000020u, 5},
+    {0x5006003Cu, 0x00000040u, 6},
+    {0x5006003Cu, 0x00000080u, 7},
+    {0x5006003Cu, 0x00000100u, 8},
+    {0x5006003Cu, 0x00000200u, 9},
+    {0x5006003Cu, 0x00000400u, 10},
+    {0x5006003Cu, 0x00000800u, 11},
+    {0x5006003Cu, 0x00001000u, 12},
+    {0x5006003Cu, 0x00002000u, 13},
+    {0x5006003Cu, 0x00004000u, 14},
+    {0x5006003Cu, 0x00008000u, 15},
+    {0x5006003Cu, 0x00010000u, 16},
+    {0x5006003Cu, 0x00020000u, 17},
+    {0x5006003Cu, 0x00040000u, 18},
+    {0x5006003Cu, 0x00080000u, 19},
+    {0x5006003Cu, 0x00100000u, 20},
+    {0x5006003Cu, 0x00200000u, 21},
+    {0x5006003Cu, 0x00400000u, 22},
+    {0x5006003Cu, 0x00800000u, 23},
+    {0x5006003Cu, 0x01000000u, 24},
+    {0x5006003Cu, 0x02000000u, 25},
+    {0x5006003Cu, 0x04000000u, 26},
+    {0x5006003Cu, 0x08000000u, 27},
+    {0x5006003Cu, 0x10000000u, 28},
+    {0x5006003Cu, 0x20000000u, 29},
+    {0x5006003Cu, 0x40000000u, 30},
+    {0x5006003Cu, 0x80000000u, 31},
+};
+constexpr Field<Access::RW> cryp_iv0lr_iv[32] = {
+    {0x50060040u, 0x80000000u, 31},
+    {0x50060040u, 0x40000000u, 30},
+    {0x50060040u, 0x20000000u, 29},
+    {0x50060040u, 0x10000000u, 28},
+    {0x50060040u, 0x08000000u, 27},
+    {0x50060040u, 0x04000000u, 26},
+    {0x50060040u, 0x02000000u, 25},
+    {0x50060040u, 0x01000000u, 24},
+    {0x50060040u, 0x00800000u, 23},
+    {0x50060040u, 0x00400000u, 22},
+    {0x50060040u, 0x00200000u, 21},
+    {0x50060040u, 0x00100000u, 20},
+    {0x50060040u, 0x00080000u, 19},
+    {0x50060040u, 0x00040000u, 18},
+    {0x50060040u, 0x00020000u, 17},
+    {0x50060040u, 0x00010000u, 16},
+    {0x50060040u, 0x00008000u, 15},
+    {0x50060040u, 0x00004000u, 14},
+    {0x50060040u, 0x00002000u, 13},
+    {0x50060040u, 0x00001000u, 12},
+    {0x50060040u, 0x00000800u, 11},
+    {0x50060040u, 0x00000400u, 10},
+    {0x50060040u, 0x00000200u, 9},
+    {0x50060040u, 0x00000100u, 8},
+    {0x50060040u, 0x00000080u, 7},
+    {0x50060040u, 0x00000040u, 6},
+    {0x50060040u, 0x00000020u, 5},
+    {0x50060040u, 0x00000010u, 4},
+    {0x50060040u, 0x00000008u, 3},
+    {0x50060040u, 0x00000004u, 2},
+    {0x50060040u, 0x00000002u, 1},
+    {0x50060040u, 0x00000001u, 0},
+};
 constexpr Field<Access::RW> cryp_iv0rr_iv63{0x50060044u, 0x00000001u, 0};
 constexpr Field<Access::RW> cryp_iv0rr_iv62{0x50060044u, 0x00000002u, 1};
 constexpr Field<Access::RW> cryp_iv0rr_iv61{0x50060044u, 0x00000004u, 2};
