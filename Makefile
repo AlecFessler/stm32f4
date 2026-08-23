@@ -54,7 +54,9 @@ regen:
 	python3 tools/svdgen.py
 
 regen-check: regen
-	git diff --exit-code -- $(SRCDIR)/do-not-edit
+	@test -z "$$(git status --porcelain -- $(SRCDIR)/do-not-edit)" \
+	  || { git status --short -- $(SRCDIR)/do-not-edit; \
+	       echo 'regen produced changes; commit them'; exit 1; }
 
 clean:
 	rm -rf $(BUILD)

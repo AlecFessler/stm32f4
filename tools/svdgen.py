@@ -46,6 +46,226 @@ access_str_map = {
 FIELD_RE = re.compile(r"([A-Za-z_]+?)(\d+)")
 
 
+def text(element, tag):
+    """Collapse the hard-wrapped whitespace the SVD uses in descriptions."""
+    return " ".join(element.findtext(tag, "").split())
+
+
+def build_derivation_map(peripherals):
+    """name -> peripheral element, for resolving derivedFrom."""
+    return {p.findtext("name", "MISSING"): p for p in peripherals}
+
+
+def resolve(peripheral, derivation_map):
+    """A derived peripheral carries only name and baseAddress; everything else
+    lives on the peripheral it derives from."""
+    derived_from = peripheral.get("derivedFrom")
+    return derivation_map[derived_from] if derived_from else peripheral
+
+
+def build_groups(peripherals, derivation_map):
+    """SVD groupName -> [peripheral names]. Groups with more than one member
+    get a subdirectory and an aggregate header."""
+    groups = defaultdict(list)
+    for peripheral in peripherals:
+        src = resolve(peripheral, derivation_map)
+        groups[src.findtext("groupName")].append(peripheral.findtext("name", "MISSING"))
+    return groups
+
+
+def sorted_registers(peripheral):
+    """The SVD does not list registers in address order."""
+    registers = peripheral.findall("registers/register")
+    registers.sort(key=lambda reg: int(reg.findtext("addressOffset", "0"), 0))
+    return registers
+
+
+def classify_fields(register):
+    """Split a register's fields into indexable families and everything else.
+
+    A family becomes an array when its names share a stem with a trailing
+    integer, there are >= 4 of them, and the indices run contiguously from 0.
+    Anything else falls back to a named constant.
+    """
+    families = defaultdict(dict)
+    singles = []
+    for field in register.findall("fields/field"):
+        match = FIELD_RE.fullmatch(field.findtext("name", "MISSING"))
+        if match:
+            families[match.group(1)][int(match.group(2))] = field
+        else:
+            singles.append(field)
+
+    arrays = {}
+    for name_prefix, members in families.items():
+        if len(members) >= 4 and set(members) == set(range(len(members))):
+            arrays[name_prefix] = members
+        else:
+            singles.extend(members.values())
+
+    return arrays, singles
+
+
+def field_mask(field):
+    bit_offset = int(field.findtext("bitOffset", "0"), 0)
+    bit_width = int(field.findtext("bitWidth", "0"), 0)
+    return ((1 << bit_width) - 1) << bit_offset, bit_offset
+
+
+def field_access(field, register_access):
+    """Field access is usually absent; the SVD default is read-write."""
+    return field.findtext("access") or register_access or "read-write"
+
+
+def field_lines(
+    peripheral_name, register_name, register_base, register_access, arrays, singles
+):
+    """constexpr Field definitions: arrays for families, scalars for the rest."""
+    lines = []
+
+    for name_prefix, members in arrays.items():
+        access = field_access(members[0], register_access)
+        lines.append(
+            f"constexpr Field<{access_str_map[access]}> "
+            f"{peripheral_name.lower()}_{register_name.lower()}_{name_prefix.lower()}"
+            f"[{len(members)}] = {{"
+        )
+        for group_idx in range(len(members)):
+            mask, bit_offset = field_mask(members[group_idx])
+            lines.append(
+                f"    {{0x{register_base:08X}u, 0x{mask:08X}u, {bit_offset}}},"
+            )
+        lines.append("};")
+
+    for field in singles:
+        field_name = field.findtext("name", "MISSING")
+        access = field_access(field, register_access)
+        mask, bit_offset = field_mask(field)
+        lines.append(
+            f"constexpr Field<{access_str_map[access]}> "
+            f"{peripheral_name.lower()}_{register_name.lower()}_{field_name.lower()}"
+            f"{{0x{register_base:08X}u, "
+            f"0x{mask:08X}u, "
+            f"{bit_offset}}};"
+        )
+
+    return lines
+
+
+def struct_lines(peripheral_name, base, registers):
+    """Debug-only register overlay, plus offsetof assertions.
+
+    Returns (lines, asserts, ok). ok is False when two registers share an
+    address, which one struct cannot express; the caller omits the struct.
+    """
+    lines = [
+        "// The BASE and Regs struct are defined entirely for debug utility.",
+        f"constexpr uintptr_t {peripheral_name.upper()}_BASE = 0x{base:08X};",
+        f"struct {peripheral_name.capitalize()}Regs {{",
+    ]
+    asserts = []
+    ok = True
+    prev_offset = 0x0
+    prev_size_bytes = 0
+    reserved_fields = 0
+
+    for register in registers:
+        register_name = register.findtext("name", "MISSING")
+        offset = int(register.findtext("addressOffset", "0"), 0)
+        size = int(register.findtext("size", "0"), 0)
+
+        gap_bytes = offset - prev_offset - prev_size_bytes
+        assert gap_bytes % 4 == 0
+        if gap_bytes > 0:
+            lines.append(f"    uint32_t _reserved{reserved_fields}[{gap_bytes // 4}];")
+            reserved_fields += 1
+        elif gap_bytes < 0:
+            ok = False
+
+        lines.append(
+            f"    volatile uint{size}_t {register_name.lower()};"
+            f" // {text(register, 'description')}"
+        )
+        asserts.append(
+            f"static_assert("
+            f"offsetof({peripheral_name.capitalize()}Regs, {register_name.lower()})"
+            f" == {offset});"
+        )
+
+        prev_offset = offset
+        prev_size_bytes = size // 8
+
+    lines.append("};")
+    return lines, asserts, ok
+
+
+def peripheral_header(peripheral_name, base, src):
+    """One header: guard, debug struct, Field definitions."""
+    guard = f"STM32_{peripheral_name.upper()}_HPP"
+    lines = [
+        "// DO NOT EDIT: PROGRAMATICALLY GENERATED CODE\n",
+        f"// {text(src, 'description')}",
+        f"#ifndef {guard}",
+        f"#define {guard}\n",
+        "#include <cstddef>",
+        "#include <cstdint>\n",
+        '#include "mmio.hpp"\n',
+    ]
+
+    registers = sorted_registers(src)
+
+    overlay, asserts, ok = struct_lines(peripheral_name, base, registers)
+    if ok:
+        lines.extend(overlay)
+        lines.extend(asserts)
+        lines.append("")
+    else:
+        lines.append(
+            f"// {peripheral_name.capitalize()}Regs omitted: overlapping registers"
+        )
+
+    for register in registers:
+        arrays, singles = classify_fields(register)
+        lines.extend(
+            field_lines(
+                peripheral_name,
+                register.findtext("name", "MISSING"),
+                base + int(register.findtext("addressOffset", "0"), 0),
+                register.findtext("access"),
+                arrays,
+                singles,
+            )
+        )
+    lines.append("")
+
+    lines.append(f"#endif // {guard}")
+    return lines
+
+
+def aggregate_header(group_name, members):
+    """Top-level header for a multi-member group: includes its members."""
+    guard = f"STM32_{group_name.upper()}_HPP"
+    lines = [
+        "// DO NOT EDIT: PROGRAMATICALLY GENERATED CODE\n",
+        f"// {group_name} peripherals",
+        f"#ifndef {guard}",
+        f"#define {guard}\n",
+    ]
+    for member_name in sorted(members):
+        lines.append(f'#include "{group_name.lower()}/{member_name.lower()}.hpp"')
+    lines.append("")
+    lines.append(f"#endif // {guard}")
+    return lines
+
+
+def output_path(outdir, groups, group_name, peripheral_name):
+    """Multi-member groups get a subdirectory; singletons stay flat, because
+    their group name is the peripheral name and would collide."""
+    if len(groups[group_name]) > 1:
+        return outdir / group_name.lower() / f"{peripheral_name.lower()}.hpp"
+    return outdir / f"{peripheral_name.lower()}.hpp"
+
+
 def main():
     outdir = Path(__file__).resolve().parent.parent / "src" / "do-not-edit"
     shutil.rmtree(outdir, ignore_errors=True)
@@ -55,210 +275,25 @@ def main():
     root = ET.parse(svddir / "STM32F429.svd").getroot()
     peripherals = root.findall("peripherals/peripheral")
 
-    derivation_map = {}
-    for peripheral in peripherals:
-        peripheral_name = peripheral.findtext("name", "MISSING")
-        derivation_map[peripheral_name] = peripheral
-
-    groups = defaultdict(list)
-    for peripheral in peripherals:
-        peripheral_name = peripheral.findtext("name", "MISSING")
-        derived_from = peripheral.get("derivedFrom")
-        src = (
-            derivation_map[derived_from]
-            if peripheral.get("derivedFrom")
-            else peripheral
-        )
-        group_name = src.findtext("groupName")
-        groups[group_name].append(peripheral_name)
+    derivation_map = build_derivation_map(peripherals)
+    groups = build_groups(peripherals, derivation_map)
 
     for peripheral in peripherals:
-        file_lines = []
-
         peripheral_name = peripheral.findtext("name", "MISSING")
         base = int(peripheral.findtext("baseAddress", "0"), 0)
+        src = resolve(peripheral, derivation_map)
 
-        derives_from = peripheral.get("derivedFrom")
-        if derives_from is not None:
-            peripheral = derivation_map[derives_from]
+        lines = peripheral_header(peripheral_name, base, src)
 
-        peripheral_description = " ".join(
-            peripheral.findtext("description", "").split()
-        )
-
-        file_lines.append("// DO NOT EDIT: PROGRAMATICALLY GENERATED CODE\n")
-
-        file_lines.append(f"// {peripheral_description}")
-        file_lines.append(f"#ifndef STM32_{peripheral_name.upper()}_HPP")
-        file_lines.append(f"#define STM32_{peripheral_name.upper()}_HPP\n")
-
-        file_lines.append("#include <cstddef>")
-        file_lines.append("#include <cstdint>\n")
-
-        file_lines.append('#include "mmio.hpp"\n')
-
-        struct_lines = []
-        struct_ok = True
-        field_defs = []
-        static_asserts = []
-        prev_offset = 0x0
-        prev_size_bytes = 0
-        reserved_fields = 0
-
-        struct_lines.append(
-            "// The BASE and Regs struct are defined entirely for debug utility."
-        )
-        struct_lines.append(
-            f"constexpr uintptr_t {peripheral_name.upper()}_BASE = 0x{base:08X};"
-        )
-        struct_lines.append(f"struct {peripheral_name.capitalize()}Regs {{")
-
-        registers = peripheral.findall("registers/register")
-        registers.sort(key=lambda reg: int(reg.findtext("addressOffset", "0"), 0))
-
-        for register in registers:
-            register_name = register.findtext("name", "MISSING")
-            register_description = " ".join(
-                register.findtext("description", "").split()
-            )
-            offset = int(register.findtext("addressOffset", "0"), 0)
-            register_base = base + offset
-            size = int(register.findtext("size", "0"), 0)
-            register_access = register.findtext("access")
-            reset_value = register.findtext("resetValue")
-
-            gap_bytes = offset - prev_offset - prev_size_bytes
-            assert gap_bytes % 4 == 0
-            gap_words = gap_bytes // 4
-            if gap_bytes > 0:
-                struct_lines.append(
-                    f"    uint32_t _reserved{reserved_fields}[{gap_words}];"
-                )
-                reserved_fields += 1
-            elif gap_bytes < 0:
-                struct_ok = False
-
-            struct_lines.append(
-                f"    volatile uint{size}_t {register_name.lower()};"
-                f" // {register_description}"
-            )
-            static_asserts.append(
-                f"static_assert("
-                f"offsetof({peripheral_name.capitalize()}Regs, {register_name.lower()})"
-                f" == {offset});"
-            )
-
-            prev_offset = offset
-            prev_size_bytes = size // 8
-
-            fields = register.findall("fields/field")
-
-            # first pass: collect fields with trailing digits into groups
-            families = defaultdict(dict)
-            singles = []
-            for field in fields:
-                field_name = field.findtext("name", "MISSING")
-                match = FIELD_RE.fullmatch(field_name)
-                if match:
-                    name_prefix, group_idx = match.group(1), int(match.group(2))
-                    families[name_prefix][group_idx] = field
-                else:
-                    singles.append(field)
-
-            # second pass: reject groups that don't have >= 4 members
-            # or groups that don't start at 0 and increment contiguously
-            arrays = {}
-            for name_prefix, members in families.items():
-                if len(members) >= 4 and set(members) == set(range(len(members))):
-                    arrays[name_prefix] = members
-                else:
-                    singles.extend(members.values())
-
-            # third pass: emit arrays of Fields for groups
-            for name_prefix, members in arrays.items():
-                array_access = (
-                    members[0].findtext("access") or register_access or "read-write"
-                )
-                field_defs.append(
-                    f"constexpr Field<{access_str_map[array_access]}> "
-                    f"{peripheral_name.lower()}_{register_name.lower()}_{name_prefix.lower()}"
-                    f"[{len(members)}] = {{"
-                )
-                for group_idx in range(len(members)):
-                    member = members[group_idx]
-                    bit_offset = int(member.findtext("bitOffset", "0"), 0)
-                    bit_width = int(member.findtext("bitWidth", "0"), 0)
-                    mask = ((1 << bit_width) - 1) << bit_offset
-                    field_defs.append(
-                        f"    {{0x{register_base:08X}u, 0x{mask:08X}u, {bit_offset}}},"
-                    )
-                field_defs.append("};")
-
-            # continued third pass: emit scalars for the rest
-            for field in singles:
-                field_name = field.findtext("name", "MISSING")
-                bit_offset = int(field.findtext("bitOffset", "0"), 0)
-                bit_width = int(field.findtext("bitWidth", "0"), 0)
-                field_access = (
-                    field.findtext("access") or register_access or "read-write"
-                )
-                mask = ((1 << bit_width) - 1) << bit_offset
-
-                field_defs.append(
-                    f"constexpr Field<{access_str_map[field_access]}> "
-                    f"{peripheral_name.lower()}_{register_name.lower()}_{field_name.lower()}"
-                    f"{{0x{register_base:08X}u, "
-                    f"0x{mask:08X}u, "
-                    f"{bit_offset}}};"
-                )
-
-        if struct_ok:
-            struct_lines.append("};")
-            file_lines.extend(struct_lines)
-            file_lines.extend(static_asserts)
-            file_lines.append("")
-        else:
-            file_lines.append(
-                f"// {peripheral_name.capitalize()}Regs omitted: overlapping registers"
-            )
-
-        file_lines.extend(field_defs)
-        file_lines.append("")
-
-        end_include_guard_line = f"#endif // STM32_{peripheral_name.upper()}_HPP"
-        file_lines.append(end_include_guard_line)
-
-        group_name = peripheral.findtext("groupName") or peripheral_name
-        if len(groups[group_name]) > 1:
-            path = outdir / group_name.lower() / f"{peripheral_name.lower()}.hpp"
-        else:
-            path = outdir / f"{peripheral_name.lower()}.hpp"
-
+        path = output_path(outdir, groups, src.findtext("groupName"), peripheral_name)
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text("\n".join(file_lines))
+        path.write_text("\n".join(lines) + "\n")
 
     for group_name, members in groups.items():
         if len(members) <= 1:
             continue
-
-        file_lines = []
-
-        file_lines.append("// DO NOT EDIT: PROGRAMATICALLY GENERATED CODE\n")
-
-        file_lines.append(f"// {group_name} peripherals")
-        file_lines.append(f"#ifndef STM32_{group_name.upper()}_HPP")
-        file_lines.append(f"#define STM32_{group_name.upper()}_HPP\n")
-
-        for member_name in sorted(members):
-            file_lines.append(
-                f'#include "{group_name.lower()}/{member_name.lower()}.hpp"'
-            )
-        file_lines.append("")
-
-        file_lines.append(f"#endif // STM32_{group_name.upper()}_HPP")
-
-        path = outdir / f"{group_name.lower()}.hpp"
-        path.write_text("\n".join(file_lines))
+        lines = aggregate_header(group_name, members)
+        (outdir / f"{group_name.lower()}.hpp").write_text("\n".join(lines) + "\n")
 
 
 if __name__ == "__main__":
