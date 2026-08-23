@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Nested Vectored Interrupt Controller
-#ifndef NVIC_HPP
-#define NVIC_HPP
+#ifndef STM32_NVIC_HPP
+#define STM32_NVIC_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -233,4 +233,4 @@ constexpr Field<Access::RW> nvic_ipr20_ipr_n[4] = {
     {0xE000E450u, 0xFF000000u, 24},
 };
 
-#endif // NVIC_HPP
+#endif // STM32_NVIC_HPP

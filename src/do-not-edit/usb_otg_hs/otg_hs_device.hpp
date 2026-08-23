@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // USB on the go high speed
-#ifndef OTG_HS_DEVICE_HPP
-#define OTG_HS_DEVICE_HPP
+#ifndef STM32_OTG_HS_DEVICE_HPP
+#define STM32_OTG_HS_DEVICE_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -591,4 +591,4 @@ constexpr Field<Access::RW> otg_hs_device_otg_hs_doepint7_otepdis{0x40040BE8u, 0
 constexpr Field<Access::RW> otg_hs_device_otg_hs_doepint7_b2bstup{0x40040BE8u, 0x00000040u, 6};
 constexpr Field<Access::RW> otg_hs_device_otg_hs_doepint7_nyet{0x40040BE8u, 0x00004000u, 14};
 
-#endif // OTG_HS_DEVICE_HPP
+#endif // STM32_OTG_HS_DEVICE_HPP

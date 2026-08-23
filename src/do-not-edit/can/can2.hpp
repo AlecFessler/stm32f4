@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Controller area network
-#ifndef CAN2_HPP
-#define CAN2_HPP
+#ifndef STM32_CAN2_HPP
+#define STM32_CAN2_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -2388,4 +2388,4 @@ constexpr Field<Access::RW> can2_f27r2_fb[32] = {
     {0x40006B1Cu, 0x80000000u, 31},
 };
 
-#endif // CAN2_HPP
+#endif // STM32_CAN2_HPP

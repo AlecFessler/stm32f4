@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Window watchdog
-#ifndef WWDG_HPP
-#define WWDG_HPP
+#ifndef STM32_WWDG_HPP
+#define STM32_WWDG_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -28,4 +28,4 @@ constexpr Field<Access::RW> wwdg_cfr_wdgtb1{0x40002C04u, 0x00000100u, 8};
 constexpr Field<Access::RW> wwdg_cfr_wdgtb0{0x40002C04u, 0x00000080u, 7};
 constexpr Field<Access::RW> wwdg_sr_ewif{0x40002C08u, 0x00000001u, 0};
 
-#endif // WWDG_HPP
+#endif // STM32_WWDG_HPP

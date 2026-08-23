@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // General purpose timers
-#ifndef TIM12_HPP
-#define TIM12_HPP
+#ifndef STM32_TIM12_HPP
+#define STM32_TIM12_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -60,4 +60,4 @@ constexpr Field<Access::RW> tim12_arr_arr{0x4000182Cu, 0x0000FFFFu, 0};
 constexpr Field<Access::RW> tim12_ccr1_ccr1{0x40001834u, 0x0000FFFFu, 0};
 constexpr Field<Access::RW> tim12_ccr2_ccr2{0x40001838u, 0x0000FFFFu, 0};
 
-#endif // TIM12_HPP
+#endif // STM32_TIM12_HPP

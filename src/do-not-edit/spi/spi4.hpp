@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Serial peripheral interface
-#ifndef SPI4_HPP
-#define SPI4_HPP
+#ifndef STM32_SPI4_HPP
+#define STM32_SPI4_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -78,4 +78,4 @@ constexpr Field<Access::RW> spi4_i2spr_mckoe{0x40013420u, 0x00000200u, 9};
 constexpr Field<Access::RW> spi4_i2spr_odd{0x40013420u, 0x00000100u, 8};
 constexpr Field<Access::RW> spi4_i2spr_i2sdiv{0x40013420u, 0x000000FFu, 0};
 
-#endif // SPI4_HPP
+#endif // STM32_SPI4_HPP

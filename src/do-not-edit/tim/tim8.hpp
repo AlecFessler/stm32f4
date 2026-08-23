@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Advanced-timers
-#ifndef TIM8_HPP
-#define TIM8_HPP
+#ifndef STM32_TIM8_HPP
+#define STM32_TIM8_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -138,4 +138,4 @@ constexpr Field<Access::RW> tim8_dcr_dbl{0x40010448u, 0x00001F00u, 8};
 constexpr Field<Access::RW> tim8_dcr_dba{0x40010448u, 0x0000001Fu, 0};
 constexpr Field<Access::RW> tim8_dmar_dmab{0x4001044Cu, 0x0000FFFFu, 0};
 
-#endif // TIM8_HPP
+#endif // STM32_TIM8_HPP

@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // DMA2D controller
-#ifndef DMA2D_HPP
-#define DMA2D_HPP
+#ifndef STM32_DMA2D_HPP
+#define STM32_DMA2D_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -127,4 +127,4 @@ constexpr Field<Access::RW> dma2d_bgclut_red{0x4002B800u, 0x00FF0000u, 16};
 constexpr Field<Access::RW> dma2d_bgclut_green{0x4002B800u, 0x0000FF00u, 8};
 constexpr Field<Access::RW> dma2d_bgclut_blue{0x4002B800u, 0x000000FFu, 0};
 
-#endif // DMA2D_HPP
+#endif // STM32_DMA2D_HPP

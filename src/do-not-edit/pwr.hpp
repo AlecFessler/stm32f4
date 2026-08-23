@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Power control
-#ifndef PWR_HPP
-#define PWR_HPP
+#ifndef STM32_PWR_HPP
+#define STM32_PWR_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -43,4 +43,4 @@ constexpr Field<Access::RO> pwr_csr_odrdy{0x40007004u, 0x00010000u, 16};
 constexpr Field<Access::RO> pwr_csr_odswrdy{0x40007004u, 0x00020000u, 17};
 constexpr Field<Access::RW> pwr_csr_udrdy{0x40007004u, 0x000C0000u, 18};
 
-#endif // PWR_HPP
+#endif // STM32_PWR_HPP

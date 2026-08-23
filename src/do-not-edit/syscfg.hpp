@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // System configuration controller
-#ifndef SYSCFG_HPP
-#define SYSCFG_HPP
+#ifndef STM32_SYSCFG_HPP
+#define STM32_SYSCFG_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -57,4 +57,4 @@ constexpr Field<Access::RW> syscfg_exticr4_exti12{0x40013814u, 0x0000000Fu, 0};
 constexpr Field<Access::RO> syscfg_cmpcr_ready{0x40013820u, 0x00000100u, 8};
 constexpr Field<Access::RO> syscfg_cmpcr_cmp_pd{0x40013820u, 0x00000001u, 0};
 
-#endif // SYSCFG_HPP
+#endif // STM32_SYSCFG_HPP

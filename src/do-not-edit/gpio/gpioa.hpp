@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // General-purpose I/Os
-#ifndef GPIOA_HPP
-#define GPIOA_HPP
+#ifndef STM32_GPIOA_HPP
+#define STM32_GPIOA_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -216,4 +216,4 @@ constexpr Field<Access::RW> gpioa_afrh_afrh10{0x40020024u, 0x00000F00u, 8};
 constexpr Field<Access::RW> gpioa_afrh_afrh9{0x40020024u, 0x000000F0u, 4};
 constexpr Field<Access::RW> gpioa_afrh_afrh8{0x40020024u, 0x0000000Fu, 0};
 
-#endif // GPIOA_HPP
+#endif // STM32_GPIOA_HPP

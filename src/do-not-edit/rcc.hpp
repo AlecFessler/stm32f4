@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Reset and clock control
-#ifndef RCC_HPP
-#define RCC_HPP
+#ifndef STM32_RCC_HPP
+#define STM32_RCC_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -358,4 +358,4 @@ constexpr Field<Access::RW> rcc_dckcfgr_sai1asrc{0x4002388Cu, 0x00300000u, 20};
 constexpr Field<Access::RW> rcc_dckcfgr_sai1bsrc{0x4002388Cu, 0x00C00000u, 22};
 constexpr Field<Access::RW> rcc_dckcfgr_timpre{0x4002388Cu, 0x01000000u, 24};
 
-#endif // RCC_HPP
+#endif // STM32_RCC_HPP

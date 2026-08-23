@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // USART peripherals
-#ifndef USART_HPP
-#define USART_HPP
+#ifndef STM32_USART_HPP
+#define STM32_USART_HPP
 
 #include "usart/uart4.hpp"
 #include "usart/uart5.hpp"
@@ -13,4 +13,4 @@
 #include "usart/usart3.hpp"
 #include "usart/usart6.hpp"
 
-#endif // USART_HPP
+#endif // STM32_USART_HPP

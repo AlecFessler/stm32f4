@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Ethernet: media access control (MAC)
-#ifndef ETHERNET_MAC_HPP
-#define ETHERNET_MAC_HPP
+#ifndef STM32_ETHERNET_MAC_HPP
+#define STM32_ETHERNET_MAC_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -139,4 +139,4 @@ constexpr Field<Access::RW> ethernet_mac_maca3hr_sa{0x40028058u, 0x40000000u, 30
 constexpr Field<Access::RW> ethernet_mac_maca3hr_ae{0x40028058u, 0x80000000u, 31};
 constexpr Field<Access::RW> ethernet_mac_maca3lr_mbca3l{0x4002805Cu, 0xFFFFFFFFu, 0};
 
-#endif // ETHERNET_MAC_HPP
+#endif // STM32_ETHERNET_MAC_HPP

@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Floating point unit CPACR
-#ifndef FPU_CPACR_HPP
-#define FPU_CPACR_HPP
+#ifndef STM32_FPU_CPACR_HPP
+#define STM32_FPU_CPACR_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -18,4 +18,4 @@ static_assert(offsetof(Fpu_cpacrRegs, cpacr) == 0);
 
 constexpr Field<Access::RW> fpu_cpacr_cpacr_cp{0xE000ED88u, 0x00F00000u, 20};
 
-#endif // FPU_CPACR_HPP
+#endif // STM32_FPU_CPACR_HPP

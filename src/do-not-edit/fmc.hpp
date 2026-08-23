@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Flexible memory controller
-#ifndef FMC_HPP
-#define FMC_HPP
+#ifndef STM32_FMC_HPP
+#define STM32_FMC_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -238,4 +238,4 @@ constexpr Field<Access::RO> fmc_sdsr_busy{0xA0000158u, 0x00000020u, 5};
 constexpr Field<Access::RO> fmc_sdsr_modes1{0xA0000158u, 0x00000006u, 1};
 constexpr Field<Access::RO> fmc_sdsr_modes2{0xA0000158u, 0x00000018u, 3};
 
-#endif // FMC_HPP
+#endif // STM32_FMC_HPP

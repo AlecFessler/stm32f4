@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Ethernet: Precision time protocol
-#ifndef ETHERNET_PTP_HPP
-#define ETHERNET_PTP_HPP
+#ifndef STM32_ETHERNET_PTP_HPP
+#define STM32_ETHERNET_PTP_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -68,4 +68,4 @@ constexpr Field<Access::RO> ethernet_ptp_ptptssr_tsttr{0x40028728u, 0x00000002u,
 constexpr Field<Access::RO> ethernet_ptp_ptpppscr_tsso{0x4002872Cu, 0x00000001u, 0};
 constexpr Field<Access::RO> ethernet_ptp_ptpppscr_tsttr{0x4002872Cu, 0x00000002u, 1};
 
-#endif // ETHERNET_PTP_HPP
+#endif // STM32_ETHERNET_PTP_HPP

@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // External interrupt/event controller
-#ifndef EXTI_HPP
-#define EXTI_HPP
+#ifndef STM32_EXTI_HPP
+#define STM32_EXTI_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -177,4 +177,4 @@ constexpr Field<Access::RW> exti_pr_pr[23] = {
     {0x40013C14u, 0x00400000u, 22},
 };
 
-#endif // EXTI_HPP
+#endif // STM32_EXTI_HPP

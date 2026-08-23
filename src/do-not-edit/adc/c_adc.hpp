@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Common ADC registers
-#ifndef C_ADC_HPP
-#define C_ADC_HPP
+#ifndef STM32_C_ADC_HPP
+#define STM32_C_ADC_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -48,4 +48,4 @@ constexpr Field<Access::RW> c_adc_ccr_mult{0x40012304u, 0x0000001Fu, 0};
 constexpr Field<Access::RO> c_adc_cdr_data2{0x40012308u, 0xFFFF0000u, 16};
 constexpr Field<Access::RO> c_adc_cdr_data1{0x40012308u, 0x0000FFFFu, 0};
 
-#endif // C_ADC_HPP
+#endif // STM32_C_ADC_HPP

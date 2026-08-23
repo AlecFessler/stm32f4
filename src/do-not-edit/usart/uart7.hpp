@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Universal synchronous asynchronous receiver transmitter
-#ifndef UART7_HPP
-#define UART7_HPP
+#ifndef STM32_UART7_HPP
+#define STM32_UART7_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -80,4 +80,4 @@ constexpr Field<Access::RW> uart7_cr3_eie{0x40007814u, 0x00000001u, 0};
 constexpr Field<Access::RW> uart7_gtpr_gt{0x40007818u, 0x0000FF00u, 8};
 constexpr Field<Access::RW> uart7_gtpr_psc{0x40007818u, 0x000000FFu, 0};
 
-#endif // UART7_HPP
+#endif // STM32_UART7_HPP

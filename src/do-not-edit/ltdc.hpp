@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // LCD-TFT Controller
-#ifndef LTDC_HPP
-#define LTDC_HPP
+#ifndef STM32_LTDC_HPP
+#define STM32_LTDC_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -190,4 +190,4 @@ constexpr Field<Access::WO> ltdc_l2clutwr_red{0x40016944u, 0x00FF0000u, 16};
 constexpr Field<Access::WO> ltdc_l2clutwr_green{0x40016944u, 0x0000FF00u, 8};
 constexpr Field<Access::WO> ltdc_l2clutwr_blue{0x40016944u, 0x000000FFu, 0};
 
-#endif // LTDC_HPP
+#endif // STM32_LTDC_HPP

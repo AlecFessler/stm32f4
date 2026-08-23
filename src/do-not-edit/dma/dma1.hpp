@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // DMA controller
-#ifndef DMA1_HPP
-#define DMA1_HPP
+#ifndef STM32_DMA1_HPP
+#define STM32_DMA1_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -442,4 +442,4 @@ constexpr Field<Access::RO> dma1_s7fcr_fs{0x400260CCu, 0x00000038u, 3};
 constexpr Field<Access::RW> dma1_s7fcr_dmdis{0x400260CCu, 0x00000004u, 2};
 constexpr Field<Access::RW> dma1_s7fcr_fth{0x400260CCu, 0x00000003u, 0};
 
-#endif // DMA1_HPP
+#endif // STM32_DMA1_HPP

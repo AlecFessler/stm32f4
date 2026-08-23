@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Universal synchronous asynchronous receiver transmitter
-#ifndef UART5_HPP
-#define UART5_HPP
+#ifndef STM32_UART5_HPP
+#define STM32_UART5_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -66,4 +66,4 @@ constexpr Field<Access::RW> uart5_cr3_irlp{0x40005014u, 0x00000004u, 2};
 constexpr Field<Access::RW> uart5_cr3_iren{0x40005014u, 0x00000002u, 1};
 constexpr Field<Access::RW> uart5_cr3_eie{0x40005014u, 0x00000001u, 0};
 
-#endif // UART5_HPP
+#endif // STM32_UART5_HPP

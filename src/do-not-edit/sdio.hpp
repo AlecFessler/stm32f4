@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Secure digital input/output interface
-#ifndef SDIO_HPP
-#define SDIO_HPP
+#ifndef STM32_SDIO_HPP
+#define STM32_SDIO_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -151,4 +151,4 @@ constexpr Field<Access::RW> sdio_mask_ccrcfailie{0x40012C3Cu, 0x00000001u, 0};
 constexpr Field<Access::RO> sdio_fifocnt_fifocount{0x40012C48u, 0x00FFFFFFu, 0};
 constexpr Field<Access::RW> sdio_fifo_fifodata{0x40012C80u, 0xFFFFFFFFu, 0};
 
-#endif // SDIO_HPP
+#endif // STM32_SDIO_HPP

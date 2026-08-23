@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // GPIO peripherals
-#ifndef GPIO_HPP
-#define GPIO_HPP
+#ifndef STM32_GPIO_HPP
+#define STM32_GPIO_HPP
 
 #include "gpio/gpioa.hpp"
 #include "gpio/gpiob.hpp"
@@ -16,4 +16,4 @@
 #include "gpio/gpioj.hpp"
 #include "gpio/gpiok.hpp"
 
-#endif // GPIO_HPP
+#endif // STM32_GPIO_HPP

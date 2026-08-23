@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Digital-to-analog converter
-#ifndef DAC_HPP
-#define DAC_HPP
+#ifndef STM32_DAC_HPP
+#define STM32_DAC_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -77,4 +77,4 @@ constexpr Field<Access::RO> dac_dor2_dacc2dor{0x40007430u, 0x00000FFFu, 0};
 constexpr Field<Access::RW> dac_sr_dmaudr2{0x40007434u, 0x20000000u, 29};
 constexpr Field<Access::RW> dac_sr_dmaudr1{0x40007434u, 0x00002000u, 13};
 
-#endif // DAC_HPP
+#endif // STM32_DAC_HPP

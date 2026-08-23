@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // General purpose timers
-#ifndef TIM3_HPP
-#define TIM3_HPP
+#ifndef STM32_TIM3_HPP
+#define STM32_TIM3_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -117,4 +117,4 @@ constexpr Field<Access::RW> tim3_dcr_dbl{0x40000448u, 0x00001F00u, 8};
 constexpr Field<Access::RW> tim3_dcr_dba{0x40000448u, 0x0000001Fu, 0};
 constexpr Field<Access::RW> tim3_dmar_dmab{0x4000044Cu, 0x0000FFFFu, 0};
 
-#endif // TIM3_HPP
+#endif // STM32_TIM3_HPP

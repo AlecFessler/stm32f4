@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Independent watchdog
-#ifndef IWDG_HPP
-#define IWDG_HPP
+#ifndef STM32_IWDG_HPP
+#define STM32_IWDG_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -28,4 +28,4 @@ constexpr Field<Access::RW> iwdg_rlr_rl{0x40003008u, 0x00000FFFu, 0};
 constexpr Field<Access::RO> iwdg_sr_rvu{0x4000300Cu, 0x00000002u, 1};
 constexpr Field<Access::RO> iwdg_sr_pvu{0x4000300Cu, 0x00000001u, 0};
 
-#endif // IWDG_HPP
+#endif // STM32_IWDG_HPP

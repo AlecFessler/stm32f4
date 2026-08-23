@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // FLASH
-#ifndef FLASH_HPP
-#define FLASH_HPP
+#ifndef STM32_FLASH_HPP
+#define STM32_FLASH_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -63,4 +63,4 @@ constexpr Field<Access::RW> flash_optcr_rdp{0x40023C14u, 0x0000FF00u, 8};
 constexpr Field<Access::RW> flash_optcr_nwrp{0x40023C14u, 0x0FFF0000u, 16};
 constexpr Field<Access::RW> flash_optcr1_nwrp{0x40023C18u, 0x0FFF0000u, 16};
 
-#endif // FLASH_HPP
+#endif // STM32_FLASH_HPP

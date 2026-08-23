@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Inter-integrated circuit
-#ifndef I2C1_HPP
-#define I2C1_HPP
+#ifndef STM32_I2C1_HPP
+#define STM32_I2C1_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -90,4 +90,4 @@ constexpr Field<Access::RW> i2c1_trise_trise{0x40005420u, 0x0000003Fu, 0};
 constexpr Field<Access::RW> i2c1_fltr_dnf{0x40005424u, 0x0000000Fu, 0};
 constexpr Field<Access::RW> i2c1_fltr_anoff{0x40005424u, 0x00000010u, 4};
 
-#endif // I2C1_HPP
+#endif // STM32_I2C1_HPP

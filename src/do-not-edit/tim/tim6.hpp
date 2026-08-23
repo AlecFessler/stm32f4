@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Basic timers
-#ifndef TIM6_HPP
-#define TIM6_HPP
+#ifndef STM32_TIM6_HPP
+#define STM32_TIM6_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -46,4 +46,4 @@ constexpr Field<Access::RW> tim6_cnt_cnt{0x40001024u, 0x0000FFFFu, 0};
 constexpr Field<Access::RW> tim6_psc_psc{0x40001028u, 0x0000FFFFu, 0};
 constexpr Field<Access::RW> tim6_arr_arr{0x4000102Cu, 0x0000FFFFu, 0};
 
-#endif // TIM6_HPP
+#endif // STM32_TIM6_HPP

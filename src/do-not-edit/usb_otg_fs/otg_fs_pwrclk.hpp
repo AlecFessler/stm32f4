@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // USB on the go full speed
-#ifndef OTG_FS_PWRCLK_HPP
-#define OTG_FS_PWRCLK_HPP
+#ifndef STM32_OTG_FS_PWRCLK_HPP
+#define STM32_OTG_FS_PWRCLK_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -20,4 +20,4 @@ constexpr Field<Access::RW> otg_fs_pwrclk_fs_pcgcctl_stppclk{0x50000E00u, 0x0000
 constexpr Field<Access::RW> otg_fs_pwrclk_fs_pcgcctl_gatehclk{0x50000E00u, 0x00000002u, 1};
 constexpr Field<Access::RW> otg_fs_pwrclk_fs_pcgcctl_physusp{0x50000E00u, 0x00000010u, 4};
 
-#endif // OTG_FS_PWRCLK_HPP
+#endif // STM32_OTG_FS_PWRCLK_HPP

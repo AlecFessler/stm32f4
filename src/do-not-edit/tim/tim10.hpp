@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // General-purpose-timers
-#ifndef TIM10_HPP
-#define TIM10_HPP
+#ifndef STM32_TIM10_HPP
+#define STM32_TIM10_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -37,4 +37,4 @@ constexpr Field<Access::RW> tim10_psc_psc{0x40014428u, 0x0000FFFFu, 0};
 constexpr Field<Access::RW> tim10_arr_arr{0x4001442Cu, 0x0000FFFFu, 0};
 constexpr Field<Access::RW> tim10_ccr1_ccr1{0x40014434u, 0x0000FFFFu, 0};
 
-#endif // TIM10_HPP
+#endif // STM32_TIM10_HPP

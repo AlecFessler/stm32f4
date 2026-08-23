@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Serial audio interface
-#ifndef SAI_HPP
-#define SAI_HPP
+#ifndef STM32_SAI_HPP
+#define STM32_SAI_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -150,4 +150,4 @@ constexpr Field<Access::WO> sai_bclrfr_mutedet{0x4001583Cu, 0x00000002u, 1};
 constexpr Field<Access::WO> sai_bclrfr_ovrudr{0x4001583Cu, 0x00000001u, 0};
 constexpr Field<Access::RW> sai_bdr_data{0x40015840u, 0xFFFFFFFFu, 0};
 
-#endif // SAI_HPP
+#endif // STM32_SAI_HPP

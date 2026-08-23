@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Ethernet: MAC management counters
-#ifndef ETHERNET_MMC_HPP
-#define ETHERNET_MMC_HPP
+#ifndef STM32_ETHERNET_MMC_HPP
+#define STM32_ETHERNET_MMC_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -65,4 +65,4 @@ constexpr Field<Access::RO> ethernet_mmc_mmcrfcecr_rfcfc{0x40028194u, 0xFFFFFFFF
 constexpr Field<Access::RO> ethernet_mmc_mmcrfaecr_rfaec{0x40028198u, 0xFFFFFFFFu, 0};
 constexpr Field<Access::RO> ethernet_mmc_mmcrgufcr_rgufc{0x400281C4u, 0xFFFFFFFFu, 0};
 
-#endif // ETHERNET_MMC_HPP
+#endif // STM32_ETHERNET_MMC_HPP

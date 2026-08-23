@@ -1,10 +1,10 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // FPU peripherals
-#ifndef FPU_HPP
-#define FPU_HPP
+#ifndef STM32_FPU_HPP
+#define STM32_FPU_HPP
 
 #include "fpu/fpu.hpp"
 #include "fpu/fpu_cpacr.hpp"
 
-#endif // FPU_HPP
+#endif // STM32_FPU_HPP

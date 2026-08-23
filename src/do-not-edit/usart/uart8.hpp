@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Universal synchronous asynchronous receiver transmitter
-#ifndef UART8_HPP
-#define UART8_HPP
+#ifndef STM32_UART8_HPP
+#define STM32_UART8_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -80,4 +80,4 @@ constexpr Field<Access::RW> uart8_cr3_eie{0x40007C14u, 0x00000001u, 0};
 constexpr Field<Access::RW> uart8_gtpr_gt{0x40007C18u, 0x0000FF00u, 8};
 constexpr Field<Access::RW> uart8_gtpr_psc{0x40007C18u, 0x000000FFu, 0};
 
-#endif // UART8_HPP
+#endif // STM32_UART8_HPP

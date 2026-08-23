@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // System control block
-#ifndef SCB_HPP
-#define SCB_HPP
+#ifndef STM32_SCB_HPP
+#define STM32_SCB_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -120,4 +120,4 @@ constexpr Field<Access::RW> scb_mmfar_mmfar{0xE000ED34u, 0xFFFFFFFFu, 0};
 constexpr Field<Access::RW> scb_bfar_bfar{0xE000ED38u, 0xFFFFFFFFu, 0};
 constexpr Field<Access::RW> scb_afsr_impdef{0xE000ED3Cu, 0xFFFFFFFFu, 0};
 
-#endif // SCB_HPP
+#endif // STM32_SCB_HPP

@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Ethernet: DMA controller operation
-#ifndef ETHERNET_DMA_HPP
-#define ETHERNET_DMA_HPP
+#ifndef STM32_ETHERNET_DMA_HPP
+#define STM32_ETHERNET_DMA_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -117,4 +117,4 @@ constexpr Field<Access::RO> ethernet_dma_dmachrdr_hrdap{0x4002904Cu, 0xFFFFFFFFu
 constexpr Field<Access::RO> ethernet_dma_dmachtbar_htbap{0x40029050u, 0xFFFFFFFFu, 0};
 constexpr Field<Access::RO> ethernet_dma_dmachrbar_hrbap{0x40029054u, 0xFFFFFFFFu, 0};
 
-#endif // ETHERNET_DMA_HPP
+#endif // STM32_ETHERNET_DMA_HPP

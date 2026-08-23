@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Universal synchronous asynchronous receiver transmitter
-#ifndef UART4_HPP
-#define UART4_HPP
+#ifndef STM32_UART4_HPP
+#define STM32_UART4_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -66,4 +66,4 @@ constexpr Field<Access::RW> uart4_cr3_irlp{0x40004C14u, 0x00000004u, 2};
 constexpr Field<Access::RW> uart4_cr3_iren{0x40004C14u, 0x00000002u, 1};
 constexpr Field<Access::RW> uart4_cr3_eie{0x40004C14u, 0x00000001u, 0};
 
-#endif // UART4_HPP
+#endif // STM32_UART4_HPP

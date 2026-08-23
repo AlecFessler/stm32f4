@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Cryptographic processor
-#ifndef CRYP_HPP
-#define CRYP_HPP
+#ifndef STM32_CRYP_HPP
+#define STM32_CRYP_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -514,4 +514,4 @@ constexpr Field<Access::RW> cryp_csgcm5r_csgcm5r{0x50060084u, 0xFFFFFFFFu, 0};
 constexpr Field<Access::RW> cryp_csgcm6r_csgcm6r{0x50060088u, 0xFFFFFFFFu, 0};
 constexpr Field<Access::RW> cryp_csgcm7r_csgcm7r{0x5006008Cu, 0xFFFFFFFFu, 0};
 
-#endif // CRYP_HPP
+#endif // STM32_CRYP_HPP

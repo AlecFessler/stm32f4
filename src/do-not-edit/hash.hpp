@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Hash processor
-#ifndef HASH_HPP
-#define HASH_HPP
+#ifndef STM32_HASH_HPP
+#define STM32_HASH_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -247,4 +247,4 @@ constexpr Field<Access::RO> hash_hash_hr5_h5{0x50060724u, 0xFFFFFFFFu, 0};
 constexpr Field<Access::RO> hash_hash_hr6_h6{0x50060728u, 0xFFFFFFFFu, 0};
 constexpr Field<Access::RO> hash_hash_hr7_h7{0x5006072Cu, 0xFFFFFFFFu, 0};
 
-#endif // HASH_HPP
+#endif // STM32_HASH_HPP

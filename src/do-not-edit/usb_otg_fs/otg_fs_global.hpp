@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // USB on the go full speed
-#ifndef OTG_FS_GLOBAL_HPP
-#define OTG_FS_GLOBAL_HPP
+#ifndef STM32_OTG_FS_GLOBAL_HPP
+#define STM32_OTG_FS_GLOBAL_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -126,4 +126,4 @@ constexpr Field<Access::RW> otg_fs_global_fs_dieptxf2_ineptxfd{0x50000108u, 0xFF
 constexpr Field<Access::RW> otg_fs_global_fs_dieptxf3_ineptxsa{0x5000010Cu, 0x0000FFFFu, 0};
 constexpr Field<Access::RW> otg_fs_global_fs_dieptxf3_ineptxfd{0x5000010Cu, 0xFFFF0000u, 16};
 
-#endif // OTG_FS_GLOBAL_HPP
+#endif // STM32_OTG_FS_GLOBAL_HPP

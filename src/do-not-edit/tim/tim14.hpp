@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // General-purpose-timers
-#ifndef TIM14_HPP
-#define TIM14_HPP
+#ifndef STM32_TIM14_HPP
+#define STM32_TIM14_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -37,4 +37,4 @@ constexpr Field<Access::RW> tim14_psc_psc{0x40002028u, 0x0000FFFFu, 0};
 constexpr Field<Access::RW> tim14_arr_arr{0x4000202Cu, 0x0000FFFFu, 0};
 constexpr Field<Access::RW> tim14_ccr1_ccr1{0x40002034u, 0x0000FFFFu, 0};
 
-#endif // TIM14_HPP
+#endif // STM32_TIM14_HPP

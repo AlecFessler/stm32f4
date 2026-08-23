@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Nested vectored interrupt controller
-#ifndef NVIC_STIR_HPP
-#define NVIC_STIR_HPP
+#ifndef STM32_NVIC_STIR_HPP
+#define STM32_NVIC_STIR_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -18,4 +18,4 @@ static_assert(offsetof(Nvic_stirRegs, stir) == 0);
 
 constexpr Field<Access::RW> nvic_stir_stir_intid{0xE000EF00u, 0x000001FFu, 0};
 
-#endif // NVIC_STIR_HPP
+#endif // STM32_NVIC_STIR_HPP

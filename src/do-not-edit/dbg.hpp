@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Debug support
-#ifndef DBG_HPP
-#define DBG_HPP
+#ifndef STM32_DBG_HPP
+#define STM32_DBG_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -51,4 +51,4 @@ constexpr Field<Access::RW> dbg_dbgmcu_apb2_fz_dbg_tim9_stop{0xE004200Cu, 0x0001
 constexpr Field<Access::RW> dbg_dbgmcu_apb2_fz_dbg_tim10_stop{0xE004200Cu, 0x00020000u, 17};
 constexpr Field<Access::RW> dbg_dbgmcu_apb2_fz_dbg_tim11_stop{0xE004200Cu, 0x00040000u, 18};
 
-#endif // DBG_HPP
+#endif // STM32_DBG_HPP

@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Memory protection unit
-#ifndef MPU_HPP
-#define MPU_HPP
+#ifndef STM32_MPU_HPP
+#define STM32_MPU_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -44,4 +44,4 @@ constexpr Field<Access::RW> mpu_mpu_rasr_tex{0xE000EDA0u, 0x00380000u, 19};
 constexpr Field<Access::RW> mpu_mpu_rasr_ap{0xE000EDA0u, 0x07000000u, 24};
 constexpr Field<Access::RW> mpu_mpu_rasr_xn{0xE000EDA0u, 0x10000000u, 28};
 
-#endif // MPU_HPP
+#endif // STM32_MPU_HPP

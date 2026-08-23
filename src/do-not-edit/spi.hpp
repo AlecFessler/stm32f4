@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // SPI peripherals
-#ifndef SPI_HPP
-#define SPI_HPP
+#ifndef STM32_SPI_HPP
+#define STM32_SPI_HPP
 
 #include "spi/i2s2ext.hpp"
 #include "spi/i2s3ext.hpp"
@@ -13,4 +13,4 @@
 #include "spi/spi5.hpp"
 #include "spi/spi6.hpp"
 
-#endif // SPI_HPP
+#endif // STM32_SPI_HPP

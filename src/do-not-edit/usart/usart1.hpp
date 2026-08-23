@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Universal synchronous asynchronous receiver transmitter
-#ifndef USART1_HPP
-#define USART1_HPP
+#ifndef STM32_USART1_HPP
+#define STM32_USART1_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -80,4 +80,4 @@ constexpr Field<Access::RW> usart1_cr3_eie{0x40011014u, 0x00000001u, 0};
 constexpr Field<Access::RW> usart1_gtpr_gt{0x40011018u, 0x0000FF00u, 8};
 constexpr Field<Access::RW> usart1_gtpr_psc{0x40011018u, 0x000000FFu, 0};
 
-#endif // USART1_HPP
+#endif // STM32_USART1_HPP

@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // USB on the go high speed
-#ifndef OTG_HS_HOST_HPP
-#define OTG_HS_HOST_HPP
+#ifndef STM32_OTG_HS_HOST_HPP
+#define STM32_OTG_HS_HOST_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -702,4 +702,4 @@ constexpr Field<Access::RW> otg_hs_host_otg_hs_hctsiz11_pktcnt{0x40040670u, 0x1F
 constexpr Field<Access::RW> otg_hs_host_otg_hs_hctsiz11_dpid{0x40040670u, 0x60000000u, 29};
 constexpr Field<Access::RW> otg_hs_host_otg_hs_hcdma11_dmaaddr{0x40040674u, 0xFFFFFFFFu, 0};
 
-#endif // OTG_HS_HOST_HPP
+#endif // STM32_OTG_HS_HOST_HPP

@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Digital camera interface
-#ifndef DCMI_HPP
-#define DCMI_HPP
+#ifndef STM32_DCMI_HPP
+#define STM32_DCMI_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -89,4 +89,4 @@ constexpr Field<Access::RO> dcmi_dr_byte[4] = {
     {0x50050028u, 0xFF000000u, 24},
 };
 
-#endif // DCMI_HPP
+#endif // STM32_DCMI_HPP

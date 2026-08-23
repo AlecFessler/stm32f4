@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Analog-to-digital converter
-#ifndef ADC2_HPP
-#define ADC2_HPP
+#ifndef STM32_ADC2_HPP
+#define STM32_ADC2_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -122,4 +122,4 @@ constexpr Field<Access::RO> adc2_jdr3_jdata{0x40012144u, 0x0000FFFFu, 0};
 constexpr Field<Access::RO> adc2_jdr4_jdata{0x40012148u, 0x0000FFFFu, 0};
 constexpr Field<Access::RO> adc2_dr_data{0x4001214Cu, 0x0000FFFFu, 0};
 
-#endif // ADC2_HPP
+#endif // STM32_ADC2_HPP

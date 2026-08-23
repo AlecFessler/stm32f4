@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // General-purpose-timers
-#ifndef TIM5_HPP
-#define TIM5_HPP
+#ifndef STM32_TIM5_HPP
+#define STM32_TIM5_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -118,4 +118,4 @@ constexpr Field<Access::RW> tim5_dcr_dba{0x40000C48u, 0x0000001Fu, 0};
 constexpr Field<Access::RW> tim5_dmar_dmab{0x40000C4Cu, 0x0000FFFFu, 0};
 constexpr Field<Access::RW> tim5_or_it4_rmp{0x40000C50u, 0x000000C0u, 6};
 
-#endif // TIM5_HPP
+#endif // STM32_TIM5_HPP

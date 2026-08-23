@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // USB on the go full speed
-#ifndef OTG_FS_HOST_HPP
-#define OTG_FS_HOST_HPP
+#ifndef STM32_OTG_FS_HOST_HPP
+#define STM32_OTG_FS_HOST_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -390,4 +390,4 @@ constexpr Field<Access::RW> otg_fs_host_fs_hctsiz7_xfrsiz{0x500005F0u, 0x0007FFF
 constexpr Field<Access::RW> otg_fs_host_fs_hctsiz7_pktcnt{0x500005F0u, 0x1FF80000u, 19};
 constexpr Field<Access::RW> otg_fs_host_fs_hctsiz7_dpid{0x500005F0u, 0x60000000u, 29};
 
-#endif // OTG_FS_HOST_HPP
+#endif // STM32_OTG_FS_HOST_HPP

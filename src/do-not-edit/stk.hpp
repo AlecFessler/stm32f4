@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // SysTick timer
-#ifndef STK_HPP
-#define STK_HPP
+#ifndef STM32_STK_HPP
+#define STM32_STK_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -32,4 +32,4 @@ constexpr Field<Access::RW> stk_calib_tenms{0xE000E01Cu, 0x00FFFFFFu, 0};
 constexpr Field<Access::RW> stk_calib_skew{0xE000E01Cu, 0x40000000u, 30};
 constexpr Field<Access::RW> stk_calib_noref{0xE000E01Cu, 0x80000000u, 31};
 
-#endif // STK_HPP
+#endif // STM32_STK_HPP

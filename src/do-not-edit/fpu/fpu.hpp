@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Floting point unit
-#ifndef FPU_HPP
-#define FPU_HPP
+#ifndef STM32_FPU_HPP
+#define STM32_FPU_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -45,4 +45,4 @@ constexpr Field<Access::RW> fpu_fpscr_c{0xE000EF3Cu, 0x20000000u, 29};
 constexpr Field<Access::RW> fpu_fpscr_z{0xE000EF3Cu, 0x40000000u, 30};
 constexpr Field<Access::RW> fpu_fpscr_n{0xE000EF3Cu, 0x80000000u, 31};
 
-#endif // FPU_HPP
+#endif // STM32_FPU_HPP

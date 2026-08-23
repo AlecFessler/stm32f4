@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // System control block ACTLR
-#ifndef SCB_ACTRL_HPP
-#define SCB_ACTRL_HPP
+#ifndef STM32_SCB_ACTRL_HPP
+#define STM32_SCB_ACTRL_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -22,4 +22,4 @@ constexpr Field<Access::RW> scb_actrl_actrl_disfold{0xE000E008u, 0x00000004u, 2}
 constexpr Field<Access::RW> scb_actrl_actrl_disfpca{0xE000E008u, 0x00000100u, 8};
 constexpr Field<Access::RW> scb_actrl_actrl_disoofp{0xE000E008u, 0x00000200u, 9};
 
-#endif // SCB_ACTRL_HPP
+#endif // STM32_SCB_ACTRL_HPP

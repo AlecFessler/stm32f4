@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Random number generator
-#ifndef RNG_HPP
-#define RNG_HPP
+#ifndef STM32_RNG_HPP
+#define STM32_RNG_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -29,4 +29,4 @@ constexpr Field<Access::RO> rng_sr_cecs{0x50060804u, 0x00000002u, 1};
 constexpr Field<Access::RO> rng_sr_drdy{0x50060804u, 0x00000001u, 0};
 constexpr Field<Access::RO> rng_dr_rndata{0x50060808u, 0xFFFFFFFFu, 0};
 
-#endif // RNG_HPP
+#endif // STM32_RNG_HPP

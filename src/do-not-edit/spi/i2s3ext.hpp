@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Serial peripheral interface
-#ifndef I2S3EXT_HPP
-#define I2S3EXT_HPP
+#ifndef STM32_I2S3EXT_HPP
+#define STM32_I2S3EXT_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -78,4 +78,4 @@ constexpr Field<Access::RW> i2s3ext_i2spr_mckoe{0x40004020u, 0x00000200u, 9};
 constexpr Field<Access::RW> i2s3ext_i2spr_odd{0x40004020u, 0x00000100u, 8};
 constexpr Field<Access::RW> i2s3ext_i2spr_i2sdiv{0x40004020u, 0x000000FFu, 0};
 
-#endif // I2S3EXT_HPP
+#endif // STM32_I2S3EXT_HPP

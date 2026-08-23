@@ -1,8 +1,8 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // Real-time clock
-#ifndef RTC_HPP
-#define RTC_HPP
+#ifndef STM32_RTC_HPP
+#define STM32_RTC_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -233,4 +233,4 @@ constexpr Field<Access::RW> rtc_bkp17r_bkp{0x40002894u, 0xFFFFFFFFu, 0};
 constexpr Field<Access::RW> rtc_bkp18r_bkp{0x40002898u, 0xFFFFFFFFu, 0};
 constexpr Field<Access::RW> rtc_bkp19r_bkp{0x4000289Cu, 0xFFFFFFFFu, 0};
 
-#endif // RTC_HPP
+#endif // STM32_RTC_HPP

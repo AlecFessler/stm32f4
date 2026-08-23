@@ -1,10 +1,10 @@
 // DO NOT EDIT: PROGRAMATICALLY GENERATED CODE
 
 // DMA peripherals
-#ifndef DMA_HPP
-#define DMA_HPP
+#ifndef STM32_DMA_HPP
+#define STM32_DMA_HPP
 
 #include "dma/dma1.hpp"
 #include "dma/dma2.hpp"
 
-#endif // DMA_HPP
+#endif // STM32_DMA_HPP
