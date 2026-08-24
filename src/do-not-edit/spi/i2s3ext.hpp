@@ -59,13 +59,13 @@ constexpr Field<Access::RO, spi::Fre> i2s3ext_sr_tifrfe{0x40004008u, 0x00000100u
 constexpr Field<Access::RO, spi::Bsy> i2s3ext_sr_bsy{0x40004008u, 0x00000080u, 7};
 constexpr Field<Access::RO, spi::Ovr> i2s3ext_sr_ovr{0x40004008u, 0x00000040u, 6};
 constexpr Field<Access::RO, spi::Modf> i2s3ext_sr_modf{0x40004008u, 0x00000020u, 5};
-constexpr Field<Access::RC_W0, spi::Crcerr, 0x00000000u, 0x00000010u, false> i2s3ext_sr_crcerr{0x40004008u, 0x00000010u, 4};
+constexpr Field<Access::RC_W0, spi::Crcerr, false> i2s3ext_sr_crcerr{0x40004008u, 0x00000010u, 4, 0x00000000u, 0x00000010u};
 constexpr Field<Access::RO, spi::Udr> i2s3ext_sr_udr{0x40004008u, 0x00000008u, 3};
 constexpr Field<Access::RO, spi::Chside> i2s3ext_sr_chside{0x40004008u, 0x00000004u, 2};
 constexpr Field<Access::RO, spi::Txe> i2s3ext_sr_txe{0x40004008u, 0x00000002u, 1};
 constexpr Field<Access::RO, spi::Rxne> i2s3ext_sr_rxne{0x40004008u, 0x00000001u, 0};
-constexpr Field<Access::RW> i2s3ext_dr_dr{0x4000400Cu, 0x0000FFFFu, 0};
-constexpr Field<Access::RW> i2s3ext_crcpr_crcpoly{0x40004010u, 0x0000FFFFu, 0};
+constexpr Field<Access::RW, uint32_t, false> i2s3ext_dr_dr{0x4000400Cu, 0x0000FFFFu, 0};
+constexpr Field<Access::RW, uint32_t, false> i2s3ext_crcpr_crcpoly{0x40004010u, 0x0000FFFFu, 0};
 constexpr Field<Access::RO> i2s3ext_rxcrcr_rxcrc{0x40004014u, 0x0000FFFFu, 0};
 constexpr Field<Access::RO> i2s3ext_txcrcr_txcrc{0x40004018u, 0x0000FFFFu, 0};
 constexpr Field<Access::RW, spi::I2smod> i2s3ext_i2scfgr_i2smod{0x4000401Cu, 0x00000800u, 11};

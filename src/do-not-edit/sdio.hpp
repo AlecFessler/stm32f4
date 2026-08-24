@@ -253,7 +253,7 @@ static_assert(offsetof(SdioRegs, mask) == 60);
 static_assert(offsetof(SdioRegs, fifocnt) == 72);
 static_assert(offsetof(SdioRegs, fifo) == 128);
 
-constexpr Field<Access::RW, sdio::Pwrctrl> sdio_power_pwrctrl{0x40012C00u, 0x00000003u, 0};
+constexpr Field<Access::RW, sdio::Pwrctrl, false> sdio_power_pwrctrl{0x40012C00u, 0x00000003u, 0};
 constexpr Field<Access::RW, sdio::Hwfc_en> sdio_clkcr_hwfc_en{0x40012C04u, 0x00004000u, 14};
 constexpr Field<Access::RW, sdio::Negedge> sdio_clkcr_negedge{0x40012C04u, 0x00002000u, 13};
 constexpr Field<Access::RW, sdio::Widbus> sdio_clkcr_widbus{0x40012C04u, 0x00001800u, 11};
@@ -261,7 +261,7 @@ constexpr Field<Access::RW, sdio::Bypass> sdio_clkcr_bypass{0x40012C04u, 0x00000
 constexpr Field<Access::RW, sdio::Pwrsav> sdio_clkcr_pwrsav{0x40012C04u, 0x00000200u, 9};
 constexpr Field<Access::RW, sdio::Clken> sdio_clkcr_clken{0x40012C04u, 0x00000100u, 8};
 constexpr Field<Access::RW> sdio_clkcr_clkdiv{0x40012C04u, 0x000000FFu, 0};
-constexpr Field<Access::RW> sdio_arg_cmdarg{0x40012C08u, 0xFFFFFFFFu, 0};
+constexpr Field<Access::RW, uint32_t, false> sdio_arg_cmdarg{0x40012C08u, 0xFFFFFFFFu, 0};
 constexpr Field<Access::RW, sdio::Ce_atacmd> sdio_cmd_ce_atacmd{0x40012C0Cu, 0x00004000u, 14};
 constexpr Field<Access::RW, sdio::Nien> sdio_cmd_nien{0x40012C0Cu, 0x00002000u, 13};
 constexpr Field<Access::RW, sdio::Encmdcompl> sdio_cmd_encmdcompl{0x40012C0Cu, 0x00001000u, 12};
@@ -276,8 +276,8 @@ constexpr Field<Access::RO> sdio_resp1_cardstatus1{0x40012C14u, 0xFFFFFFFFu, 0};
 constexpr Field<Access::RO> sdio_resp2_cardstatus2{0x40012C18u, 0xFFFFFFFFu, 0};
 constexpr Field<Access::RO> sdio_resp3_cardstatus3{0x40012C1Cu, 0xFFFFFFFFu, 0};
 constexpr Field<Access::RO> sdio_resp4_cardstatus4{0x40012C20u, 0xFFFFFFFFu, 0};
-constexpr Field<Access::RW> sdio_dtimer_datatime{0x40012C24u, 0xFFFFFFFFu, 0};
-constexpr Field<Access::RW> sdio_dlen_datalength{0x40012C28u, 0x01FFFFFFu, 0};
+constexpr Field<Access::RW, uint32_t, false> sdio_dtimer_datatime{0x40012C24u, 0xFFFFFFFFu, 0};
+constexpr Field<Access::RW, uint32_t, false> sdio_dlen_datalength{0x40012C28u, 0x01FFFFFFu, 0};
 constexpr Field<Access::RW, sdio::Sdioen> sdio_dctrl_sdioen{0x40012C2Cu, 0x00000800u, 11};
 constexpr Field<Access::RW, sdio::Rwmod> sdio_dctrl_rwmod{0x40012C2Cu, 0x00000400u, 10};
 constexpr Field<Access::RW, sdio::Rwstop> sdio_dctrl_rwstop{0x40012C2Cu, 0x00000200u, 9};
@@ -350,6 +350,6 @@ constexpr Field<Access::RW, sdio::Ie> sdio_mask_ctimeoutie{0x40012C3Cu, 0x000000
 constexpr Field<Access::RW, sdio::Ie> sdio_mask_dcrcfailie{0x40012C3Cu, 0x00000002u, 1};
 constexpr Field<Access::RW, sdio::Ie> sdio_mask_ccrcfailie{0x40012C3Cu, 0x00000001u, 0};
 constexpr Field<Access::RO> sdio_fifocnt_fifocount{0x40012C48u, 0x00FFFFFFu, 0};
-constexpr Field<Access::RW> sdio_fifo_fifodata{0x40012C80u, 0xFFFFFFFFu, 0};
+constexpr Field<Access::RW, uint32_t, false> sdio_fifo_fifodata{0x40012C80u, 0xFFFFFFFFu, 0};
 
 #endif // STM32_SDIO_HPP

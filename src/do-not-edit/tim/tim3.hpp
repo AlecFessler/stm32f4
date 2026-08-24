@@ -289,16 +289,16 @@ constexpr Field<Access::RW, tim3::Ccie> tim3_dier_cc3ie{0x4000040Cu, 0x00000008u
 constexpr Field<Access::RW, tim3::Ccie> tim3_dier_cc2ie{0x4000040Cu, 0x00000004u, 2};
 constexpr Field<Access::RW, tim3::Ccie> tim3_dier_cc1ie{0x4000040Cu, 0x00000002u, 1};
 constexpr Field<Access::RW, tim3::Uie> tim3_dier_uie{0x4000040Cu, 0x00000001u, 0};
-constexpr Field<Access::RC_W0, tim3::Ccof, 0x00000000u, 0x00001E5Fu, false> tim3_sr_cc4of{0x40000410u, 0x00001000u, 12};
-constexpr Field<Access::RC_W0, tim3::Ccof, 0x00000000u, 0x00001E5Fu, false> tim3_sr_cc3of{0x40000410u, 0x00000800u, 11};
-constexpr Field<Access::RC_W0, tim3::Ccof, 0x00000000u, 0x00001E5Fu, false> tim3_sr_cc2of{0x40000410u, 0x00000400u, 10};
-constexpr Field<Access::RC_W0, tim3::Ccof, 0x00000000u, 0x00001E5Fu, false> tim3_sr_cc1of{0x40000410u, 0x00000200u, 9};
-constexpr Field<Access::RC_W0, tim3::Tif, 0x00000000u, 0x00001E5Fu, false> tim3_sr_tif{0x40000410u, 0x00000040u, 6};
-constexpr Field<Access::RC_W0, tim3::Ccif, 0x00000000u, 0x00001E5Fu, false> tim3_sr_cc4if{0x40000410u, 0x00000010u, 4};
-constexpr Field<Access::RC_W0, tim3::Ccif, 0x00000000u, 0x00001E5Fu, false> tim3_sr_cc3if{0x40000410u, 0x00000008u, 3};
-constexpr Field<Access::RC_W0, tim3::Ccif, 0x00000000u, 0x00001E5Fu, false> tim3_sr_cc2if{0x40000410u, 0x00000004u, 2};
-constexpr Field<Access::RC_W0, tim3::Ccif, 0x00000000u, 0x00001E5Fu, false> tim3_sr_cc1if{0x40000410u, 0x00000002u, 1};
-constexpr Field<Access::RC_W0, tim3::Uif, 0x00000000u, 0x00001E5Fu, false> tim3_sr_uif{0x40000410u, 0x00000001u, 0};
+constexpr Field<Access::RC_W0, tim3::Ccof, false> tim3_sr_cc4of{0x40000410u, 0x00001000u, 12, 0x00000000u, 0x00001E5Fu};
+constexpr Field<Access::RC_W0, tim3::Ccof, false> tim3_sr_cc3of{0x40000410u, 0x00000800u, 11, 0x00000000u, 0x00001E5Fu};
+constexpr Field<Access::RC_W0, tim3::Ccof, false> tim3_sr_cc2of{0x40000410u, 0x00000400u, 10, 0x00000000u, 0x00001E5Fu};
+constexpr Field<Access::RC_W0, tim3::Ccof, false> tim3_sr_cc1of{0x40000410u, 0x00000200u, 9, 0x00000000u, 0x00001E5Fu};
+constexpr Field<Access::RC_W0, tim3::Tif, false> tim3_sr_tif{0x40000410u, 0x00000040u, 6, 0x00000000u, 0x00001E5Fu};
+constexpr Field<Access::RC_W0, tim3::Ccif, false> tim3_sr_cc4if{0x40000410u, 0x00000010u, 4, 0x00000000u, 0x00001E5Fu};
+constexpr Field<Access::RC_W0, tim3::Ccif, false> tim3_sr_cc3if{0x40000410u, 0x00000008u, 3, 0x00000000u, 0x00001E5Fu};
+constexpr Field<Access::RC_W0, tim3::Ccif, false> tim3_sr_cc2if{0x40000410u, 0x00000004u, 2, 0x00000000u, 0x00001E5Fu};
+constexpr Field<Access::RC_W0, tim3::Ccif, false> tim3_sr_cc1if{0x40000410u, 0x00000002u, 1, 0x00000000u, 0x00001E5Fu};
+constexpr Field<Access::RC_W0, tim3::Uif, false> tim3_sr_uif{0x40000410u, 0x00000001u, 0, 0x00000000u, 0x00001E5Fu};
 constexpr Field<Access::WO, tim3::Tg> tim3_egr_tg{0x40000414u, 0x00000040u, 6};
 constexpr Field<Access::WO, tim3::Ccg> tim3_egr_cc4g{0x40000414u, 0x00000010u, 4};
 constexpr Field<Access::WO, tim3::Ccg> tim3_egr_cc3g{0x40000414u, 0x00000008u, 3};
@@ -351,7 +351,7 @@ constexpr Field<Access::RW, tim3::Ccp> tim3_ccer_cc1p{0x40000420u, 0x00000002u, 
 constexpr Field<Access::RW, tim3::Cce> tim3_ccer_cc1e{0x40000420u, 0x00000001u, 0};
 constexpr Field<Access::RW> tim3_cnt_cnt_h{0x40000424u, 0xFFFF0000u, 16};
 constexpr Field<Access::RW> tim3_cnt_cnt_l{0x40000424u, 0x0000FFFFu, 0};
-constexpr Field<Access::RW> tim3_psc_psc{0x40000428u, 0x0000FFFFu, 0};
+constexpr Field<Access::RW, uint32_t, false> tim3_psc_psc{0x40000428u, 0x0000FFFFu, 0};
 constexpr Field<Access::RW> tim3_arr_arr_h{0x4000042Cu, 0xFFFF0000u, 16};
 constexpr Field<Access::RW> tim3_arr_arr_l{0x4000042Cu, 0x0000FFFFu, 0};
 constexpr Field<Access::RW> tim3_ccr1_ccr1_h{0x40000434u, 0xFFFF0000u, 16};
@@ -364,6 +364,6 @@ constexpr Field<Access::RW> tim3_ccr4_ccr4_h{0x40000440u, 0xFFFF0000u, 16};
 constexpr Field<Access::RW> tim3_ccr4_ccr4_l{0x40000440u, 0x0000FFFFu, 0};
 constexpr Field<Access::RW> tim3_dcr_dbl{0x40000448u, 0x00001F00u, 8};
 constexpr Field<Access::RW> tim3_dcr_dba{0x40000448u, 0x0000001Fu, 0};
-constexpr Field<Access::RW> tim3_dmar_dmab{0x4000044Cu, 0x0000FFFFu, 0};
+constexpr Field<Access::RW, uint32_t, false> tim3_dmar_dmab{0x4000044Cu, 0x0000FFFFu, 0};
 
 #endif // STM32_TIM3_HPP

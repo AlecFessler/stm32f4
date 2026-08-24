@@ -59,13 +59,13 @@ constexpr Field<Access::RO, spi::Fre> spi1_sr_tifrfe{0x40013008u, 0x00000100u, 8
 constexpr Field<Access::RO, spi::Bsy> spi1_sr_bsy{0x40013008u, 0x00000080u, 7};
 constexpr Field<Access::RO, spi::Ovr> spi1_sr_ovr{0x40013008u, 0x00000040u, 6};
 constexpr Field<Access::RO, spi::Modf> spi1_sr_modf{0x40013008u, 0x00000020u, 5};
-constexpr Field<Access::RC_W0, spi::Crcerr, 0x00000000u, 0x00000010u, false> spi1_sr_crcerr{0x40013008u, 0x00000010u, 4};
+constexpr Field<Access::RC_W0, spi::Crcerr, false> spi1_sr_crcerr{0x40013008u, 0x00000010u, 4, 0x00000000u, 0x00000010u};
 constexpr Field<Access::RO, spi::Udr> spi1_sr_udr{0x40013008u, 0x00000008u, 3};
 constexpr Field<Access::RO, spi::Chside> spi1_sr_chside{0x40013008u, 0x00000004u, 2};
 constexpr Field<Access::RO, spi::Txe> spi1_sr_txe{0x40013008u, 0x00000002u, 1};
 constexpr Field<Access::RO, spi::Rxne> spi1_sr_rxne{0x40013008u, 0x00000001u, 0};
-constexpr Field<Access::RW> spi1_dr_dr{0x4001300Cu, 0x0000FFFFu, 0};
-constexpr Field<Access::RW> spi1_crcpr_crcpoly{0x40013010u, 0x0000FFFFu, 0};
+constexpr Field<Access::RW, uint32_t, false> spi1_dr_dr{0x4001300Cu, 0x0000FFFFu, 0};
+constexpr Field<Access::RW, uint32_t, false> spi1_crcpr_crcpoly{0x40013010u, 0x0000FFFFu, 0};
 constexpr Field<Access::RO> spi1_rxcrcr_rxcrc{0x40013014u, 0x0000FFFFu, 0};
 constexpr Field<Access::RO> spi1_txcrcr_txcrc{0x40013018u, 0x0000FFFFu, 0};
 constexpr Field<Access::RW, spi::I2smod> spi1_i2scfgr_i2smod{0x4001301Cu, 0x00000800u, 11};

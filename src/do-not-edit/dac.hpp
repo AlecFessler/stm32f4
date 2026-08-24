@@ -42,6 +42,7 @@ enum class Mamp : uint32_t {
     amp511 = 8,
     amp1023 = 9,
     amp2047 = 10,
+    amp4095 = 11,
 };
 enum class Swtrig : uint32_t {
     disabled = 0,
@@ -64,6 +65,7 @@ enum class Tsel : uint32_t {
 enum class Wave : uint32_t {
     disabled = 0,
     noise = 1,
+    triangle = 2,
 };
 } // namespace dac
 
@@ -118,12 +120,12 @@ constexpr Field<Access::RW, dac::En> dac_cr_en2{0x40007400u, 0x00010000u, 16};
 constexpr Field<Access::RW, dac::En> dac_cr_en1{0x40007400u, 0x00000001u, 0};
 constexpr Field<Access::WO, dac::Swtrig> dac_swtrigr_swtrig2{0x40007404u, 0x00000002u, 1};
 constexpr Field<Access::WO, dac::Swtrig> dac_swtrigr_swtrig1{0x40007404u, 0x00000001u, 0};
-constexpr Field<Access::RW> dac_dhr12r1_dacc1dhr{0x40007408u, 0x00000FFFu, 0};
-constexpr Field<Access::RW> dac_dhr12l1_dacc1dhr{0x4000740Cu, 0x0000FFF0u, 4};
-constexpr Field<Access::RW> dac_dhr8r1_dacc1dhr{0x40007410u, 0x000000FFu, 0};
-constexpr Field<Access::RW> dac_dhr12r2_dacc2dhr{0x40007414u, 0x00000FFFu, 0};
-constexpr Field<Access::RW> dac_dhr12l2_dacc2dhr{0x40007418u, 0x0000FFF0u, 4};
-constexpr Field<Access::RW> dac_dhr8r2_dacc2dhr{0x4000741Cu, 0x000000FFu, 0};
+constexpr Field<Access::RW, uint32_t, false> dac_dhr12r1_dacc1dhr{0x40007408u, 0x00000FFFu, 0};
+constexpr Field<Access::RW, uint32_t, false> dac_dhr12l1_dacc1dhr{0x4000740Cu, 0x0000FFF0u, 4};
+constexpr Field<Access::RW, uint32_t, false> dac_dhr8r1_dacc1dhr{0x40007410u, 0x000000FFu, 0};
+constexpr Field<Access::RW, uint32_t, false> dac_dhr12r2_dacc2dhr{0x40007414u, 0x00000FFFu, 0};
+constexpr Field<Access::RW, uint32_t, false> dac_dhr12l2_dacc2dhr{0x40007418u, 0x0000FFF0u, 4};
+constexpr Field<Access::RW, uint32_t, false> dac_dhr8r2_dacc2dhr{0x4000741Cu, 0x000000FFu, 0};
 constexpr Field<Access::RW> dac_dhr12rd_dacc2dhr{0x40007420u, 0x0FFF0000u, 16};
 constexpr Field<Access::RW> dac_dhr12rd_dacc1dhr{0x40007420u, 0x00000FFFu, 0};
 constexpr Field<Access::RW> dac_dhr12ld_dacc2dhr{0x40007424u, 0xFFF00000u, 20};
@@ -132,7 +134,7 @@ constexpr Field<Access::RW> dac_dhr8rd_dacc2dhr{0x40007428u, 0x0000FF00u, 8};
 constexpr Field<Access::RW> dac_dhr8rd_dacc1dhr{0x40007428u, 0x000000FFu, 0};
 constexpr Field<Access::RO> dac_dor1_dacc1dor{0x4000742Cu, 0x00000FFFu, 0};
 constexpr Field<Access::RO> dac_dor2_dacc2dor{0x40007430u, 0x00000FFFu, 0};
-constexpr Field<Access::RC_W1, dac::Dmaudr, 0x20002000u, 0x00000000u, false> dac_sr_dmaudr2{0x40007434u, 0x20000000u, 29};
-constexpr Field<Access::RC_W1, dac::Dmaudr, 0x20002000u, 0x00000000u, false> dac_sr_dmaudr1{0x40007434u, 0x00002000u, 13};
+constexpr Field<Access::RC_W1, dac::Dmaudr, false> dac_sr_dmaudr2{0x40007434u, 0x20000000u, 29, 0x20002000u, 0x00000000u};
+constexpr Field<Access::RC_W1, dac::Dmaudr, false> dac_sr_dmaudr1{0x40007434u, 0x00002000u, 13, 0x20002000u, 0x00000000u};
 
 #endif // STM32_DAC_HPP

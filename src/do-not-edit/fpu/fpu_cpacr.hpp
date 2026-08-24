@@ -16,6 +16,6 @@ struct Fpu_cpacrRegs {
 };
 static_assert(offsetof(Fpu_cpacrRegs, cpacr) == 0);
 
-constexpr Field<Access::RW> fpu_cpacr_cpacr_cp{0xE000ED88u, 0x00F00000u, 20};
+constexpr Field<Access::RW, uint32_t, false> fpu_cpacr_cpacr_cp{0xE000ED88u, 0x00F00000u, 20};
 
 #endif // STM32_FPU_CPACR_HPP

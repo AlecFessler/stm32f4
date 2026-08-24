@@ -80,13 +80,13 @@ constexpr Field<Access::RW, tim7::Opm> tim7_cr1_opm{0x40001400u, 0x00000008u, 3}
 constexpr Field<Access::RW, tim7::Urs> tim7_cr1_urs{0x40001400u, 0x00000004u, 2};
 constexpr Field<Access::RW, tim7::Udis> tim7_cr1_udis{0x40001400u, 0x00000002u, 1};
 constexpr Field<Access::RW, tim7::Cen> tim7_cr1_cen{0x40001400u, 0x00000001u, 0};
-constexpr Field<Access::RW, tim7::Mms> tim7_cr2_mms{0x40001404u, 0x00000070u, 4};
+constexpr Field<Access::RW, tim7::Mms, false> tim7_cr2_mms{0x40001404u, 0x00000070u, 4};
 constexpr Field<Access::RW, tim7::Ude> tim7_dier_ude{0x4000140Cu, 0x00000100u, 8};
 constexpr Field<Access::RW, tim7::Uie> tim7_dier_uie{0x4000140Cu, 0x00000001u, 0};
-constexpr Field<Access::RC_W0, tim7::Uif, 0x00000000u, 0x00000001u, false> tim7_sr_uif{0x40001410u, 0x00000001u, 0};
+constexpr Field<Access::RC_W0, tim7::Uif, false> tim7_sr_uif{0x40001410u, 0x00000001u, 0, 0x00000000u, 0x00000001u};
 constexpr Field<Access::WO, tim7::Ug> tim7_egr_ug{0x40001414u, 0x00000001u, 0};
-constexpr Field<Access::RW> tim7_cnt_cnt{0x40001424u, 0x0000FFFFu, 0};
-constexpr Field<Access::RW> tim7_psc_psc{0x40001428u, 0x0000FFFFu, 0};
-constexpr Field<Access::RW> tim7_arr_arr{0x4000142Cu, 0x0000FFFFu, 0};
+constexpr Field<Access::RW, uint32_t, false> tim7_cnt_cnt{0x40001424u, 0x0000FFFFu, 0};
+constexpr Field<Access::RW, uint32_t, false> tim7_psc_psc{0x40001428u, 0x0000FFFFu, 0};
+constexpr Field<Access::RW, uint32_t, false> tim7_arr_arr{0x4000142Cu, 0x0000FFFFu, 0};
 
 #endif // STM32_TIM7_HPP

@@ -291,7 +291,7 @@ constexpr Field<Access::RW> sai_aclrfr_cnrdy{0x4001581Cu, 0x00000010u, 4};
 constexpr Field<Access::RW> sai_aclrfr_wckcfg{0x4001581Cu, 0x00000004u, 2};
 constexpr Field<Access::RW> sai_aclrfr_mutedet{0x4001581Cu, 0x00000002u, 1};
 constexpr Field<Access::RW> sai_aclrfr_ovrudr{0x4001581Cu, 0x00000001u, 0};
-constexpr Field<Access::RW> sai_adr_data{0x40015820u, 0xFFFFFFFFu, 0};
+constexpr Field<Access::RW, uint32_t, false> sai_adr_data{0x40015820u, 0xFFFFFFFFu, 0};
 constexpr Field<Access::RW> sai_bcr1_mcjdiv{0x40015824u, 0x00F00000u, 20};
 constexpr Field<Access::RW, sai::Nodiv> sai_bcr1_nodiv{0x40015824u, 0x00080000u, 19};
 constexpr Field<Access::RW, sai::Dmaen> sai_bcr1_dmaen{0x40015824u, 0x00020000u, 17};
@@ -342,6 +342,6 @@ constexpr Field<Access::WO> sai_bclrfr_cnrdy{0x4001583Cu, 0x00000010u, 4};
 constexpr Field<Access::WO> sai_bclrfr_wckcfg{0x4001583Cu, 0x00000004u, 2};
 constexpr Field<Access::WO> sai_bclrfr_mutedet{0x4001583Cu, 0x00000002u, 1};
 constexpr Field<Access::WO> sai_bclrfr_ovrudr{0x4001583Cu, 0x00000001u, 0};
-constexpr Field<Access::RW> sai_bdr_data{0x40015840u, 0xFFFFFFFFu, 0};
+constexpr Field<Access::RW, uint32_t, false> sai_bdr_data{0x40015840u, 0xFFFFFFFFu, 0};
 
 #endif // STM32_SAI_HPP

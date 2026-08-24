@@ -8,7 +8,7 @@ Generates `src/do-not-edit/` from three inputs:
 |---|---|
 | `svd/STM32F429.svd` | registers, fields, offsets, access |
 | `enums/` | symbolic field values, vendored from stm32-rs |
-| `clear_on_write.yaml` | the access the SVD gets wrong |
+| `access_overrides.yaml` | the access the SVD cannot express |
 
 ```
 make regen         # run the generator
@@ -69,7 +69,7 @@ gpiob_moder_moder[0].rmw(gpio::Bs::set);        // error: cannot convert
 gpiob_moder_moder[0].rmw(1);                    // error: cannot convert
 ```
 
-3086 of 6901 field declarations are typed. The rest have no patch data and keep
+3114 of 6901 field declarations are typed. The rest have no patch data and keep
 `Value = uint32_t`, so plain numbers still work: `rcc_pllcfgr_plln.rmw(336)`.
 
 Placement depends on whether a group's members share one set of patch files:
@@ -95,11 +95,24 @@ glob with its metacharacters stripped. Enumerators that collide with C++
 keywords (`break`, `long`, `short`, `protected`, `xor`) get a trailing
 underscore.
 
-Seven enumerators are dropped because their value is `-1`, which svdtools uses
-for "any other value" rather than an encoding: `FLASH.RDP.Level1`,
-`RCC.CFGR.HPRE.Div1`, `RCC.CFGR.PPRE*.Div1`, `RCC.CFGR.MCO?PRE.Div1`,
-`DAC.CR.WAVE?.Triangle`, `DAC.CR.MAMP?.Amp4095`, `IWDG.PR.DivideBy256`. Those
-enums are therefore incomplete.
+Seven enumerators carry `-1`, which svdtools uses for "any encoding the other
+members do not claim" rather than for a value. The generator resolves each to
+the smallest unclaimed encoding, which is what the manual means:
+
+| | width | claimed | emitted | RM0090 |
+|---|---|---|---|---|
+| `RCC.CFGR.HPRE.Div1` | 4 | 8..15 | 0 | `0xxx` = /1 |
+| `RCC.CFGR.PPRE*.Div1` | 3 | 4..7 | 0 | `0xx` = /1 |
+| `RCC.CFGR.MCO?PRE.Div1` | 3 | 4..7 | 0 | `0xx` = /1 |
+| `IWDG.PR.DivideBy256` | 3 | 0..5 | 6 | `110` = /256 |
+| `DAC.CR.WAVE?.Triangle` | 2 | 0,1 | 2 | `1x` = triangle |
+| `DAC.CR.MAMP?.Amp4095` | 4 | 0..10 | 11 | `1011`+ = 4095 |
+| `FLASH.OPTCR.RDP.Level1` | 8 | 0xAA, 0xCC | 0 | anything else |
+
+Dropping them instead would have made `HPRE` unable to express the one setting
+a 180 MHz clock tree needs. The width comes from the SVD field the enum types,
+so the resolution needs no hand-written data; an enumerator is only dropped if
+every encoding in the field's width is already claimed.
 
 ### Field arrays
 
@@ -111,71 +124,84 @@ integer, there are >= 4 of them, and the indices run contiguously from 0.
 Elements are emitted in index order, not document order: the SVD lists fields
 high-to-low.
 
-### Clear-on-write
+### Access overrides
 
 `EXTI_PR`, every status register: writing a bit acknowledges a flag rather than
 storing a value. An `rmw` reads the word, catches whatever flags are set, and
 writing them back is what acknowledges them, so one meant for a single field
-eats all of them. The SVD has no `modifiedWriteValues` and calls these
-registers read-write, so the access comes from `clear_on_write.yaml`: 28
-registers covering 105 instances, read from the RM0090 Rev 19 diagrams. It
-nests peripheral, then register, then a list per category, every key a shell
-glob matched against SVD names:
+eats all of them. The SVD has no `modifiedWriteValues` and no way to say `rs`,
+so it calls all of these bits plain read-write. The real access comes from
+`access_overrides.yaml`: 49 registers covering 159 instances, read from the
+RM0090 Rev 19 diagrams. It nests peripheral, then register, then a list per
+category, every key a shell glob matched against SVD names:
 
 ```yaml
-PWR:
+FLASH:
   CR:
-    rc_w1: [CSBF, CWUF]
-    keep: [UDEN, ODSWEN, ODEN, VOS, ...]
+    rs: [LOCK, STRT]            # p.105
 ```
 
-Globs starting with `*` need quoting, since YAML reads a leading `*` as an
-alias. An unknown category name is an error rather than a no-op: a misspelled
-`keep` would otherwise leave `has_rw` false and turn `RTC_ISR`'s `clear` into a
-store that zeroes `INIT`, with the table still looking right.
+Categories are `rc_w1`, `rc_w0`, `rs`, and `ro` for the five fields the SVD
+calls read-write in error. Globs starting with `*` need quoting, since YAML
+reads a leading `*` as an alias. An unknown category name is an error rather
+than a no-op: a misspelled one would otherwise leave a mask quietly empty with
+the table still looking right.
 
-Matched fields become `Access::RC_W1` or `Access::RC_W0`, which allows only
-`read` and `clear`. `write` and `rmw` fail to compile. 641 declarations.
+The `rs` entries come from an exhaustive sweep of the manual: 52 `rs` marker
+cells exist in RM0090, 48 of them on this part, across 7 of its 37 peripheral
+chapters. Every entry carries the page it was read from, so any of it can be
+checked against the diagram.
 
-The hazard is not confined to the flags, though. A store is all-or-nothing, so
-writing *any* field also writes every flag beside it, and `pwr_cr_vos.rmw()`
+Listed fields get the access the manual gives them: `Access::RC_W1` or
+`Access::RC_W0`, which allow only `read` and `clear` (641 declarations), or
+`Access::RS`, which allows only `read` and `set` (116). `write` and `rmw` fail
+to compile on all of them.
+
+The hazard is not confined to those bits, though. A store is all-or-nothing, so
+writing *any* field also writes everything beside it, and `pwr_cr_vos.rmw()`
 would acknowledge CWUF and CSBF on its way past. Every field in a listed
-register therefore carries three masks naming its neighbors by how each
-survives a write-back, and each accessor honors the ones it can:
+register therefore carries two masks naming what a store has to state
+explicitly rather than leave at 0:
 
-| | `preserve_w1_mask` | `preserve_w0_mask` | `has_rw` |
-|---|---|---|---|
-| bits | `rc_w1` | `rc_w0` | `rw` |
-| survive | a written 0 | a written 1 | only a read |
-| `write` | already 0 | `\| preserve_w0_mask` | not honored |
-| `rmw` | `& ~preserve_w1_mask` | `\| preserve_w0_mask` | the read |
-| `clear` | `& ~preserve_w1_mask` | `\| preserve_w0_mask` | picks the path |
+| | `force_zero_mask` | `force_one_mask` |
+|---|---|---|
+| bits | `rc_w1`, `rs` | `rc_w0`, and reserved bits that reset to 1 |
+| why | a 1 there is a command | a 0 acknowledges, or drops a reset value |
+| `write` | already 0 | `\| force_one_mask` |
+| `set`, `clear` | `& ~force_zero_mask` | `\| force_one_mask` |
+| `rmw` | `& ~force_zero_mask` | `\| force_one_mask` |
 
-`has_rw` is a `bool`, not a mask: rw bits are recovered by the read itself, so
-nothing ever ORs or ANDs them and only their presence matters.
+The reserved half of `force_one_mask` is the one part that needs no table.
+`resetValue & ~(union of field masks)` finds it, and it is not empty on 31
+registers including `RCC_PLLCFGR` (bit 29), `CAN1_FMR` and all the FMC timing
+registers. Without it `rcc_pllcfgr_pllsrc.write()` would zero a bit RM0090 asks
+be kept.
 
-`clear` needs a read only when `has_rw` is set. Otherwise the whole word is a
-compile-time constant and it compiles to one store: 621 of 641 declarations,
-the exceptions being `PWR_CR`, `PWR_CSR`, `RTC_ISR`, `ETH_MACFCR` and
-`OTG_*_HPRT`.
+`rw_neighbors` is the third thing a store cannot handle: `rw` bits elsewhere in
+the register, whose value nothing can reconstruct. It is a `bool` rather than a
+mask because the read recovers them wholesale, so only their presence matters,
+and it answers two questions at once:
 
-That constant leaves everything outside the two masks at 0, which is why it is
-safe: writes to read-only bits are ignored, and 0 is the reset value RM0090
-asks reserved bits be kept at.
+- `set` and `clear` need no read when it is false, so the stored word is a
+  compile-time constant and they are a single instruction. That covers 621 of
+  641 `clear` declarations and 10 of 116 `set` ones.
+- `write` is barred when it is true, because it would zero those bits.
+  `pwr_cr_vos.write()` used to compile and take `DBP`, `PLS`, `PDDS` and the
+  rest with it. 403 of 4925 read-write fields still allow `write`, the ones
+  that share their register with nothing writable, `USART_DR` among them.
 
-The `keep` list is read from the diagrams, never from the SVD's access
-attribute, which calls `PWR_CSR.VOSRDY`, `RTC_ISR.SHPF` and
-`OTG_HS_GINTSTS.DATAFSUSP` read-write where RM0090 marks all three `r`.
-Deriving it would put five registers on the read path for nothing.
+Nothing hand-writes it. It is whatever the SVD still calls read-write once the
+lists above have had their say, which is why the `ro` entries earn their place:
+without them the SVD's five mistakes would put registers on the slow path and
+bar `write` on fields that deserve it. Checked against the `keep` list it
+replaced, the derivation agrees on all 105 register instances that list covered.
 
-Regen prints a warning for every field the SVD calls read-write that no list
-claims. Each is a table gap, an SVD access bug, or an `rs` bit. All ten that
-remain are accounted for: `VOSRDY` / `SHPF` / `DATAFSUSP` above, `CAN1` and
-`CAN2`'s `ABRQ*` and `RFOM*` (`rs`, so a written 0 is ignored and they need no
-read), and `BERR` / `BNA` in `OTG_HS_DIEPINTx`, which the SVD invents over bits
-RM0090 shows as Reserved.
+The constant a single store writes leaves everything outside the two masks at
+0, which is why it is safe: writes to read-only bits are ignored, and 0 is what
+remains of a reserved bit once `force_one_mask` has claimed the ones that reset
+to 1.
 
-Eight of the 146 globs match nothing, because the SVD omits fields RM0090
+Eight of the 167 globs match nothing, because the SVD omits fields RM0090
 documents: `FLASH_SR.RDERR`, `DIEPINT.INEPNM` / `.AHBERR`, and `DOEPINT.NAK` /
 `.BERR` / `.OUTPKTERR` / `.STSPHSRX` / `.AHBERR`. Harmless, and correct against
 a fixed SVD.
@@ -183,26 +209,36 @@ a fixed SVD.
 ## mmio.hpp
 
 Hand-written, not generated. Holds `Access`, `Field`, and the `read` / `write`
-/ `rmw` / `clear` accessors.
+/ `set` / `clear` / `rmw` accessors.
 
-| | read | write | rmw | clear |
-|---|---|---|---|---|
-| `RW` | y | y | y | . |
-| `RO` | y | . | . | . |
-| `WO` | . | y | . | . |
-| `RC_W1` | y | . | . | y |
-| `RC_W0` | y | . | . | y |
+| | read | write | set | clear | rmw |
+|---|---|---|---|---|---|
+| `RW` | y | y | . | . | y |
+| `RO` | y | . | . | . | . |
+| `WO` | . | y | . | . | . |
+| `RS` | y | . | y | . | . |
+| `RC_W1` | y | . | . | y | . |
+| `RC_W0` | y | . | . | y | . |
 
-Every `.` is a `static_assert`. Five template parameters, all enforced at
-compile time and none costing anything at runtime:
+Every `.` is a `static_assert`. `RS`, `RC_W1` and `RC_W0` bits hold no value,
+so `write` and `rmw` have nothing to store into them: a written 1 or 0 is a
+command, which is why `set` and `clear` take no argument.
 
-- `Access` — the row above.
+Three template parameters:
+
+- `acc` — the row above.
 - `Value` — the enum type this field accepts, defaulting to `uint32_t`. `read`
   returns it; `write` and `rmw` take it.
-- `preserve_w1_mask`, `preserve_w0_mask`, `has_rw` — the neighboring
-  clear-on-write bits, per the table in Clear-on-write. All three keep their
-  defaults on an ordinary register, which is what collapses every accessor to
-  its naive form.
+- `rw_neighbors` — whether the register holds `rw` bits other than this field,
+  which decides whether `set` and `clear` need a read and whether `write` is
+  allowed at all. It defaults to `true`, so a hand-written `Field` is guarded
+  rather than trusted. It is a template parameter rather than a member because
+  it gates a volatile access, and a member would leave that read in the binary
+  at `-O0`.
+
+Five data members: `addr`, `field_mask`, `shift`, and the two masks from
+Access overrides. Aggregate initialization value-initializes what is left out,
+so the fields needing neither mask stay `{addr, field_mask, shift}`.
 
 The accessors are `__attribute__((always_inline))`. Without it, `-Os` declines
 to inline `rmw` when the `Field` comes from an array subscript, which forces

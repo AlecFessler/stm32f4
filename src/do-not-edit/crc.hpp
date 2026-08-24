@@ -26,8 +26,8 @@ static_assert(offsetof(CrcRegs, dr) == 0);
 static_assert(offsetof(CrcRegs, idr) == 4);
 static_assert(offsetof(CrcRegs, cr) == 8);
 
-constexpr Field<Access::RW> crc_dr_dr{0x40023000u, 0xFFFFFFFFu, 0};
-constexpr Field<Access::RW> crc_idr_idr{0x40023004u, 0x000000FFu, 0};
+constexpr Field<Access::RW, uint32_t, false> crc_dr_dr{0x40023000u, 0xFFFFFFFFu, 0};
+constexpr Field<Access::RW, uint32_t, false> crc_idr_idr{0x40023004u, 0x000000FFu, 0};
 constexpr Field<Access::WO> crc_cr_cr{0x40023008u, 0x00000001u, 0};
 
 #endif // STM32_CRC_HPP

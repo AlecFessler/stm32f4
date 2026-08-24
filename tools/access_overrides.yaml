@@ -1,0 +1,219 @@
+# Register access RM0090 Rev 19 documents and the SVD cannot express.
+#
+# The SVD has no modifiedWriteValues and no way to say rs, so it calls all of
+# these bits plain read-write. Nothing then stops an rmw, which acknowledges
+# every flag that happened to be set at the read, not just the one you meant.
+#
+# RM0090 marks it per bit (see the abbreviation list, p.57):
+#
+#     rc_w1   clear this bit by writing 1;  writing 0 has no effect
+#     rc_w0   clear this bit by writing 0;  writing 1 has no effect
+#     rs      set this bit by writing 1;    writing 0 has no effect
+#
+# A 32-bit store is all-or-nothing, so every write to one of these registers is
+# also a decision about every other bit in it. Each register lists its bits by
+# what the generated code has to do about them:
+#
+#     rc_w1   Access::RC_W1, and force_zero_mask, since a 1 would acknowledge
+#     rc_w0   Access::RC_W0, and force_one_mask, since a 0 would acknowledge
+#     rs      Access::RS, and force_zero_mask, since a 1 is a command
+#     ro      Access::RO, for the few the SVD calls read-write in error
+#
+# Bits that are genuinely r, or reserved, belong in no list: a written 0 is
+# correct or harmless for both, which is what a bare store already gives them.
+# Reserved bits whose reset value is 1 are the exception, and the generator
+# finds those in the SVD without help.
+#
+# rw bits are not listed either. rw_neighbors is derived from whatever the
+# lists below leave behind, which is what the ro entries are for: without them
+# the SVD's five mistakes would put registers on the slow path for clear() and
+# bar write() on fields that have earned it.
+#
+# Every key is a shell glob: peripheral, then register, then each field name.
+
+EXTI:
+  PR:
+    rc_w1: [PR*]
+
+USART*:
+  SR:
+    rc_w0: [CTS, LBD, TC, RXNE]
+
+UART*:
+  SR:
+    rc_w0: [CTS, LBD, TC, RXNE]
+
+SPI*:
+  SR:
+    rc_w0: [CRCERR]
+
+I2S*ext:
+  SR:
+    rc_w0: [CRCERR]
+
+TIM*:
+  SR:
+    rc_w0: ["*IF", "*OF"]
+
+I2C*:
+  SR1:
+    rc_w0: [SMBALERT, TIMEOUT, PECERR, OVR, AF, ARLO, BERR]
+
+ADC*:
+  SR:
+    rc_w0: [OVR, STRT, JSTRT, JEOC, EOC, AWD]
+
+WWDG:
+  SR:
+    rc_w0: [EWIF]
+  CR:
+    rs: [WDGA]                  # p.717
+  CFR:
+    rs: [EWI]                   # p.718
+
+RNG:
+  SR:
+    rc_w0: [SEIS, CEIS]
+
+HASH:
+  SR:
+    rc_w0: [DCIS, DINIS]
+
+DAC:
+  SR:
+    rc_w1: [DMAUDR1, DMAUDR2]
+
+DMA2D:
+  IFCR:
+    rc_w1: [C*IF]
+  # SUSP, between ABORT and START, is rw: the odd one out
+  CR:
+    rs: [ABORT, START]          # p.352
+  FGPFCCR:
+    rs: [START]                 # p.358
+  BGPFCCR:
+    rs: [START]                 # p.361
+
+FLASH:
+  SR:
+    rc_w1: [RDERR, PGSERR, PGPERR, PGAERR, WRPERR, OPERR, EOP]
+  CR:
+    rs: [LOCK, STRT]            # p.105
+  OPTCR:
+    rs: [OPTSTRT, OPTLOCK]      # p.108
+
+# ABRQ* and RFOM* are rs, so they need no read: a bare store gives them 0,
+# which they ignore, which is why neither register has any rw_neighbors.
+CAN*:
+  MCR:
+    rs: [RESET]                 # p.1097
+  TSR:
+    rc_w1: [TERR*, ALST*, TXOK*, RQCP*]
+    rs: [ABRQ0, ABRQ1, ABRQ2]
+  MSR:
+    rc_w1: [SLAKI, WKUI, ERRI]
+  RF0R:
+    rc_w1: [FOVR0, FULL0]
+    rs: [RFOM0]
+  RF1R:
+    rc_w1: [FOVR1, FULL1]
+    rs: [RFOM1]
+
+PWR:
+  CR:
+    rc_w1: [CSBF, CWUF]
+  CSR:
+    rc_w1: [UDRDY]
+    ro: [VOSRDY]        # RM0090 marks it r, the SVD says read-write
+
+RTC:
+  ISR:
+    rc_w0: [TAMP2F, TAMP1F, TSOVF, TSF, WUTF, ALRBF, ALRAF, RSF]
+    ro: [SHPF]          # RM0090 marks it r, the SVD says read-write
+
+Ethernet_MAC:
+  MACFCR:
+    rc_w1: [FCB]
+  MACPMTCSR:
+    rs: [WFFRPR, PD]            # p.1201
+
+Ethernet_DMA:
+  DMABMR:
+    rs: [SR]                    # p.1223
+  DMAOMR:
+    rs: [FTF]                   # p.1229
+
+# USB OTG: same core in FS and HS, but HS adds bits FS does not have (NYET,
+# AHBERR, TXFIFOUDRN). Those globs simply match nothing on FS.
+OTG_*_GLOBAL:
+  "*GRSTCTL":
+    rs: [TXFFLSH, RXFFLSH, FCRST, HSRST, CSRST]   # p.1277 FS, p.1415 HS
+  "*GOTGINT":
+    rc_w1: [DBCDNE, ADTOCHG, HNGDET, HNSSCHG, SRSSCHG, SEDET]
+  "*GINTSTS":
+    rc_w1: [WKU*INT, SRQINT, DISCINT, CIDSCHG, "*PXFR_INCOMPISOOUT", IISOIXFR,
+            EOPF, ISOODRP, ENUMDNE, USBRST, USBSUSP, ESUSP, SOF, MMIS]
+    ro: [DATAFSUSP]     # RM0090 marks it r, the SVD says read-write
+
+OTG_*_HOST:
+  "*HCCHAR[0-9]*":
+    rs: [CHENA, CHDIS]          # p.1298 FS, p.1437 HS
+  "*HCINT[0-9]*":
+    rc_w1: [DTERR, FRMOR, BBERR, TXERR, NYET, ACK, NAK, STALL, AHBERR, CHH,
+            XFRC]
+  # the only register mixing both directions
+  "*HPRT":
+    rc_w1: [PCDET, PENCHNG, POCCHNG]
+    rc_w0: [PENA]
+    rs: [PSUSP]         # bit 7 is rs; bit 8 PRST is the rw one, p.1295
+
+OTG_*_DEVICE:
+  "*DIEPINT[0-9]*":
+    rc_w1: [NAK, PKTDRPSTS, TXFIFOUDRN, INEPNE, INEPNM, ITTXFE, TOC, AHBERR,
+            EPDISD, XFRC]
+    ro: [BERR, BNA]     # the SVD invents these over bits RM0090 reserves
+  "*DOEPINT[0-9]*":
+    rc_w1: [NYET, NAK, BERR, OUTPKTERR, B2BSTUP, STSPHSRX, OTEPDIS, STUP,
+            AHBERR, EPDISD, XFRC]
+
+# Endpoint 0 is a control endpoint and is drawn apart from endpoints 1 and up.
+# RM0090 gives FS endpoint 0 its own diagram, where EPENA and EPDIS are r and
+# only the stall bit is rs; it folds HS endpoint 0 into the shared diagram,
+# where EPENA and EPDIS are rs for every endpoint. The SVD mirrors both, and
+# spells the stall bit STALL in one place and Stall everywhere else.
+OTG_FS_DEVICE:
+  FS_DIEPCTL0:
+    rs: [STALL]                 # p.1309
+  "DIEPCTL[1-9]":
+    rs: [EPENA, EPDIS]          # p.1311
+  DOEPCTL0:
+    rs: [Stall]                 # p.1314
+  "DOEPCTL[1-9]":
+    rs: [EPENA, EPDIS]          # p.1315
+
+OTG_HS_DEVICE:
+  # bit 21 is drawn rw/rs, the manual's only split marker: rw on noncontrol
+  # nonisochronous endpoints, rs on the control endpoint, which is endpoint 0
+  OTG_HS_DIEPCTL0:
+    rs: [EPENA, EPDIS, Stall]   # p.1457
+  "OTG_HS_DIEPCTL[1-9]":
+    rs: [EPENA, EPDIS]          # p.1457
+  OTG_HS_DOEPCTL0:
+    rs: [Stall]                 # p.1460
+  "OTG_HS_DOEPCTL[1-9]":
+    rs: [EPENA, EPDIS]          # p.1461
+
+# Notes from reading the manual, worth keeping:
+#
+# PWR_CR and PWR_CSR appear twice in RM0090, once for STM32F405/415 and once for
+# STM32F42x/F43x. The entries above are the F42x/F43x ones, which is this part.
+# On the F405 variant CSBF and CWUF are plain write-only, not rc_w1.
+#
+# OTG_FS_DOEPCTL0 and OTG_HS_DOEPCTL0 look like candidates but are not: their
+# bits are w, r, rs and rw only (diagram on p.1314).
+#
+# DIEPINT.TXFE sits among ten rc_w1 bits and is r, so it is deliberately absent.
+#
+# svdgen warns when the SVD calls a field in one of these registers read-write
+# and no list here covers it. Each warning is a table gap, an SVD access bug, or
+# an rs bit; all three want checking against the diagram.
