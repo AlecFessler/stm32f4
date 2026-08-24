@@ -59,7 +59,7 @@ constexpr Field<Access::RW> scb_icsr_pendstset{0xE000ED04u, 0x04000000u, 26};
 constexpr Field<Access::RW> scb_icsr_pendsvclr{0xE000ED04u, 0x08000000u, 27};
 constexpr Field<Access::RW> scb_icsr_pendsvset{0xE000ED04u, 0x10000000u, 28};
 constexpr Field<Access::RW> scb_icsr_nmipendset{0xE000ED04u, 0x80000000u, 31};
-constexpr Field<Access::RW, uint32_t, false> scb_vtor_tbloff{0xE000ED08u, 0x3FFFFE00u, 9};
+constexpr Field<Access::RW, uint32_t, false, false> scb_vtor_tbloff{0xE000ED08u, 0x3FFFFE00u, 9};
 constexpr Field<Access::RW> scb_aircr_vectreset{0xE000ED0Cu, 0x00000001u, 0};
 constexpr Field<Access::RW> scb_aircr_vectclractive{0xE000ED0Cu, 0x00000002u, 1};
 constexpr Field<Access::RW> scb_aircr_sysresetreq{0xE000ED0Cu, 0x00000004u, 2};
@@ -78,7 +78,7 @@ constexpr Field<Access::RW> scb_ccr_stkalign{0xE000ED14u, 0x00000200u, 9};
 constexpr Field<Access::RW> scb_shpr1_pri_4{0xE000ED18u, 0x000000FFu, 0};
 constexpr Field<Access::RW> scb_shpr1_pri_5{0xE000ED18u, 0x0000FF00u, 8};
 constexpr Field<Access::RW> scb_shpr1_pri_6{0xE000ED18u, 0x00FF0000u, 16};
-constexpr Field<Access::RW, uint32_t, false> scb_shpr2_pri_11{0xE000ED1Cu, 0xFF000000u, 24};
+constexpr Field<Access::RW, uint32_t, false, false> scb_shpr2_pri_11{0xE000ED1Cu, 0xFF000000u, 24};
 constexpr Field<Access::RW> scb_shpr3_pri_14{0xE000ED20u, 0x00FF0000u, 16};
 constexpr Field<Access::RW> scb_shpr3_pri_15{0xE000ED20u, 0xFF000000u, 24};
 constexpr Field<Access::RW> scb_shcrs_memfaultact{0xE000ED24u, 0x00000001u, 0};
@@ -116,8 +116,8 @@ constexpr Field<Access::RW> scb_cfsr_ufsr_bfsr_mmfsr_divbyzero{0xE000ED28u, 0x02
 constexpr Field<Access::RW> scb_hfsr_vecttbl{0xE000ED2Cu, 0x00000002u, 1};
 constexpr Field<Access::RW> scb_hfsr_forced{0xE000ED2Cu, 0x40000000u, 30};
 constexpr Field<Access::RW> scb_hfsr_debug_vt{0xE000ED2Cu, 0x80000000u, 31};
-constexpr Field<Access::RW, uint32_t, false> scb_mmfar_mmfar{0xE000ED34u, 0xFFFFFFFFu, 0};
-constexpr Field<Access::RW, uint32_t, false> scb_bfar_bfar{0xE000ED38u, 0xFFFFFFFFu, 0};
-constexpr Field<Access::RW, uint32_t, false> scb_afsr_impdef{0xE000ED3Cu, 0xFFFFFFFFu, 0};
+constexpr Field<Access::RW, uint32_t, false, false> scb_mmfar_mmfar{0xE000ED34u, 0xFFFFFFFFu, 0};
+constexpr Field<Access::RW, uint32_t, false, false> scb_bfar_bfar{0xE000ED38u, 0xFFFFFFFFu, 0};
+constexpr Field<Access::RW, uint32_t, false, false> scb_afsr_impdef{0xE000ED3Cu, 0xFFFFFFFFu, 0};
 
 #endif // STM32_SCB_HPP

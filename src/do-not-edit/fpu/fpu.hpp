@@ -29,7 +29,7 @@ constexpr Field<Access::RW> fpu_fpccr_bfrdy{0xE000EF34u, 0x00000040u, 6};
 constexpr Field<Access::RW> fpu_fpccr_monrdy{0xE000EF34u, 0x00000100u, 8};
 constexpr Field<Access::RW> fpu_fpccr_lspen{0xE000EF34u, 0x40000000u, 30};
 constexpr Field<Access::RW> fpu_fpccr_aspen{0xE000EF34u, 0x80000000u, 31};
-constexpr Field<Access::RW, uint32_t, false> fpu_fpcar_address{0xE000EF38u, 0xFFFFFFF8u, 3};
+constexpr Field<Access::RW, uint32_t, false, false> fpu_fpcar_address{0xE000EF38u, 0xFFFFFFF8u, 3};
 constexpr Field<Access::RW> fpu_fpscr_ioc{0xE000EF3Cu, 0x00000001u, 0};
 constexpr Field<Access::RW> fpu_fpscr_dzc{0xE000EF3Cu, 0x00000002u, 1};
 constexpr Field<Access::RW> fpu_fpscr_ofc{0xE000EF3Cu, 0x00000004u, 2};

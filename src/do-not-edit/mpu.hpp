@@ -30,7 +30,7 @@ constexpr Field<Access::RO> mpu_mpu_typer_iregion{0xE000ED90u, 0x00FF0000u, 16};
 constexpr Field<Access::RO> mpu_mpu_ctrl_enable{0xE000ED94u, 0x00000001u, 0};
 constexpr Field<Access::RO> mpu_mpu_ctrl_hfnmiena{0xE000ED94u, 0x00000002u, 1};
 constexpr Field<Access::RO> mpu_mpu_ctrl_privdefena{0xE000ED94u, 0x00000004u, 2};
-constexpr Field<Access::RW, uint32_t, false> mpu_mpu_rnr_region{0xE000ED98u, 0x000000FFu, 0};
+constexpr Field<Access::RW, uint32_t, false, false> mpu_mpu_rnr_region{0xE000ED98u, 0x000000FFu, 0};
 constexpr Field<Access::RW> mpu_mpu_rbar_region{0xE000ED9Cu, 0x0000000Fu, 0};
 constexpr Field<Access::RW> mpu_mpu_rbar_valid{0xE000ED9Cu, 0x00000010u, 4};
 constexpr Field<Access::RW> mpu_mpu_rbar_addr{0xE000ED9Cu, 0xFFFFFFE0u, 5};

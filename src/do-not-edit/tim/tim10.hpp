@@ -137,30 +137,30 @@ enum class Urs : uint32_t {
 
 // Tim10Regs omitted: overlapping registers
 constexpr Field<Access::RW, tim10::Ckd> tim10_cr1_ckd{0x40014400u, 0x00000300u, 8};
-constexpr Field<Access::RW, tim10::Arpe, true, true> tim10_cr1_arpe{0x40014400u, 0x00000080u, 7};
-constexpr Field<Access::RW, tim10::Urs, true, true> tim10_cr1_urs{0x40014400u, 0x00000004u, 2};
-constexpr Field<Access::RW, tim10::Udis, true, true> tim10_cr1_udis{0x40014400u, 0x00000002u, 1};
-constexpr Field<Access::RW, tim10::Cen, true, true> tim10_cr1_cen{0x40014400u, 0x00000001u, 0};
-constexpr Field<Access::RW, tim10::Ccie, true, true> tim10_dier_cc1ie{0x4001440Cu, 0x00000002u, 1};
-constexpr Field<Access::RW, tim10::Uie, true, true> tim10_dier_uie{0x4001440Cu, 0x00000001u, 0};
-constexpr Field<Access::RC_W0, tim10::Ccof, false> tim10_sr_cc1of{0x40014410u, 0x00000200u, 9, 0x00000000u, 0x00000203u};
-constexpr Field<Access::RC_W0, tim10::Ccif, false> tim10_sr_cc1if{0x40014410u, 0x00000002u, 1, 0x00000000u, 0x00000203u};
-constexpr Field<Access::RC_W0, tim10::Uif, false> tim10_sr_uif{0x40014410u, 0x00000001u, 0, 0x00000000u, 0x00000203u};
+constexpr Field<Access::RW, tim10::Arpe, true> tim10_cr1_arpe{0x40014400u, 0x00000080u, 7};
+constexpr Field<Access::RW, tim10::Urs, true> tim10_cr1_urs{0x40014400u, 0x00000004u, 2};
+constexpr Field<Access::RW, tim10::Udis, true> tim10_cr1_udis{0x40014400u, 0x00000002u, 1};
+constexpr Field<Access::RW, tim10::Cen, true> tim10_cr1_cen{0x40014400u, 0x00000001u, 0};
+constexpr Field<Access::RW, tim10::Ccie, true> tim10_dier_cc1ie{0x4001440Cu, 0x00000002u, 1};
+constexpr Field<Access::RW, tim10::Uie, true> tim10_dier_uie{0x4001440Cu, 0x00000001u, 0};
+constexpr Field<Access::RC_W0, tim10::Ccof, false, false> tim10_sr_cc1of{0x40014410u, 0x00000200u, 9, 0x00000000u, 0x00000203u};
+constexpr Field<Access::RC_W0, tim10::Ccif, false, false> tim10_sr_cc1if{0x40014410u, 0x00000002u, 1, 0x00000000u, 0x00000203u};
+constexpr Field<Access::RC_W0, tim10::Uif, false, false> tim10_sr_uif{0x40014410u, 0x00000001u, 0, 0x00000000u, 0x00000203u};
 constexpr Field<Access::WO, tim10::Ccg> tim10_egr_cc1g{0x40014414u, 0x00000002u, 1};
 constexpr Field<Access::WO, tim10::Ug> tim10_egr_ug{0x40014414u, 0x00000001u, 0};
 constexpr Field<Access::RW, tim10::Ocm> tim10_ccmr1_output_oc1m{0x40014418u, 0x00000070u, 4};
-constexpr Field<Access::RW, tim10::Ocpe, true, true> tim10_ccmr1_output_oc1pe{0x40014418u, 0x00000008u, 3};
-constexpr Field<Access::RW, tim10::Ocfe, true, true> tim10_ccmr1_output_oc1fe{0x40014418u, 0x00000004u, 2};
+constexpr Field<Access::RW, tim10::Ocpe, true> tim10_ccmr1_output_oc1pe{0x40014418u, 0x00000008u, 3};
+constexpr Field<Access::RW, tim10::Ocfe, true> tim10_ccmr1_output_oc1fe{0x40014418u, 0x00000004u, 2};
 constexpr Field<Access::RW, tim10::Ccs> tim10_ccmr1_output_cc1s{0x40014418u, 0x00000003u, 0};
 constexpr Field<Access::RW, tim10::Icfilter> tim10_ccmr1_input_ic1f{0x40014418u, 0x000000F0u, 4};
 constexpr Field<Access::RW> tim10_ccmr1_input_icpcs{0x40014418u, 0x0000000Cu, 2};
 constexpr Field<Access::RW, tim10::Cc1s> tim10_ccmr1_input_cc1s{0x40014418u, 0x00000003u, 0};
-constexpr Field<Access::RW, uint32_t, true, true> tim10_ccer_cc1np{0x40014420u, 0x00000008u, 3};
-constexpr Field<Access::RW, tim10::Ccp, true, true> tim10_ccer_cc1p{0x40014420u, 0x00000002u, 1};
-constexpr Field<Access::RW, tim10::Cce, true, true> tim10_ccer_cc1e{0x40014420u, 0x00000001u, 0};
-constexpr Field<Access::RW, uint32_t, false> tim10_cnt_cnt{0x40014424u, 0x0000FFFFu, 0};
-constexpr Field<Access::RW, uint32_t, false> tim10_psc_psc{0x40014428u, 0x0000FFFFu, 0};
-constexpr Field<Access::RW, uint32_t, false> tim10_arr_arr{0x4001442Cu, 0x0000FFFFu, 0};
-constexpr Field<Access::RW, uint32_t, false> tim10_ccr1_ccr1{0x40014434u, 0x0000FFFFu, 0};
+constexpr Field<Access::RW, uint32_t, true> tim10_ccer_cc1np{0x40014420u, 0x00000008u, 3};
+constexpr Field<Access::RW, tim10::Ccp, true> tim10_ccer_cc1p{0x40014420u, 0x00000002u, 1};
+constexpr Field<Access::RW, tim10::Cce, true> tim10_ccer_cc1e{0x40014420u, 0x00000001u, 0};
+constexpr Field<Access::RW, uint32_t, false, false> tim10_cnt_cnt{0x40014424u, 0x0000FFFFu, 0};
+constexpr Field<Access::RW, uint32_t, false, false> tim10_psc_psc{0x40014428u, 0x0000FFFFu, 0};
+constexpr Field<Access::RW, uint32_t, false, false> tim10_arr_arr{0x4001442Cu, 0x0000FFFFu, 0};
+constexpr Field<Access::RW, uint32_t, false, false> tim10_ccr1_ccr1{0x40014434u, 0x0000FFFFu, 0};
 
 #endif // STM32_TIM10_HPP

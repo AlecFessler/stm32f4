@@ -43,8 +43,8 @@ enum class Access {RW, RO, WO, RS, RC_W1, RC_W0};
 // safe, which needs the field to be one bit, the register to live below
 // 0x40100000, and no other rc_w1 flag to share the register, since the
 // hardware writes back what it read and a 1 there would acknowledge it.
-template <Access acc, class Value = uint32_t, bool rw_neighbors = true,
-          bool bit_band = false>
+template <Access acc, class Value = uint32_t, bool bit_band = false,
+          bool rw_neighbors = true>
 struct Field {
     uintptr_t addr;
     uint32_t field_mask;

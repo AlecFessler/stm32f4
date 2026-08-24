@@ -128,15 +128,15 @@ constexpr Field<Access::RW, pwr::Vos> pwr_cr_vos{0x40007000u, 0x0000C000u, 14, 0
 constexpr Field<Access::RW, pwr::Oden> pwr_cr_oden{0x40007000u, 0x00010000u, 16, 0x0000000Cu, 0x00000000u};
 constexpr Field<Access::RW, pwr::Odswen> pwr_cr_odswen{0x40007000u, 0x00020000u, 17, 0x0000000Cu, 0x00000000u};
 constexpr Field<Access::RW, pwr::Uden> pwr_cr_uden{0x40007000u, 0x000C0000u, 18, 0x0000000Cu, 0x00000000u};
-constexpr Field<Access::RO, pwr::Wuf> pwr_csr_wuf{0x40007004u, 0x00000001u, 0};
-constexpr Field<Access::RO, pwr::Sbf> pwr_csr_sbf{0x40007004u, 0x00000002u, 1};
-constexpr Field<Access::RO, pwr::Pvdo> pwr_csr_pvdo{0x40007004u, 0x00000004u, 2};
-constexpr Field<Access::RO, pwr::Brr> pwr_csr_brr{0x40007004u, 0x00000008u, 3};
+constexpr Field<Access::RO, pwr::Wuf, true> pwr_csr_wuf{0x40007004u, 0x00000001u, 0};
+constexpr Field<Access::RO, pwr::Sbf, true> pwr_csr_sbf{0x40007004u, 0x00000002u, 1};
+constexpr Field<Access::RO, pwr::Pvdo, true> pwr_csr_pvdo{0x40007004u, 0x00000004u, 2};
+constexpr Field<Access::RO, pwr::Brr, true> pwr_csr_brr{0x40007004u, 0x00000008u, 3};
 constexpr Field<Access::RW, pwr::Ewup> pwr_csr_ewup{0x40007004u, 0x00000100u, 8, 0x000C0000u, 0x00000000u};
 constexpr Field<Access::RW, pwr::Bre> pwr_csr_bre{0x40007004u, 0x00000200u, 9, 0x000C0000u, 0x00000000u};
-constexpr Field<Access::RO, pwr::Vosrdy> pwr_csr_vosrdy{0x40007004u, 0x00004000u, 14, 0x000C0000u, 0x00000000u};
-constexpr Field<Access::RO, pwr::Odrdy> pwr_csr_odrdy{0x40007004u, 0x00010000u, 16};
-constexpr Field<Access::RO, pwr::Odswrdy> pwr_csr_odswrdy{0x40007004u, 0x00020000u, 17};
+constexpr Field<Access::RO, pwr::Vosrdy, true> pwr_csr_vosrdy{0x40007004u, 0x00004000u, 14, 0x000C0000u, 0x00000000u};
+constexpr Field<Access::RO, pwr::Odrdy, true> pwr_csr_odrdy{0x40007004u, 0x00010000u, 16};
+constexpr Field<Access::RO, pwr::Odswrdy, true> pwr_csr_odswrdy{0x40007004u, 0x00020000u, 17};
 constexpr Field<Access::RC_W1, pwr::Udrdy> pwr_csr_udrdy{0x40007004u, 0x000C0000u, 18, 0x000C0000u, 0x00000000u};
 
 #endif // STM32_PWR_HPP

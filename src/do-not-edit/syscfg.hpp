@@ -69,12 +69,12 @@ static_assert(offsetof(SyscfgRegs, exticr4) == 20);
 static_assert(offsetof(SyscfgRegs, cmpcr) == 32);
 
 constexpr Field<Access::RW> syscfg_memrm_mem_mode{0x40013800u, 0x00000007u, 0};
-constexpr Field<Access::RW, uint32_t, true, true> syscfg_memrm_fb_mode{0x40013800u, 0x00000100u, 8};
+constexpr Field<Access::RW, uint32_t, true> syscfg_memrm_fb_mode{0x40013800u, 0x00000100u, 8};
 constexpr Field<Access::RW> syscfg_memrm_swp_fmc{0x40013800u, 0x00000C00u, 10};
-constexpr Field<Access::RW, syscfg::Mii_rmii_sel, true, true> syscfg_pmc_mii_rmii_sel{0x40013804u, 0x00800000u, 23};
-constexpr Field<Access::RW, uint32_t, true, true> syscfg_pmc_adc1dc2{0x40013804u, 0x00010000u, 16};
-constexpr Field<Access::RW, uint32_t, true, true> syscfg_pmc_adc2dc2{0x40013804u, 0x00020000u, 17};
-constexpr Field<Access::RW, uint32_t, true, true> syscfg_pmc_adc3dc2{0x40013804u, 0x00040000u, 18};
+constexpr Field<Access::RW, syscfg::Mii_rmii_sel, true> syscfg_pmc_mii_rmii_sel{0x40013804u, 0x00800000u, 23};
+constexpr Field<Access::RW, uint32_t, true> syscfg_pmc_adc1dc2{0x40013804u, 0x00010000u, 16};
+constexpr Field<Access::RW, uint32_t, true> syscfg_pmc_adc2dc2{0x40013804u, 0x00020000u, 17};
+constexpr Field<Access::RW, uint32_t, true> syscfg_pmc_adc3dc2{0x40013804u, 0x00040000u, 18};
 constexpr Field<Access::RW, syscfg::Exti0> syscfg_exticr1_exti[4] = {
     {0x40013808u, 0x0000000Fu, 0},
     {0x40013808u, 0x000000F0u, 4},
@@ -93,7 +93,7 @@ constexpr Field<Access::RW> syscfg_exticr4_exti15{0x40013814u, 0x0000F000u, 12};
 constexpr Field<Access::RW> syscfg_exticr4_exti14{0x40013814u, 0x00000F00u, 8};
 constexpr Field<Access::RW> syscfg_exticr4_exti13{0x40013814u, 0x000000F0u, 4};
 constexpr Field<Access::RW> syscfg_exticr4_exti12{0x40013814u, 0x0000000Fu, 0};
-constexpr Field<Access::RO, syscfg::Ready> syscfg_cmpcr_ready{0x40013820u, 0x00000100u, 8};
-constexpr Field<Access::RO, syscfg::Cmp_pd> syscfg_cmpcr_cmp_pd{0x40013820u, 0x00000001u, 0};
+constexpr Field<Access::RO, syscfg::Ready, true> syscfg_cmpcr_ready{0x40013820u, 0x00000100u, 8};
+constexpr Field<Access::RO, syscfg::Cmp_pd, true> syscfg_cmpcr_cmp_pd{0x40013820u, 0x00000001u, 0};
 
 #endif // STM32_SYSCFG_HPP

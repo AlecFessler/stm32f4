@@ -16,8 +16,8 @@ struct Otg_hs_pwrclkRegs {
 };
 static_assert(offsetof(Otg_hs_pwrclkRegs, otg_hs_pcgcr) == 0);
 
-constexpr Field<Access::RW, uint32_t, true, true> otg_hs_pwrclk_otg_hs_pcgcr_stppclk{0x40040E00u, 0x00000001u, 0};
-constexpr Field<Access::RW, uint32_t, true, true> otg_hs_pwrclk_otg_hs_pcgcr_gatehclk{0x40040E00u, 0x00000002u, 1};
-constexpr Field<Access::RW, uint32_t, true, true> otg_hs_pwrclk_otg_hs_pcgcr_physusp{0x40040E00u, 0x00000010u, 4};
+constexpr Field<Access::RW, uint32_t, true> otg_hs_pwrclk_otg_hs_pcgcr_stppclk{0x40040E00u, 0x00000001u, 0};
+constexpr Field<Access::RW, uint32_t, true> otg_hs_pwrclk_otg_hs_pcgcr_gatehclk{0x40040E00u, 0x00000002u, 1};
+constexpr Field<Access::RW, uint32_t, true> otg_hs_pwrclk_otg_hs_pcgcr_physusp{0x40040E00u, 0x00000010u, 4};
 
 #endif // STM32_OTG_HS_PWRCLK_HPP

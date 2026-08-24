@@ -205,21 +205,35 @@ to 1.
 `0x40000000-0x400FFFFF` is mirrored at `0x42000000`, one alias word per bit, so
 a store there reaches a single bit and the hardware does the read-modify-write
 with no window an interrupt can land in. `bit_band` says a field has one, and
-`write`, `set`, `clear` and `read` take that path when it does. 2510
-declarations: 2432 `RW`, 69 `RS`, 8 `RC_W0`, 1 `RC_W1`.
+`read`, `write`, `set` and `clear` take that path when it does. 2966
+declarations.
 
-Four conditions, all of them necessary:
+Two conditions decide whether an alias word exists:
 
-- **One bit wide.** An alias word maps to one bit and nothing else.
+- **One bit wide.** An alias word maps to one bit and nothing else, so a 5-bit
+  field like `RCC_CR.HSITRIM` can never use one.
 - **Register below `0x40100000`.** USB OTG at `0x5...`, FMC at `0xA...` and the
-  core blocks at `0xE...` have no alias.
+  core blocks at `0xE...` are outside the aliased region.
+
+Two more decide whether *storing* through it is right, and a read-only field
+skips both, since `read` is the only accessor it has and a read triggers no
+write-back. Nothing has to trust that: every storing accessor already
+`static_assert`s its way out of an `RO` field, so those paths cannot be
+instantiated.
+
 - **No other `rc_w1` bit in the register.** PM0214 2.2.5: *"A write operation
   is performed as read-modify-write."* The hardware writes back what it read,
   so a set `rc_w1` flag would get its 1 echoed and be acknowledged. `rw`,
   `rc_w0` and reserved bits all survive being echoed; that one does not, and
   `force_zero_mask` cannot reach inside a hardware RMW to stop it.
-- **`rw_neighbors` is true.** Otherwise the direct store is already one
-  instruction and needs no read at all, which is cheaper.
+- **`rw_neighbors` is true.** A write-only field, or one owning its whole
+  register, already stores in one bus cycle; the alias would make the hardware
+  read first, which is two.
+
+`RCC_CR` shows all of it in one register. `HSEON` (bit 16, `rw`) and `HSERDY`
+(bit 17, `ro`) sit next to each other with alias words four bytes apart at
+`0x42470040` and `0x42470044`, and both use them. `HSITRIM` is five bits wide
+and cannot.
 
 `rmw` is a compile error on these, because it is strictly worse there: four
 instructions and a window, against one store that cannot be interrupted. That
@@ -268,6 +282,8 @@ Four template parameters:
 - `Value` — the enum type this field accepts, defaulting to `uint32_t`. `read`
   returns it; `write` and `rmw` take it.
 - `bit_band` — whether this field has a bit-band alias, per Bit-banding below.
+  It precedes `rw_neighbors` because it is the commoner of the two, and because
+  an `RO` field has no meaningful `rw_neighbors` to spell out on the way past.
 - `rw_neighbors` — whether the register holds `rw` bits other than this field,
   which decides whether `set` and `clear` need a read and whether `write` is
   allowed at all. It defaults to `true`, so a hand-written `Field` is guarded

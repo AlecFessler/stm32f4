@@ -463,18 +463,26 @@ BIT_BAND_REGION = range(0x40000000, 0x40100000)
 def bit_band_ok(register_base, field, access, rw_neighbors, rc_w1_mask):
     """Whether a store to this field's alias word is both legal and worth it.
 
-    The alias reaches one bit, and the hardware writes back what it read for
-    the rest. That is safe beside rw, rc_w0 and reserved bits, and unsafe
-    beside another rc_w1 flag, which the echoed 1 would acknowledge. Read-only
-    and write-only fields never want it, and neither does a field with no rw
-    neighbors, whose direct store is a bit cheaper.
+    The first two conditions decide whether an alias word exists at all. The
+    rest are about storing through it: the hardware writes back what it read
+    for every other bit, which is safe beside rw, rc_w0 and reserved bits and
+    unsafe beside another rc_w1 flag, whose echoed 1 would acknowledge it.
+
+    A read-only field returns before any of that, because read() is the only
+    accessor it has and a read triggers no write-back. Nothing has to trust
+    that: every storing accessor already static_asserts its way out of an RO
+    field, so those paths cannot be instantiated to begin with.
     """
     mask, bit = field_mask(field)
+    if mask != 1 << bit or register_base not in BIT_BAND_REGION:
+        return False
+    if access in ("read-only", "ro"):
+        return True
     return (
-        rw_neighbors
-        and access in ("read-write", "rs", "rc_w1", "rc_w0")
-        and mask == 1 << bit
-        and register_base in BIT_BAND_REGION
+        access in ("read-write", "rs", "rc_w1", "rc_w0")
+        # a write-only field, or one owning its register, stores in one bus
+        # cycle already; the alias would make the hardware read first
+        and rw_neighbors
         and not (rc_w1_mask & ~mask)
     )
 
@@ -570,14 +578,14 @@ def resolve_open_encodings(values, widths):
 def field_type(access, enum, rw_neighbors, bit_band):
     """Field<Access::X>, Field<Access::X, gpio::Mode>, and the two flags only
     when they differ from their defaults. They are positional, so an untyped
-    field has to name uint32_t to reach them, and bit_band has to spell out the
-    rw_neighbors it implies. None means this field's accessors never consult
-    it."""
+    field has to name uint32_t to reach them. bit_band comes first because it
+    is the commoner of the two and because an RO field has no meaningful
+    rw_neighbors to spell out on the way past."""
     arguments = [access_str_map[access]]
     if bit_band:
-        arguments += [enum or "uint32_t", "true", "true"]
+        arguments += [enum or "uint32_t", "true"]
     elif rw_neighbors is False:
-        arguments += [enum or "uint32_t", "false"]
+        arguments += [enum or "uint32_t", "false", "false"]
     elif enum:
         arguments.append(enum)
     return f"Field<{', '.join(arguments)}>"

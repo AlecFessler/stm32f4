@@ -40,9 +40,9 @@ static_assert(offsetof(IwdgRegs, rlr) == 8);
 static_assert(offsetof(IwdgRegs, sr) == 12);
 
 constexpr Field<Access::WO, iwdg::Key> iwdg_kr_key{0x40003000u, 0x0000FFFFu, 0};
-constexpr Field<Access::RW, iwdg::Pr, false> iwdg_pr_pr{0x40003004u, 0x00000007u, 0};
-constexpr Field<Access::RW, uint32_t, false> iwdg_rlr_rl{0x40003008u, 0x00000FFFu, 0};
-constexpr Field<Access::RO> iwdg_sr_rvu{0x4000300Cu, 0x00000002u, 1};
-constexpr Field<Access::RO> iwdg_sr_pvu{0x4000300Cu, 0x00000001u, 0};
+constexpr Field<Access::RW, iwdg::Pr, false, false> iwdg_pr_pr{0x40003004u, 0x00000007u, 0};
+constexpr Field<Access::RW, uint32_t, false, false> iwdg_rlr_rl{0x40003008u, 0x00000FFFu, 0};
+constexpr Field<Access::RO, uint32_t, true> iwdg_sr_rvu{0x4000300Cu, 0x00000002u, 1};
+constexpr Field<Access::RO, uint32_t, true> iwdg_sr_pvu{0x4000300Cu, 0x00000001u, 0};
 
 #endif // STM32_IWDG_HPP

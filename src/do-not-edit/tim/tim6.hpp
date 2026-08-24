@@ -75,18 +75,18 @@ static_assert(offsetof(Tim6Regs, cnt) == 36);
 static_assert(offsetof(Tim6Regs, psc) == 40);
 static_assert(offsetof(Tim6Regs, arr) == 44);
 
-constexpr Field<Access::RW, tim6::Arpe, true, true> tim6_cr1_arpe{0x40001000u, 0x00000080u, 7};
-constexpr Field<Access::RW, tim6::Opm, true, true> tim6_cr1_opm{0x40001000u, 0x00000008u, 3};
-constexpr Field<Access::RW, tim6::Urs, true, true> tim6_cr1_urs{0x40001000u, 0x00000004u, 2};
-constexpr Field<Access::RW, tim6::Udis, true, true> tim6_cr1_udis{0x40001000u, 0x00000002u, 1};
-constexpr Field<Access::RW, tim6::Cen, true, true> tim6_cr1_cen{0x40001000u, 0x00000001u, 0};
-constexpr Field<Access::RW, tim6::Mms, false> tim6_cr2_mms{0x40001004u, 0x00000070u, 4};
-constexpr Field<Access::RW, tim6::Ude, true, true> tim6_dier_ude{0x4000100Cu, 0x00000100u, 8};
-constexpr Field<Access::RW, tim6::Uie, true, true> tim6_dier_uie{0x4000100Cu, 0x00000001u, 0};
-constexpr Field<Access::RC_W0, tim6::Uif, false> tim6_sr_uif{0x40001010u, 0x00000001u, 0, 0x00000000u, 0x00000001u};
+constexpr Field<Access::RW, tim6::Arpe, true> tim6_cr1_arpe{0x40001000u, 0x00000080u, 7};
+constexpr Field<Access::RW, tim6::Opm, true> tim6_cr1_opm{0x40001000u, 0x00000008u, 3};
+constexpr Field<Access::RW, tim6::Urs, true> tim6_cr1_urs{0x40001000u, 0x00000004u, 2};
+constexpr Field<Access::RW, tim6::Udis, true> tim6_cr1_udis{0x40001000u, 0x00000002u, 1};
+constexpr Field<Access::RW, tim6::Cen, true> tim6_cr1_cen{0x40001000u, 0x00000001u, 0};
+constexpr Field<Access::RW, tim6::Mms, false, false> tim6_cr2_mms{0x40001004u, 0x00000070u, 4};
+constexpr Field<Access::RW, tim6::Ude, true> tim6_dier_ude{0x4000100Cu, 0x00000100u, 8};
+constexpr Field<Access::RW, tim6::Uie, true> tim6_dier_uie{0x4000100Cu, 0x00000001u, 0};
+constexpr Field<Access::RC_W0, tim6::Uif, false, false> tim6_sr_uif{0x40001010u, 0x00000001u, 0, 0x00000000u, 0x00000001u};
 constexpr Field<Access::WO, tim6::Ug> tim6_egr_ug{0x40001014u, 0x00000001u, 0};
-constexpr Field<Access::RW, uint32_t, false> tim6_cnt_cnt{0x40001024u, 0x0000FFFFu, 0};
-constexpr Field<Access::RW, uint32_t, false> tim6_psc_psc{0x40001028u, 0x0000FFFFu, 0};
-constexpr Field<Access::RW, uint32_t, false> tim6_arr_arr{0x4000102Cu, 0x0000FFFFu, 0};
+constexpr Field<Access::RW, uint32_t, false, false> tim6_cnt_cnt{0x40001024u, 0x0000FFFFu, 0};
+constexpr Field<Access::RW, uint32_t, false, false> tim6_psc_psc{0x40001028u, 0x0000FFFFu, 0};
+constexpr Field<Access::RW, uint32_t, false, false> tim6_arr_arr{0x4000102Cu, 0x0000FFFFu, 0};
 
 #endif // STM32_TIM6_HPP

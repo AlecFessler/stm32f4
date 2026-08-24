@@ -16,6 +16,6 @@ struct Nvic_stirRegs {
 };
 static_assert(offsetof(Nvic_stirRegs, stir) == 0);
 
-constexpr Field<Access::RW, uint32_t, false> nvic_stir_stir_intid{0xE000EF00u, 0x000001FFu, 0};
+constexpr Field<Access::RW, uint32_t, false, false> nvic_stir_stir_intid{0xE000EF00u, 0x000001FFu, 0};
 
 #endif // STM32_NVIC_STIR_HPP
