@@ -9,7 +9,7 @@ Generates `src/do-not-edit/` from four inputs:
 | `svd/STM32F429.svd` | registers, fields, offsets, access |
 | `enums/` | symbolic field values, vendored from stm32-rs |
 | `access_overrides.yaml` | the access the SVD cannot express |
-| `field_merges.yaml` | fields the SVD splits that the vendored enums miss |
+| `svd_overrides.yaml` | corrections the vendored enums do not carry |
 
 ```
 make regen         # run the generator
@@ -146,15 +146,15 @@ _merge: WDGTB*                  # bare glob
 _merge: {ADD: "ADD[07],ADD10"}  # explicit name, comma-separated globs
 ```
 
-`field_merges.yaml` is the local half, for what that subset misses. stm32-rs
+`svd_overrides.yaml` is the local half, for what that subset misses. stm32-rs
 keeps the RCC merges in `patches/rcc/`, and only `enums/fields/` was vendored,
-so `SW`, `SWS` and `RTCSEL` need naming here. Shape is `access_overrides.yaml`'s,
-one level deeper:
+so `SW`, `SWS` and `RTCSEL` need naming here:
 
 ```yaml
 RCC:
   CFGR:
-    SW: [SW0, SW1]
+    merge:
+      SW: [SW0, SW1]
 ```
 
 Merging rewrites the SVD tree before anything reads it, so the array grouping,
@@ -171,6 +171,62 @@ a hole, or disagree on access raise rather than merge.
 
 `rcc::Pllp`, `rcc::Sw`, `rcc::Sws`, `rcc::Rtcsel` and `wwdg::Wdgtb` were built
 from the yaml and used by nothing until this landed.
+
+### Attribute corrections
+
+`_modify` is the other directive the vendored yaml carries, and it fixes what
+the SVD gets wrong outright. Under a peripheral it targets registers, under a
+register it targets fields, and `svd_overrides.yaml` spells it `modify` at the
+same two depths.
+
+Eleven come from the vendored yaml. Two of them matter:
+
+```yaml
+# Offset of BWTR3 and BWTR4 is incorrect
+FMC:
+  _modify:
+    BWTR3: {addressOffset: 0x114, alternateRegister: ""}
+    BWTR4: {addressOffset: 0x11C, alternateRegister: ""}
+```
+
+The SVD gives `BWTR3` the address of `BWTR1` and calls that an alternate view
+of it, so configuring bank 3 write timing reconfigured bank 1. RM0090 p.1715
+gives the offset as `0x104 + 8 * (x - 1)`. The other nine rename a field whose
+enum was written against the corrected name, which is why `crc::Reset`,
+`pwr::Mruds`, `pwr::Lpuds`, `spi::Tifrfe` and `fmc::Clk` typed nothing.
+
+Four more are local, for defects no vendored directive covers:
+
+| | |
+|---|---|
+| `FLASH_ACR.LATENCY` | 3 bits, should be 4. RM0090 3.9.1 is the F405/F407 definition, 3.9.2 is this part's |
+| `TIM9`, `TIM12` `IC1F`/`IC2F` | 3 bits, should be 4. TIM1 has it right |
+| `SYSCFG.MEMRM` | RM0090 and the enum yaml both call it `MEMRMP` |
+
+### Checks
+
+Every defect above reached the headers silently, so the generator now refuses
+rather than warns:
+
+| | |
+|---|---|
+| directives | a key starting with `_` is in `HANDLED_DIRECTIVES` or `SKIPPED_DIRECTIVES`, nothing else |
+| corrections | every `modify` matches something, unless named in `UNMATCHED_MODIFICATIONS` |
+| enum width | every member of an enum fits the field it types |
+| addresses | two registers at one offset name each other with `alternateRegister` |
+| register globs | an enum's register glob matches a register, unless it carries `?~` |
+
+`SKIPPED_DIRECTIVES` is the honest part of that list. Seven directive types in
+the vendored yaml go unhonored, each with what it would change:
+
+| | |
+|---|---|
+| `_W1C`, `_W0C` | clear-on-write access, 46 sites. `access_overrides.yaml` carries the same thing by hand |
+| `_add` | `PWR_CR.ADCDC1`, a field the SVD leaves out |
+| `_delete` | `TIM9_CR2`, a register this part does not have |
+| `_derive` | EXTICR field derivation, and UART7/UART8 from UART4 |
+| `_rebase` | which peripheral of a family the others derive from |
+| `_strip` | the `FS_` and `OTG_HS_` prefixes on OTG register names |
 
 ### Access overrides
 

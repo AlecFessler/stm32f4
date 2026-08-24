@@ -481,8 +481,8 @@ constexpr Field<Access::RW, rcc::Rst, true> rcc_apb1rstr_tim14rst{0x40023820u, 0
 constexpr Field<Access::RW, rcc::Rst, true> rcc_apb1rstr_wwdgrst{0x40023820u, 0x00000800u, 11};
 constexpr Field<Access::RW, rcc::Rst, true> rcc_apb1rstr_spi2rst{0x40023820u, 0x00004000u, 14};
 constexpr Field<Access::RW, rcc::Rst, true> rcc_apb1rstr_spi3rst{0x40023820u, 0x00008000u, 15};
-constexpr Field<Access::RW, rcc::Rst, true> rcc_apb1rstr_uart2rst{0x40023820u, 0x00020000u, 17};
-constexpr Field<Access::RW, rcc::Rst, true> rcc_apb1rstr_uart3rst{0x40023820u, 0x00040000u, 18};
+constexpr Field<Access::RW, rcc::Rst, true> rcc_apb1rstr_usart2rst{0x40023820u, 0x00020000u, 17};
+constexpr Field<Access::RW, rcc::Rst, true> rcc_apb1rstr_usart3rst{0x40023820u, 0x00040000u, 18};
 constexpr Field<Access::RW, rcc::Rst, true> rcc_apb1rstr_uart4rst{0x40023820u, 0x00080000u, 19};
 constexpr Field<Access::RW, rcc::Rst, true> rcc_apb1rstr_uart5rst{0x40023820u, 0x00100000u, 20};
 constexpr Field<Access::RW, rcc::Rst, true> rcc_apb1rstr_i2c1rst{0x40023820u, 0x00200000u, 21};

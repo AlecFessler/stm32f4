@@ -1,0 +1,65 @@
+# Local corrections to the SVD, for what the vendored enums do not carry.
+#
+# stm32-rs keeps its corrections in patches/, and only enums/fields/ was
+# vendored, so anything the patch tree would have fixed has to be named here.
+# Two kinds, matching the directives svdgen reads out of the vendored yaml:
+#
+#   merge    fields the SVD splits into one entry per bit, rejoined into the
+#            one field RM0090 documents
+#   modify   attributes the SVD gets wrong: a name, a width, an address
+#
+# Under a peripheral, `modify` targets registers. Under a register, it targets
+# fields. That is svdtools' own nesting, so an entry here reads the same as the
+# equivalent entry upstream.
+#
+#   peripheral glob -> modify -> register glob -> {attribute: value}
+#   peripheral glob -> register glob -> merge  -> merged name -> field globs
+#   peripheral glob -> register glob -> modify -> field glob  -> {attribute: value}
+#
+# Page numbers are RM0090 Rev 19. The RCC ones are chapter 7, the
+# STM32F42xxx/F43xxx variant.
+
+RCC:
+  CFGR:
+    merge:
+      SW: [SW0, SW1]                # p.228, SW[1:0]: 00 HSI, 01 HSE, 10 PLL
+      SWS: [SWS0, SWS1]             # p.228, SWS[1:0], same encoding, read back
+  BDCR:
+    merge:
+      RTCSEL: [RTCSEL0, RTCSEL1]    # p.259, RTCSEL[1:0]
+
+I2C*:
+  OAR1:
+    merge:
+      ADD: [ADD0, ADD7, ADD10]      # p.864, ADD[9:0] in three uneven pieces
+
+# The SVD carries the F405/F407 definition of LATENCY, which is 3 bits.
+# RM0090 has two FLASH_ACR sections: 3.9.1 is LATENCY[2:0] for that part,
+# 3.9.2 is LATENCY[3:0] for this one. Three bits cannot hold the 8 wait states
+# the low voltage ranges need, and flash::Latency names encodings up to ws15,
+# so a store above ws7 truncates into a faster setting than the flash can meet.
+FLASH:
+  ACR:
+    modify:
+      LATENCY: {bitWidth: 4}        # p.99
+
+# Same shape, on the timers that got it wrong. RM0090 documents IC1F[3:0] for
+# every timer with an input capture filter, and TIM1 has it right, so this is
+# per-peripheral sloppiness rather than an older definition.
+TIM9:
+  CCMR1_Input:
+    modify:
+      IC1F: {bitWidth: 4}           # p.574
+      IC2F: {bitWidth: 4}
+TIM12:
+  CCMR1_Input:
+    modify:
+      IC1F: {bitWidth: 4}
+      IC2F: {bitWidth: 4}
+
+# RM0090 calls the register SYSCFG_MEMRMP and so does the vendored enum yaml,
+# which is why its MEM_MODE and SWP_FMC values match nothing: the rename lives
+# in patches/syscfg/f4_common.yaml, which was not vendored.
+SYSCFG:
+  modify:
+    MEMRM: {name: MEMRMP}           # p.291

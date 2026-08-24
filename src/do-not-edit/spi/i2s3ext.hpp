@@ -55,7 +55,7 @@ constexpr Field<Access::RW, spi::Frf, true> i2s3ext_cr2_frf{0x40004004u, 0x00000
 constexpr Field<Access::RW, spi::Ssoe, true> i2s3ext_cr2_ssoe{0x40004004u, 0x00000004u, 2};
 constexpr Field<Access::RW, spi::Txdmaen, true> i2s3ext_cr2_txdmaen{0x40004004u, 0x00000002u, 1};
 constexpr Field<Access::RW, spi::Rxdmaen, true> i2s3ext_cr2_rxdmaen{0x40004004u, 0x00000001u, 0};
-constexpr Field<Access::RO, spi::Fre, true> i2s3ext_sr_tifrfe{0x40004008u, 0x00000100u, 8};
+constexpr Field<Access::RO, spi::Fre, true> i2s3ext_sr_fre{0x40004008u, 0x00000100u, 8};
 constexpr Field<Access::RO, spi::Bsy, true> i2s3ext_sr_bsy{0x40004008u, 0x00000080u, 7};
 constexpr Field<Access::RO, spi::Ovr, true> i2s3ext_sr_ovr{0x40004008u, 0x00000040u, 6};
 constexpr Field<Access::RO, spi::Modf, true> i2s3ext_sr_modf{0x40004008u, 0x00000020u, 5};

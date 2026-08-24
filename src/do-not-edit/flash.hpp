@@ -183,7 +183,7 @@ static_assert(offsetof(FlashRegs, cr) == 16);
 static_assert(offsetof(FlashRegs, optcr) == 20);
 static_assert(offsetof(FlashRegs, optcr1) == 24);
 
-constexpr Field<Access::RW, flash::Latency> flash_acr_latency{0x40023C00u, 0x00000007u, 0};
+constexpr Field<Access::RW, flash::Latency> flash_acr_latency{0x40023C00u, 0x0000000Fu, 0};
 constexpr Field<Access::RW, flash::Prften, true> flash_acr_prften{0x40023C00u, 0x00000100u, 8};
 constexpr Field<Access::RW, flash::Icen, true> flash_acr_icen{0x40023C00u, 0x00000200u, 9};
 constexpr Field<Access::RW, flash::Dcen, true> flash_acr_dcen{0x40023C00u, 0x00000400u, 10};

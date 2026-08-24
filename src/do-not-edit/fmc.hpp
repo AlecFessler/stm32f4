@@ -214,7 +214,89 @@ enum class Wren : uint32_t {
 };
 } // namespace fmc
 
-// FmcRegs omitted: overlapping registers
+// The BASE and Regs struct are defined entirely for debug utility.
+constexpr uintptr_t FMC_BASE = 0xA0000000;
+struct FmcRegs {
+    volatile uint32_t bcr1; // SRAM/NOR-Flash chip-select control register 1
+    volatile uint32_t btr1; // SRAM/NOR-Flash chip-select timing register 1
+    volatile uint32_t bcr2; // SRAM/NOR-Flash chip-select control register 2
+    volatile uint32_t btr2; // SRAM/NOR-Flash chip-select timing register 2
+    volatile uint32_t bcr3; // SRAM/NOR-Flash chip-select control register 3
+    volatile uint32_t btr3; // SRAM/NOR-Flash chip-select timing register 3
+    volatile uint32_t bcr4; // SRAM/NOR-Flash chip-select control register 4
+    volatile uint32_t btr4; // SRAM/NOR-Flash chip-select timing register 4
+    uint32_t _reserved0[16];
+    volatile uint32_t pcr2; // PC Card/NAND Flash control register 2
+    volatile uint32_t sr2; // FIFO status and interrupt register 2
+    volatile uint32_t pmem2; // Common memory space timing register 2
+    volatile uint32_t patt2; // Attribute memory space timing register 2
+    uint32_t _reserved1[1];
+    volatile uint32_t eccr2; // ECC result register 2
+    uint32_t _reserved2[2];
+    volatile uint32_t pcr3; // PC Card/NAND Flash control register 3
+    volatile uint32_t sr3; // FIFO status and interrupt register 3
+    volatile uint32_t pmem3; // Common memory space timing register 3
+    volatile uint32_t patt3; // Attribute memory space timing register 3
+    uint32_t _reserved3[1];
+    volatile uint32_t eccr3; // ECC result register 3
+    uint32_t _reserved4[2];
+    volatile uint32_t pcr4; // PC Card/NAND Flash control register 4
+    volatile uint32_t sr4; // FIFO status and interrupt register 4
+    volatile uint32_t pmem4; // Common memory space timing register 4
+    volatile uint32_t patt4; // Attribute memory space timing register 4
+    volatile uint32_t pio4; // I/O space timing register 4
+    uint32_t _reserved5[20];
+    volatile uint32_t bwtr1; // SRAM/NOR-Flash write timing registers 1
+    uint32_t _reserved6[1];
+    volatile uint32_t bwtr2; // SRAM/NOR-Flash write timing registers 2
+    uint32_t _reserved7[1];
+    volatile uint32_t bwtr3; // SRAM/NOR-Flash write timing registers 3
+    uint32_t _reserved8[1];
+    volatile uint32_t bwtr4; // SRAM/NOR-Flash write timing registers 4
+    uint32_t _reserved9[8];
+    volatile uint32_t sdcr1; // SDRAM Control Register 1
+    volatile uint32_t sdcr2; // SDRAM Control Register 2
+    volatile uint32_t sdtr1; // SDRAM Timing register 1
+    volatile uint32_t sdtr2; // SDRAM Timing register 2
+    volatile uint32_t sdcmr; // SDRAM Command Mode register
+    volatile uint32_t sdrtr; // SDRAM Refresh Timer register
+    volatile uint32_t sdsr; // SDRAM Status register
+};
+static_assert(offsetof(FmcRegs, bcr1) == 0);
+static_assert(offsetof(FmcRegs, btr1) == 4);
+static_assert(offsetof(FmcRegs, bcr2) == 8);
+static_assert(offsetof(FmcRegs, btr2) == 12);
+static_assert(offsetof(FmcRegs, bcr3) == 16);
+static_assert(offsetof(FmcRegs, btr3) == 20);
+static_assert(offsetof(FmcRegs, bcr4) == 24);
+static_assert(offsetof(FmcRegs, btr4) == 28);
+static_assert(offsetof(FmcRegs, pcr2) == 96);
+static_assert(offsetof(FmcRegs, sr2) == 100);
+static_assert(offsetof(FmcRegs, pmem2) == 104);
+static_assert(offsetof(FmcRegs, patt2) == 108);
+static_assert(offsetof(FmcRegs, eccr2) == 116);
+static_assert(offsetof(FmcRegs, pcr3) == 128);
+static_assert(offsetof(FmcRegs, sr3) == 132);
+static_assert(offsetof(FmcRegs, pmem3) == 136);
+static_assert(offsetof(FmcRegs, patt3) == 140);
+static_assert(offsetof(FmcRegs, eccr3) == 148);
+static_assert(offsetof(FmcRegs, pcr4) == 160);
+static_assert(offsetof(FmcRegs, sr4) == 164);
+static_assert(offsetof(FmcRegs, pmem4) == 168);
+static_assert(offsetof(FmcRegs, patt4) == 172);
+static_assert(offsetof(FmcRegs, pio4) == 176);
+static_assert(offsetof(FmcRegs, bwtr1) == 260);
+static_assert(offsetof(FmcRegs, bwtr2) == 268);
+static_assert(offsetof(FmcRegs, bwtr3) == 276);
+static_assert(offsetof(FmcRegs, bwtr4) == 284);
+static_assert(offsetof(FmcRegs, sdcr1) == 320);
+static_assert(offsetof(FmcRegs, sdcr2) == 324);
+static_assert(offsetof(FmcRegs, sdtr1) == 328);
+static_assert(offsetof(FmcRegs, sdtr2) == 332);
+static_assert(offsetof(FmcRegs, sdcmr) == 336);
+static_assert(offsetof(FmcRegs, sdrtr) == 340);
+static_assert(offsetof(FmcRegs, sdsr) == 344);
+
 constexpr Field<Access::RW> fmc_bcr1_cclken{0xA0000000u, 0x00100000u, 20, 0x00000000u, 0x00000080u};
 constexpr Field<Access::RW, fmc::Cburstrw> fmc_bcr1_cburstrw{0xA0000000u, 0x00080000u, 19, 0x00000000u, 0x00000080u};
 constexpr Field<Access::RW, fmc::Asyncwait> fmc_bcr1_asyncwait{0xA0000000u, 0x00008000u, 15, 0x00000000u, 0x00000080u};
@@ -380,24 +462,24 @@ constexpr Field<Access::RW> fmc_bwtr1_clkdiv{0xA0000104u, 0x00F00000u, 20, 0x000
 constexpr Field<Access::RW> fmc_bwtr1_datast{0xA0000104u, 0x0000FF00u, 8, 0x00000000u, 0x000F0000u};
 constexpr Field<Access::RW> fmc_bwtr1_addhld{0xA0000104u, 0x000000F0u, 4, 0x00000000u, 0x000F0000u};
 constexpr Field<Access::RW> fmc_bwtr1_addset{0xA0000104u, 0x0000000Fu, 0, 0x00000000u, 0x000F0000u};
-constexpr Field<Access::RW, fmc::Accmod> fmc_bwtr3_accmod{0xA0000104u, 0x30000000u, 28, 0x00000000u, 0x000F0000u};
-constexpr Field<Access::RW> fmc_bwtr3_datlat{0xA0000104u, 0x0F000000u, 24, 0x00000000u, 0x000F0000u};
-constexpr Field<Access::RW> fmc_bwtr3_clkdiv{0xA0000104u, 0x00F00000u, 20, 0x00000000u, 0x000F0000u};
-constexpr Field<Access::RW> fmc_bwtr3_datast{0xA0000104u, 0x0000FF00u, 8, 0x00000000u, 0x000F0000u};
-constexpr Field<Access::RW> fmc_bwtr3_addhld{0xA0000104u, 0x000000F0u, 4, 0x00000000u, 0x000F0000u};
-constexpr Field<Access::RW> fmc_bwtr3_addset{0xA0000104u, 0x0000000Fu, 0, 0x00000000u, 0x000F0000u};
 constexpr Field<Access::RW, fmc::Accmod> fmc_bwtr2_accmod{0xA000010Cu, 0x30000000u, 28, 0x00000000u, 0x000F0000u};
 constexpr Field<Access::RW> fmc_bwtr2_datlat{0xA000010Cu, 0x0F000000u, 24, 0x00000000u, 0x000F0000u};
 constexpr Field<Access::RW> fmc_bwtr2_clkdiv{0xA000010Cu, 0x00F00000u, 20, 0x00000000u, 0x000F0000u};
 constexpr Field<Access::RW> fmc_bwtr2_datast{0xA000010Cu, 0x0000FF00u, 8, 0x00000000u, 0x000F0000u};
 constexpr Field<Access::RW> fmc_bwtr2_addhld{0xA000010Cu, 0x000000F0u, 4, 0x00000000u, 0x000F0000u};
 constexpr Field<Access::RW> fmc_bwtr2_addset{0xA000010Cu, 0x0000000Fu, 0, 0x00000000u, 0x000F0000u};
-constexpr Field<Access::RW, fmc::Accmod> fmc_bwtr4_accmod{0xA000010Cu, 0x30000000u, 28, 0x00000000u, 0x000F0000u};
-constexpr Field<Access::RW> fmc_bwtr4_datlat{0xA000010Cu, 0x0F000000u, 24, 0x00000000u, 0x000F0000u};
-constexpr Field<Access::RW> fmc_bwtr4_clkdiv{0xA000010Cu, 0x00F00000u, 20, 0x00000000u, 0x000F0000u};
-constexpr Field<Access::RW> fmc_bwtr4_datast{0xA000010Cu, 0x0000FF00u, 8, 0x00000000u, 0x000F0000u};
-constexpr Field<Access::RW> fmc_bwtr4_addhld{0xA000010Cu, 0x000000F0u, 4, 0x00000000u, 0x000F0000u};
-constexpr Field<Access::RW> fmc_bwtr4_addset{0xA000010Cu, 0x0000000Fu, 0, 0x00000000u, 0x000F0000u};
+constexpr Field<Access::RW, fmc::Accmod> fmc_bwtr3_accmod{0xA0000114u, 0x30000000u, 28, 0x00000000u, 0x000F0000u};
+constexpr Field<Access::RW> fmc_bwtr3_datlat{0xA0000114u, 0x0F000000u, 24, 0x00000000u, 0x000F0000u};
+constexpr Field<Access::RW> fmc_bwtr3_clkdiv{0xA0000114u, 0x00F00000u, 20, 0x00000000u, 0x000F0000u};
+constexpr Field<Access::RW> fmc_bwtr3_datast{0xA0000114u, 0x0000FF00u, 8, 0x00000000u, 0x000F0000u};
+constexpr Field<Access::RW> fmc_bwtr3_addhld{0xA0000114u, 0x000000F0u, 4, 0x00000000u, 0x000F0000u};
+constexpr Field<Access::RW> fmc_bwtr3_addset{0xA0000114u, 0x0000000Fu, 0, 0x00000000u, 0x000F0000u};
+constexpr Field<Access::RW, fmc::Accmod> fmc_bwtr4_accmod{0xA000011Cu, 0x30000000u, 28, 0x00000000u, 0x000F0000u};
+constexpr Field<Access::RW> fmc_bwtr4_datlat{0xA000011Cu, 0x0F000000u, 24, 0x00000000u, 0x000F0000u};
+constexpr Field<Access::RW> fmc_bwtr4_clkdiv{0xA000011Cu, 0x00F00000u, 20, 0x00000000u, 0x000F0000u};
+constexpr Field<Access::RW> fmc_bwtr4_datast{0xA000011Cu, 0x0000FF00u, 8, 0x00000000u, 0x000F0000u};
+constexpr Field<Access::RW> fmc_bwtr4_addhld{0xA000011Cu, 0x000000F0u, 4, 0x00000000u, 0x000F0000u};
+constexpr Field<Access::RW> fmc_bwtr4_addset{0xA000011Cu, 0x0000000Fu, 0, 0x00000000u, 0x000F0000u};
 constexpr Field<Access::RW, fmc::Nc> fmc_sdcr1_nc{0xA0000140u, 0x00000003u, 0};
 constexpr Field<Access::RW, fmc::Nr> fmc_sdcr1_nr{0xA0000140u, 0x0000000Cu, 2};
 constexpr Field<Access::RW, fmc::Mwid> fmc_sdcr1_mwid{0xA0000140u, 0x00000030u, 4};

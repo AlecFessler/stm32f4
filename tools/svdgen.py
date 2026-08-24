@@ -315,35 +315,191 @@ def load_merges(enumdir, paths):
     return merges
 
 
-def load_field_merges(path):
-    """peripheral glob -> register glob -> {merged name: [field globs]}
+def load_modifications(enumdir, paths):
+    """-> [(register_glob, field_glob, {attr: value})] from the vendored yaml.
 
-    The local half of the merge table, for what the vendored enums do not
-    declare. A bare string would glob as a sequence of one-character patterns,
-    so insist on a list rather than accepting one silently.
+    A fields/*.yaml corrects the fields of the registers it describes, the way
+    crc_idr_8bit.yaml narrows IDR to the 8 bits RM0090 gives it.
+    """
+    modifications = []
+    for document in yaml_documents(enumdir, paths):
+        for register_glob, register_spec in registers_in(document):
+            for field_glob, attrs in (register_spec.get("_modify") or {}).items():
+                modifications.append((register_glob, field_glob, attrs))
+    return modifications
+
+
+LOCAL_KINDS = ("merge", "modify")
+
+
+def load_svd_overrides(path):
+    """peripheral glob -> `modify`, or -> register glob -> {kind: payload}
+
+    The local corrections, for what the vendored enums do not carry. Rejects
+    an unknown kind rather than ignoring it, the same reason
+    load_access_overrides does: a misspelling would leave the correction
+    silently unapplied with the table still looking right.
     """
     table = load_yaml(path)
-    for peripheral_glob, registers in table.items():
-        for register_glob, entry in registers.items():
-            for name, globs in entry.items():
-                if not isinstance(globs, list):
+    for peripheral_glob, entry in table.items():
+        for key, value in entry.items():
+            if key == "modify":
+                continue
+            for kind, payload in value.items():
+                if kind not in LOCAL_KINDS:
                     raise ValueError(
-                        f"{path.name}: {peripheral_glob}.{register_glob}.{name} "
-                        f"is {type(globs).__name__}, expected a list of globs"
+                        f"{path.name}: {peripheral_glob}.{key} lists '{kind}', "
+                        f"which is not one of {', '.join(LOCAL_KINDS)}"
                     )
+                if kind == "merge":
+                    for name, globs in payload.items():
+                        if not isinstance(globs, list):
+                            raise ValueError(
+                                f"{path.name}: {peripheral_glob}.{key}.merge."
+                                f"{name} is {type(globs).__name__}, expected a "
+                                f"list of globs"
+                            )
     return table
 
 
 def peripheral_merges(vendored, local, peripheral_name):
     """One flat merge list for a peripheral, from both tables."""
     merges = list(vendored)
-    for peripheral_glob, registers in local.items():
+    for peripheral_glob, entry in local.items():
         if not fnmatch.fnmatchcase(peripheral_name, peripheral_glob):
             continue
-        for register_glob, entry in registers.items():
-            for name, globs in entry.items():
+        for register_glob, kinds in entry.items():
+            if register_glob == "modify":
+                continue
+            for name, globs in (kinds.get("merge") or {}).items():
                 merges.append((register_glob, name, list(globs)))
     return merges
+
+
+def peripheral_modifications(vendored, local, peripheral_name):
+    """-> ({register glob: {attr: value}}, [(register glob, field glob, attrs)])
+
+    Register-level changes first, then field-level ones, from both tables. The
+    vendored yaml spells the key _modify and the local one spells it modify,
+    which is the only difference between them.
+    """
+    registers, fields = {}, []
+    for table, key in ((vendored, "_modify"), (local, "modify")):
+        for peripheral_glob, entry in table.items():
+            if peripheral_glob.startswith("_") or not isinstance(entry, dict):
+                continue
+            if not fnmatch.fnmatchcase(peripheral_name, peripheral_glob):
+                continue
+            registers.update(entry.get(key) or {})
+            for register_glob, spec in entry.items():
+                if register_glob == key or not isinstance(spec, dict):
+                    continue
+                for field_glob, attrs in (spec.get(key) or {}).items():
+                    fields.append((register_glob, field_glob, attrs))
+    return registers, fields
+
+
+# What an SVD element will accept a correction for. Anything else is a typo,
+# or a directive shape svdgen has not been taught.
+REGISTER_ATTRS = (
+    "name",
+    "displayName",
+    "description",
+    "addressOffset",
+    "alternateRegister",
+    "access",
+    "resetValue",
+    "size",
+)
+FIELD_ATTRS = ("name", "description", "bitOffset", "bitWidth", "access")
+
+
+def apply_attributes(element, attrs, allowed, where):
+    """Set or drop the child elements a _modify entry names.
+
+    An empty value removes the child: alternateRegister: "" is how the
+    vendored yaml unlinks a register whose address was wrong in the first
+    place. Numbers go back as hex, because reset_value reads a bare decimal
+    string as hex and would misread `276`.
+    """
+    for attr, value in attrs.items():
+        if attr not in allowed:
+            raise ValueError(f"{where}: cannot modify '{attr}'")
+        child = element.find(attr)
+        if value == "" or value is None:
+            if child is not None:
+                element.remove(child)
+            continue
+        if child is None:
+            child = ET.SubElement(element, attr)
+        child.text = f"0x{value:X}" if isinstance(value, int) else str(value)
+
+
+# A _modify whose target this SVD does not have. The two RCC ones rename a
+# field an unvendored patches/rcc/ file would have added first, so the rename
+# lands on nothing and RCC_APB1ENR has no UART7EN or UART8EN at all. The FMC
+# one is already applied: this revision spells the field SDCLK to begin with.
+UNMATCHED_MODIFICATIONS = {
+    ("APB1ENR", "UART7ENR"): "the field is added by an unvendored rcc patch",
+    ("APB1ENR", "UART8ENR"): "the field is added by an unvendored rcc patch",
+    ("SDCR2", "CLK"): "this SVD revision already names the field SDCLK",
+}
+
+
+def apply_modifications(peripheral, registers, fields):
+    """Correct the SVD before anything reads it, and report what it corrected.
+
+    The vendored yaml carries these because the vendor file is wrong: FMC
+    gives BWTR3 and BWTR4 the addresses of BWTR1 and BWTR2, and nine fields
+    keep a name their enum was written against. Dropping them silently is
+    what left rcc::Pllon and spi::Tifrfe attached to nothing.
+    """
+    matched = set()
+    for register in peripheral.findall("registers/register"):
+        register_name = register.findtext("name", "MISSING")
+        for register_glob, attrs in registers.items():
+            if fnmatch.fnmatchcase(register_name, register_glob):
+                apply_attributes(
+                    register, attrs, REGISTER_ATTRS, f"register {register_name}"
+                )
+                matched.add((None, register_glob))
+        # a rename above is what the field globs below are matched against
+        register_name = register.findtext("name", "MISSING")
+        for register_glob, field_glob, attrs in fields:
+            if not fnmatch.fnmatchcase(register_name, register_glob):
+                continue
+            for field in register.findall("fields/field"):
+                field_name = field.findtext("name", "MISSING")
+                if any(
+                    fnmatch.fnmatchcase(field_name, g.strip().lstrip("?~"))
+                    for g in field_glob.split(",")
+                ):
+                    apply_attributes(
+                        field,
+                        attrs,
+                        FIELD_ATTRS,
+                        f"field {register_name}.{field_name}",
+                    )
+                    matched.add((register_glob, field_glob))
+    return matched
+
+
+def check_modifications_landed(requested, matched):
+    """A correction that matches nothing is the failure it was written to fix.
+
+    Nine of the eleven in the vendored yaml rename a field whose enum is
+    already written against the new name, so a miss here is what leaves that
+    enum typing nothing.
+    """
+    for register_glob, field_glob in sorted(requested - matched, key=str):
+        target = (register_glob, field_glob)
+        if target in UNMATCHED_MODIFICATIONS:
+            continue
+        where = field_glob if register_glob is None else f"{register_glob}.{field_glob}"
+        raise ValueError(
+            f"modify '{where}' matches nothing. Correct the glob, or name it "
+            f"in UNMATCHED_MODIFICATIONS with why the target is absent."
+        )
 
 
 def merge_register_fields(register, merges):
@@ -399,6 +555,111 @@ def merge_register_fields(register, merges):
         for field in members:
             if field is not merged:
                 container.remove(field)
+
+
+# Directives svdgen acts on, and the ones it knowingly leaves alone. A
+# directive in neither set stops the run: _merge and _modify both sat in this
+# yaml being silently dropped, and the point of the split is that a third one
+# cannot arrive the same way.
+HANDLED_DIRECTIVES = {
+    "_include",  # yaml_documents, load_enum_files
+    "_modify",   # apply_modifications, and peripheral renames in load_enum_files
+    "_merge",    # merge_register_fields
+    "_name",     # enum_namespaces
+    "_read",     # collect_enum_values
+    "_write",    # collect_enum_values
+    "_svd",      # names the file already being parsed
+}
+SKIPPED_DIRECTIVES = {
+    "_W1C": "clear-on-write access, carried by hand in access_overrides.yaml",
+    "_W0C": "clear-on-write access, carried by hand in access_overrides.yaml",
+    "_add": "PWR_CR.ADCDC1, a field the SVD leaves out",
+    "_delete": "TIM9_CR2, a register this part does not have",
+    "_derive": "EXTICR field derivation, and UART7/UART8 from UART4",
+    "_rebase": "which peripheral of a family the others derive from",
+    "_strip": "the FS_ and OTG_HS_ prefixes on OTG register names",
+}
+
+
+def validate_directives(document, name):
+    """Refuse a directive that is neither implemented nor knowingly skipped."""
+    def visit(node):
+        if not isinstance(node, dict):
+            return
+        for key, value in node.items():
+            if isinstance(key, str) and key.startswith("_"):
+                if key not in HANDLED_DIRECTIVES and key not in SKIPPED_DIRECTIVES:
+                    raise ValueError(
+                        f"{name}: '{key}' is a directive svdgen does not "
+                        f"implement. Add it to HANDLED_DIRECTIVES once it is, "
+                        f"or to SKIPPED_DIRECTIVES with what honouring it "
+                        f"would change."
+                    )
+            visit(value)
+
+    visit(document)
+
+
+def check_enum_fits(values, widths, where):
+    """Every member of an enum has to survive the store into its field.
+
+    write() masks with field_mask, so a member wider than the field loses its
+    high bits and silently means something else. FLASH_ACR.LATENCY is the one
+    that matters: 3 bits in the SVD, and flash::Latency names ws8 through ws15.
+    """
+    for enum_name, members in values.items():
+        width = widths.get(enum_name)
+        if width is None:
+            continue
+        for member, value in members.items():
+            if value >= 0 and value >= (1 << width):
+                raise ValueError(
+                    f"{where}: {enum_name}::{member} = {value} does not fit "
+                    f"the {width} bit field it types"
+                )
+
+
+def check_address_collisions(peripheral_name, registers):
+    """Two registers at one address have to say so.
+
+    The SVD marks the real cases, TIM's CCMR in output and input mode, with
+    alternateRegister. Where it does not, the address is usually the thing
+    that is wrong: FMC gave BWTR3 the address of BWTR1 and called that an
+    alternate view.
+    """
+    by_offset = defaultdict(list)
+    for register in registers:
+        by_offset[int(register.findtext("addressOffset", "0"), 0)].append(register)
+    for offset, sharing in by_offset.items():
+        if len(sharing) < 2:
+            continue
+        if not any(r.findtext("alternateRegister") for r in sharing):
+            names = ", ".join(r.findtext("name", "MISSING") for r in sharing)
+            raise ValueError(
+                f"{peripheral_name} 0x{offset:03X}: {names} share an address "
+                f"and none names the other as an alternateRegister"
+            )
+
+
+def check_register_globs(peripheral_name, registers, enum_globs):
+    """A register glob that matches nothing means an enum reaches no field.
+
+    svdtools writes ?~ on the ones that are meant to miss, so TIM9 can be
+    handed the same yaml as TIM1 without owning a CR2. Anything else is a name
+    the SVD spells differently, which is how SYSCFG_MEMRMP hid.
+    """
+    names = [register.findtext("name", "MISSING") for register in registers]
+    for register_glob, _, enum_name in enum_globs:
+        globs = [g.strip() for g in register_glob.split(",")]
+        if any(g.startswith("?~") for g in globs):
+            continue
+        if not any(
+            fnmatch.fnmatchcase(name, g) for g in globs for name in names
+        ):
+            raise ValueError(
+                f"{peripheral_name}: enum {enum_name} is keyed to register "
+                f"'{register_glob}', which matches no register here"
+            )
 
 
 def text(element, tag):
@@ -889,13 +1150,16 @@ def peripheral_header(
     if values_include:
         lines.append(f'#include "{values_include}"\n')
 
+    registers = sorted_registers(src)
+    check_register_globs(peripheral_name, registers, enum_globs)
+
     # must precede the Field definitions, which name these types
     if enums:
-        resolved = resolve_open_encodings(enums, enum_widths(src, enum_globs))
+        widths = enum_widths(src, enum_globs)
+        resolved = resolve_open_encodings(enums, widths)
+        check_enum_fits(resolved, widths, peripheral_name)
         lines.extend(enum_lines(peripheral_name.lower(), resolved))
         lines.append("")
-
-    registers = sorted_registers(src)
 
     overlay, asserts, ok = struct_lines(peripheral_name, base, registers)
     if ok:
@@ -982,9 +1246,10 @@ def main():
     clear_table = load_access_overrides(
         Path(__file__).resolve().parent / "access_overrides.yaml"
     )
-    merge_table = load_field_merges(
-        Path(__file__).resolve().parent / "field_merges.yaml"
+    overrides = load_svd_overrides(
+        Path(__file__).resolve().parent / "svd_overrides.yaml"
     )
+    device = load_yaml(enumdir / "stm32f429.yaml")
 
     derivation_map = build_derivation_map(peripherals)
     groups = build_groups(peripherals, derivation_map)
@@ -993,6 +1258,7 @@ def main():
     uniform = uniform_groups(groups, enum_files)
     enum_cache = {}
     merge_cache = {}
+    modification_cache = {}
 
     def enums_for(paths):
         if paths not in enum_cache:
@@ -1004,24 +1270,43 @@ def main():
             merge_cache[paths] = load_merges(enumdir, paths)
         return merge_cache[paths]
 
-    # Split fields are rejoined before anything reads a register. resolve()
-    # hands every peripheral of a derived family the same element, so group by
-    # it: mutate once, and let each name in the family contribute its globs.
+    def modifications_for(paths):
+        if paths not in modification_cache:
+            modification_cache[paths] = load_modifications(enumdir, paths)
+        return modification_cache[paths]
+
+    validate_directives(device, "stm32f429.yaml")
+    for rel in sorted({path for paths in enum_files.values() for path in paths}):
+        validate_directives(load_yaml(enumdir / rel), rel)
+
+    # The SVD is corrected before anything reads it: attributes first, since a
+    # rename decides what the merge globs below match. resolve() hands every
+    # peripheral of a derived family the same element, so group by it and
+    # mutate once, letting each name in the family contribute its entries.
     by_source = defaultdict(list)
     for peripheral in peripherals:
         by_source[id(resolve(peripheral, derivation_map))].append(peripheral)
 
+    requested, landed = set(), set()
     for family in by_source.values():
-        merges = []
+        src = resolve(family[0], derivation_map)
+        registers, fields, merges = {}, [], []
         for peripheral in family:
             name = peripheral.findtext("name", "MISSING")
-            merges += peripheral_merges(
-                merges_for(enum_files[name]), merge_table, name
+            peripheral_registers, peripheral_fields = peripheral_modifications(
+                device, overrides, name
             )
-        for register in resolve(family[0], derivation_map).findall(
-            "registers/register"
-        ):
+            registers.update(peripheral_registers)
+            fields += peripheral_fields + modifications_for(enum_files[name])
+            merges += peripheral_merges(merges_for(enum_files[name]), overrides, name)
+        requested |= {(None, glob) for glob in registers}
+        requested |= {(reg, field) for reg, field, _ in fields}
+        landed |= apply_modifications(src, registers, fields)
+        for register in src.findall("registers/register"):
             merge_register_fields(register, merges)
+        check_address_collisions(family[0].findtext("name", "MISSING"),
+                                 src.findall("registers/register"))
+    check_modifications_landed(requested, landed)
 
     for peripheral in peripherals:
         peripheral_name = peripheral.findtext("name", "MISSING")
@@ -1057,7 +1342,9 @@ def main():
         values, globs = enums_for(enum_files[members[0]])
         if group_name in uniform and values:
             member_src = resolve(derivation_map[members[0]], derivation_map)
-            resolved = resolve_open_encodings(values, enum_widths(member_src, globs))
+            widths = enum_widths(member_src, globs)
+            resolved = resolve_open_encodings(values, widths)
+            check_enum_fits(resolved, widths, group_name)
             lines = values_header(group_name, resolved)
             (outdir / group_name.lower() / "values.hpp").write_text(
                 "\n".join(lines) + "\n"

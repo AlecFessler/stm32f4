@@ -51,7 +51,7 @@ enum class Swp_fmc : uint32_t {
 // The BASE and Regs struct are defined entirely for debug utility.
 constexpr uintptr_t SYSCFG_BASE = 0x40013800;
 struct SyscfgRegs {
-    volatile uint32_t memrm; // memory remap register
+    volatile uint32_t memrmp; // memory remap register
     volatile uint32_t pmc; // peripheral mode configuration register
     volatile uint32_t exticr1; // external interrupt configuration register 1
     volatile uint32_t exticr2; // external interrupt configuration register 2
@@ -60,7 +60,7 @@ struct SyscfgRegs {
     uint32_t _reserved0[2];
     volatile uint32_t cmpcr; // Compensation cell control register
 };
-static_assert(offsetof(SyscfgRegs, memrm) == 0);
+static_assert(offsetof(SyscfgRegs, memrmp) == 0);
 static_assert(offsetof(SyscfgRegs, pmc) == 4);
 static_assert(offsetof(SyscfgRegs, exticr1) == 8);
 static_assert(offsetof(SyscfgRegs, exticr2) == 12);
@@ -68,9 +68,9 @@ static_assert(offsetof(SyscfgRegs, exticr3) == 16);
 static_assert(offsetof(SyscfgRegs, exticr4) == 20);
 static_assert(offsetof(SyscfgRegs, cmpcr) == 32);
 
-constexpr Field<Access::RW> syscfg_memrm_mem_mode{0x40013800u, 0x00000007u, 0};
-constexpr Field<Access::RW, uint32_t, true> syscfg_memrm_fb_mode{0x40013800u, 0x00000100u, 8};
-constexpr Field<Access::RW> syscfg_memrm_swp_fmc{0x40013800u, 0x00000C00u, 10};
+constexpr Field<Access::RW, syscfg::Mem_mode> syscfg_memrmp_mem_mode{0x40013800u, 0x00000007u, 0};
+constexpr Field<Access::RW, uint32_t, true> syscfg_memrmp_fb_mode{0x40013800u, 0x00000100u, 8};
+constexpr Field<Access::RW, syscfg::Swp_fmc> syscfg_memrmp_swp_fmc{0x40013800u, 0x00000C00u, 10};
 constexpr Field<Access::RW, syscfg::Mii_rmii_sel, true> syscfg_pmc_mii_rmii_sel{0x40013804u, 0x00800000u, 23};
 constexpr Field<Access::RW, uint32_t, true> syscfg_pmc_adc1dc2{0x40013804u, 0x00010000u, 16};
 constexpr Field<Access::RW, uint32_t, true> syscfg_pmc_adc2dc2{0x40013804u, 0x00020000u, 17};

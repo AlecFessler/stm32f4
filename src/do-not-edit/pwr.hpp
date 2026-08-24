@@ -122,8 +122,8 @@ constexpr Field<Access::RW, pwr::Pvde> pwr_cr_pvde{0x40007000u, 0x00000010u, 4, 
 constexpr Field<Access::RW> pwr_cr_pls{0x40007000u, 0x000000E0u, 5, 0x0000000Cu, 0x00000000u};
 constexpr Field<Access::RW, pwr::Dbp> pwr_cr_dbp{0x40007000u, 0x00000100u, 8, 0x0000000Cu, 0x00000000u};
 constexpr Field<Access::RW, pwr::Fpds> pwr_cr_fpds{0x40007000u, 0x00000200u, 9, 0x0000000Cu, 0x00000000u};
-constexpr Field<Access::RW> pwr_cr_lplvds{0x40007000u, 0x00000400u, 10, 0x0000000Cu, 0x00000000u};
-constexpr Field<Access::RW> pwr_cr_mrlvds{0x40007000u, 0x00000800u, 11, 0x0000000Cu, 0x00000000u};
+constexpr Field<Access::RW, pwr::Lpuds> pwr_cr_lpuds{0x40007000u, 0x00000400u, 10, 0x0000000Cu, 0x00000000u};
+constexpr Field<Access::RW, pwr::Mruds> pwr_cr_mruds{0x40007000u, 0x00000800u, 11, 0x0000000Cu, 0x00000000u};
 constexpr Field<Access::RW, pwr::Vos> pwr_cr_vos{0x40007000u, 0x0000C000u, 14, 0x0000000Cu, 0x00000000u};
 constexpr Field<Access::RW, pwr::Oden> pwr_cr_oden{0x40007000u, 0x00010000u, 16, 0x0000000Cu, 0x00000000u};
 constexpr Field<Access::RW, pwr::Odswen> pwr_cr_odswen{0x40007000u, 0x00020000u, 17, 0x0000000Cu, 0x00000000u};

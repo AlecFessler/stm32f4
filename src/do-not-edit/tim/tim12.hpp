@@ -207,10 +207,10 @@ constexpr Field<Access::RW, tim12::Ocm> tim12_ccmr1_output_oc1m{0x40001818u, 0x0
 constexpr Field<Access::RW, tim12::Ocpe, true> tim12_ccmr1_output_oc1pe{0x40001818u, 0x00000008u, 3};
 constexpr Field<Access::RW, tim12::Ocfe, true> tim12_ccmr1_output_oc1fe{0x40001818u, 0x00000004u, 2};
 constexpr Field<Access::RW, tim12::Ccs> tim12_ccmr1_output_cc1s{0x40001818u, 0x00000003u, 0};
-constexpr Field<Access::RW, tim12::Icfilter> tim12_ccmr1_input_ic2f{0x40001818u, 0x00007000u, 12};
+constexpr Field<Access::RW, tim12::Icfilter> tim12_ccmr1_input_ic2f{0x40001818u, 0x0000F000u, 12};
 constexpr Field<Access::RW> tim12_ccmr1_input_ic2pcs{0x40001818u, 0x00000C00u, 10};
 constexpr Field<Access::RW, tim12::Cc2s> tim12_ccmr1_input_cc2s{0x40001818u, 0x00000300u, 8};
-constexpr Field<Access::RW, tim12::Icfilter> tim12_ccmr1_input_ic1f{0x40001818u, 0x00000070u, 4};
+constexpr Field<Access::RW, tim12::Icfilter> tim12_ccmr1_input_ic1f{0x40001818u, 0x000000F0u, 4};
 constexpr Field<Access::RW> tim12_ccmr1_input_icpcs{0x40001818u, 0x0000000Cu, 2};
 constexpr Field<Access::RW, tim12::Cc1s> tim12_ccmr1_input_cc1s{0x40001818u, 0x00000003u, 0};
 constexpr Field<Access::RW, uint32_t, true> tim12_ccer_cc2np{0x40001820u, 0x00000080u, 7};
