@@ -230,14 +230,9 @@ def collect_enum_values(spec):
     return values
 
 
-def load_enum_values(enumdir, paths):
-    """-> ({enum_name: {member: value}}, [(register_glob, field_glob, enum_name)])
-
-    The second list is what lets a Field be typed: at emit time each field's
-    real register and field name is matched against these globs.
-    """
-    out = {}
-    globs = []
+def yaml_documents(enumdir, paths):
+    """Every yaml reachable from paths, an include before whatever includes it,
+    each one visited once."""
     seen = set()
 
     def visit(rel):
@@ -248,11 +243,32 @@ def load_enum_values(enumdir, paths):
         includes = document.get("_include", [])
         includes = [includes] if isinstance(includes, str) else includes
         for include in includes:
-            visit(str(Path(rel).parent / include))
+            yield from visit(str(Path(rel).parent / include))
+        yield document
 
-        for register_glob, register_spec in document.items():
-            if register_glob.startswith("_") or not isinstance(register_spec, dict):
-                continue
+    for path in sorted(paths):
+        yield from visit(path)
+
+
+def registers_in(document):
+    """The (register glob, spec) pairs of a yaml, skipping its directives."""
+    return [
+        (glob, spec)
+        for glob, spec in document.items()
+        if not glob.startswith("_") and isinstance(spec, dict)
+    ]
+
+
+def load_enum_values(enumdir, paths):
+    """-> ({enum_name: {member: value}}, [(register_glob, field_glob, enum_name)])
+
+    The second list is what lets a Field be typed: at emit time each field's
+    real register and field name is matched against these globs.
+    """
+    out = {}
+    globs = []
+    for document in yaml_documents(enumdir, paths):
+        for register_glob, register_spec in registers_in(document):
             for field_glob, spec in register_spec.items():
                 if field_glob.startswith("_"):
                     continue
@@ -265,11 +281,124 @@ def load_enum_values(enumdir, paths):
                         continue
                     out[namespace] = values
                     globs.append((register_glob, field_glob, namespace))
-
-    for path in sorted(paths):
-        visit(path)
-
     return out, globs
+
+
+def merge_name(glob):
+    """PLLM* -> PLLM, the same shaping enum_namespaces does to name a type."""
+    return re.sub(r"[^A-Za-z0-9_]", "", glob)
+
+
+def load_merges(enumdir, paths):
+    """-> [(register_glob, merged_name, [field globs])] from the vendored yaml.
+
+    _merge marks a field the SVD split into one entry per bit. enums/README.md
+    documents three shapes: a bare glob, a list of them, or a mapping from the
+    merged name to a comma-separated list of them.
+    """
+    merges = []
+    for document in yaml_documents(enumdir, paths):
+        for register_glob, register_spec in registers_in(document):
+            spec = register_spec.get("_merge")
+            if spec is None:
+                continue
+            if isinstance(spec, str):
+                spec = [spec]
+            if isinstance(spec, dict):
+                named = list(spec.items())
+            else:
+                named = [(merge_name(glob), glob) for glob in spec]
+            for name, globs in named:
+                if isinstance(globs, str):
+                    globs = globs.split(",")
+                merges.append((register_glob, name, [str(g).strip() for g in globs]))
+    return merges
+
+
+def load_field_merges(path):
+    """peripheral glob -> register glob -> {merged name: [field globs]}
+
+    The local half of the merge table, for what the vendored enums do not
+    declare. A bare string would glob as a sequence of one-character patterns,
+    so insist on a list rather than accepting one silently.
+    """
+    table = load_yaml(path)
+    for peripheral_glob, registers in table.items():
+        for register_glob, entry in registers.items():
+            for name, globs in entry.items():
+                if not isinstance(globs, list):
+                    raise ValueError(
+                        f"{path.name}: {peripheral_glob}.{register_glob}.{name} "
+                        f"is {type(globs).__name__}, expected a list of globs"
+                    )
+    return table
+
+
+def peripheral_merges(vendored, local, peripheral_name):
+    """One flat merge list for a peripheral, from both tables."""
+    merges = list(vendored)
+    for peripheral_glob, registers in local.items():
+        if not fnmatch.fnmatchcase(peripheral_name, peripheral_glob):
+            continue
+        for register_glob, entry in registers.items():
+            for name, globs in entry.items():
+                merges.append((register_glob, name, list(globs)))
+    return merges
+
+
+def merge_register_fields(register, merges):
+    """Replace each split family with the one field it really is.
+
+    The SVD gives PLLM as PLLM0..PLLM5, six one-bit fields, where RM0090
+    documents one 6-bit PLLM. Rewriting the lowest member to span the whole
+    range and dropping the rest happens before anything reads the register, so
+    the array grouping, the masks and the enum matching all see one field.
+
+    A merge that is not contiguous, overlaps itself, or spans two accesses is
+    a mistake in the table rather than something to paper over.
+    """
+    container = register.find("fields")
+    if container is None:
+        return
+    register_name = register.findtext("name", "MISSING")
+    for register_glob, name, field_globs in merges:
+        if not fnmatch.fnmatchcase(register_name, register_glob):
+            continue
+        members = [
+            field
+            for field in container.findall("field")
+            if any(
+                fnmatch.fnmatchcase(field.findtext("name", ""), glob)
+                for glob in field_globs
+            )
+        ]
+        # a merge already applied leaves one field behind, and every table is
+        # consulted for every peripheral sharing the registers
+        if len(members) < 2:
+            continue
+
+        mask = 0
+        for field in members:
+            member_mask = field_mask(field)[0]
+            if member_mask & mask:
+                raise ValueError(f"{register_name}.{name}: members overlap")
+            mask |= member_mask
+        shift = (mask & -mask).bit_length() - 1
+        width = mask.bit_length() - shift
+        if mask != ((1 << width) - 1) << shift:
+            raise ValueError(f"{register_name}.{name}: bits are not contiguous")
+
+        accesses = {field.findtext("access") for field in members}
+        if len(accesses) > 1:
+            raise ValueError(f"{register_name}.{name}: members disagree on access")
+
+        merged = min(members, key=lambda field: field_mask(field)[1])
+        merged.find("name").text = name
+        merged.find("bitOffset").text = str(shift)
+        merged.find("bitWidth").text = str(width)
+        for field in members:
+            if field is not merged:
+                container.remove(field)
 
 
 def text(element, tag):
@@ -853,6 +982,9 @@ def main():
     clear_table = load_access_overrides(
         Path(__file__).resolve().parent / "access_overrides.yaml"
     )
+    merge_table = load_field_merges(
+        Path(__file__).resolve().parent / "field_merges.yaml"
+    )
 
     derivation_map = build_derivation_map(peripherals)
     groups = build_groups(peripherals, derivation_map)
@@ -860,11 +992,36 @@ def main():
     enum_files = load_enum_files(enumdir, peripherals, derivation_map)
     uniform = uniform_groups(groups, enum_files)
     enum_cache = {}
+    merge_cache = {}
 
     def enums_for(paths):
         if paths not in enum_cache:
             enum_cache[paths] = load_enum_values(enumdir, paths)
         return enum_cache[paths]
+
+    def merges_for(paths):
+        if paths not in merge_cache:
+            merge_cache[paths] = load_merges(enumdir, paths)
+        return merge_cache[paths]
+
+    # Split fields are rejoined before anything reads a register. resolve()
+    # hands every peripheral of a derived family the same element, so group by
+    # it: mutate once, and let each name in the family contribute its globs.
+    by_source = defaultdict(list)
+    for peripheral in peripherals:
+        by_source[id(resolve(peripheral, derivation_map))].append(peripheral)
+
+    for family in by_source.values():
+        merges = []
+        for peripheral in family:
+            name = peripheral.findtext("name", "MISSING")
+            merges += peripheral_merges(
+                merges_for(enum_files[name]), merge_table, name
+            )
+        for register in resolve(family[0], derivation_map).findall(
+            "registers/register"
+        ):
+            merge_register_fields(register, merges)
 
     for peripheral in peripherals:
         peripheral_name = peripheral.findtext("name", "MISSING")

@@ -57,9 +57,7 @@ constexpr Field<Access::RW, i2c::Itevten, true> i2c3_cr2_itevten{0x40005C04u, 0x
 constexpr Field<Access::RW, i2c::Iterren, true> i2c3_cr2_iterren{0x40005C04u, 0x00000100u, 8};
 constexpr Field<Access::RW> i2c3_cr2_freq{0x40005C04u, 0x0000003Fu, 0};
 constexpr Field<Access::RW, i2c::Addmode, true> i2c3_oar1_addmode{0x40005C08u, 0x00008000u, 15};
-constexpr Field<Access::RW> i2c3_oar1_add10{0x40005C08u, 0x00000300u, 8};
-constexpr Field<Access::RW> i2c3_oar1_add7{0x40005C08u, 0x000000FEu, 1};
-constexpr Field<Access::RW, uint32_t, true> i2c3_oar1_add0{0x40005C08u, 0x00000001u, 0};
+constexpr Field<Access::RW> i2c3_oar1_add{0x40005C08u, 0x000003FFu, 0};
 constexpr Field<Access::RW, i2c::Endual, true> i2c3_oar2_endual{0x40005C0Cu, 0x00000001u, 0};
 constexpr Field<Access::RW> i2c3_oar2_add2{0x40005C0Cu, 0x000000FEu, 1};
 constexpr Field<Access::RW, uint32_t, false, false> i2c3_dr_dr{0x40005C10u, 0x000000FFu, 0};

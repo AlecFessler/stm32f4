@@ -2,13 +2,14 @@
 
 ## svdgen.py
 
-Generates `src/do-not-edit/` from three inputs:
+Generates `src/do-not-edit/` from four inputs:
 
 | | |
 |---|---|
 | `svd/STM32F429.svd` | registers, fields, offsets, access |
 | `enums/` | symbolic field values, vendored from stm32-rs |
 | `access_overrides.yaml` | the access the SVD cannot express |
+| `field_merges.yaml` | fields the SVD splits that the vendored enums miss |
 
 ```
 make regen         # run the generator
@@ -123,6 +124,53 @@ integer, there are >= 4 of them, and the indices run contiguously from 0.
 
 Elements are emitted in index order, not document order: the SVD lists fields
 high-to-low.
+
+### Field merges
+
+Some of those families are not families. The SVD gives `RCC_PLLCFGR.PLLM` as
+`PLLM0`..`PLLM5`, six one-bit fields, where RM0090 documents one 6-bit `PLLM`.
+Grouped as an array it costs a store per bit, `pllm[3]` means nothing, and
+`rcc::Pllm` has no field to attach to. Under four members and they do not even
+group: `SW0` and `SW1` were two loose scalars.
+
+Nothing structural separates the two cases. `GPIO_BSRR.BS0`..`BS15` are also
+one bit each and also contiguous, and there `bs[n]` is exactly right. So it
+takes a table.
+
+The vendored enums carry `_merge` directives for this and svdgen reads them, in
+all three shapes `enums/README.md` documents:
+
+```yaml
+_merge: [PLLM*, PLLN*]          # list of globs, stem names the merged field
+_merge: WDGTB*                  # bare glob
+_merge: {ADD: "ADD[07],ADD10"}  # explicit name, comma-separated globs
+```
+
+`field_merges.yaml` is the local half, for what that subset misses. stm32-rs
+keeps the RCC merges in `patches/rcc/`, and only `enums/fields/` was vendored,
+so `SW`, `SWS` and `RTCSEL` need naming here. Shape is `access_overrides.yaml`'s,
+one level deeper:
+
+```yaml
+RCC:
+  CFGR:
+    SW: [SW0, SW1]
+```
+
+Merging rewrites the SVD tree before anything reads it, so the array grouping,
+the masks, and the enum matching all see one field. Members that overlap, leave
+a hole, or disagree on access raise rather than merge.
+
+| merged | from |
+|---|---|
+| `RCC_PLLCFGR` | `PLLM` 6, `PLLN` 9, `PLLQ` 4, `PLLP` 2 |
+| `RCC_CFGR` | `SW` 2, `SWS` 2 |
+| `RCC_BDCR` | `RTCSEL` 2 |
+| `WWDG_CFR` | `WDGTB` 2 |
+| `I2C[123]_OAR1` | `ADD` from `ADD0`, `ADD7`, `ADD10` |
+
+`rcc::Pllp`, `rcc::Sw`, `rcc::Sws`, `rcc::Rtcsel` and `wwdg::Wdgtb` were built
+from the yaml and used by nothing until this landed.
 
 ### Access overrides
 

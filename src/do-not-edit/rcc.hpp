@@ -413,47 +413,22 @@ constexpr Field<Access::RO> rcc_cr_hsical{0x40023800u, 0x0000FF00u, 8};
 constexpr Field<Access::RW> rcc_cr_hsitrim{0x40023800u, 0x000000F8u, 3};
 constexpr Field<Access::RO, rcc::Rdy, true> rcc_cr_hsirdy{0x40023800u, 0x00000002u, 1};
 constexpr Field<Access::RW, rcc::Hsion, true> rcc_cr_hsion{0x40023800u, 0x00000001u, 0};
-constexpr Field<Access::RW, uint32_t, true> rcc_pllcfgr_pllq[4] = {
-    {0x40023804u, 0x01000000u, 24, 0x00000000u, 0x20000000u},
-    {0x40023804u, 0x02000000u, 25, 0x00000000u, 0x20000000u},
-    {0x40023804u, 0x04000000u, 26, 0x00000000u, 0x20000000u},
-    {0x40023804u, 0x08000000u, 27, 0x00000000u, 0x20000000u},
-};
-constexpr Field<Access::RW, uint32_t, true> rcc_pllcfgr_plln[9] = {
-    {0x40023804u, 0x00000040u, 6, 0x00000000u, 0x20000000u},
-    {0x40023804u, 0x00000080u, 7, 0x00000000u, 0x20000000u},
-    {0x40023804u, 0x00000100u, 8, 0x00000000u, 0x20000000u},
-    {0x40023804u, 0x00000200u, 9, 0x00000000u, 0x20000000u},
-    {0x40023804u, 0x00000400u, 10, 0x00000000u, 0x20000000u},
-    {0x40023804u, 0x00000800u, 11, 0x00000000u, 0x20000000u},
-    {0x40023804u, 0x00001000u, 12, 0x00000000u, 0x20000000u},
-    {0x40023804u, 0x00002000u, 13, 0x00000000u, 0x20000000u},
-    {0x40023804u, 0x00004000u, 14, 0x00000000u, 0x20000000u},
-};
-constexpr Field<Access::RW, uint32_t, true> rcc_pllcfgr_pllm[6] = {
-    {0x40023804u, 0x00000001u, 0, 0x00000000u, 0x20000000u},
-    {0x40023804u, 0x00000002u, 1, 0x00000000u, 0x20000000u},
-    {0x40023804u, 0x00000004u, 2, 0x00000000u, 0x20000000u},
-    {0x40023804u, 0x00000008u, 3, 0x00000000u, 0x20000000u},
-    {0x40023804u, 0x00000010u, 4, 0x00000000u, 0x20000000u},
-    {0x40023804u, 0x00000020u, 5, 0x00000000u, 0x20000000u},
-};
+constexpr Field<Access::RW> rcc_pllcfgr_pllq{0x40023804u, 0x0F000000u, 24, 0x00000000u, 0x20000000u};
 constexpr Field<Access::RW, rcc::Pllsrc, true> rcc_pllcfgr_pllsrc{0x40023804u, 0x00400000u, 22, 0x00000000u, 0x20000000u};
-constexpr Field<Access::RW, uint32_t, true> rcc_pllcfgr_pllp1{0x40023804u, 0x00020000u, 17, 0x00000000u, 0x20000000u};
-constexpr Field<Access::RW, uint32_t, true> rcc_pllcfgr_pllp0{0x40023804u, 0x00010000u, 16, 0x00000000u, 0x20000000u};
+constexpr Field<Access::RW, rcc::Pllp> rcc_pllcfgr_pllp{0x40023804u, 0x00030000u, 16, 0x00000000u, 0x20000000u};
+constexpr Field<Access::RW> rcc_pllcfgr_plln{0x40023804u, 0x00007FC0u, 6, 0x00000000u, 0x20000000u};
+constexpr Field<Access::RW> rcc_pllcfgr_pllm{0x40023804u, 0x0000003Fu, 0, 0x00000000u, 0x20000000u};
 constexpr Field<Access::RW, rcc::Mcopre> rcc_cfgr_mco2pre{0x40023808u, 0x38000000u, 27};
 constexpr Field<Access::RW, rcc::Mcopre> rcc_cfgr_mco1pre{0x40023808u, 0x07000000u, 24};
 constexpr Field<Access::RW, rcc::I2ssrc, true> rcc_cfgr_i2ssrc{0x40023808u, 0x00800000u, 23};
 constexpr Field<Access::RW> rcc_cfgr_rtcpre{0x40023808u, 0x001F0000u, 16};
 constexpr Field<Access::RW, rcc::Hpre> rcc_cfgr_hpre{0x40023808u, 0x000000F0u, 4};
+constexpr Field<Access::RO, rcc::Sws> rcc_cfgr_sws{0x40023808u, 0x0000000Cu, 2};
+constexpr Field<Access::RW, rcc::Sw> rcc_cfgr_sw{0x40023808u, 0x00000003u, 0};
 constexpr Field<Access::RW, rcc::Mco2> rcc_cfgr_mco2{0x40023808u, 0xC0000000u, 30};
 constexpr Field<Access::RW, rcc::Mco1> rcc_cfgr_mco1{0x40023808u, 0x00600000u, 21};
 constexpr Field<Access::RW, rcc::Ppre> rcc_cfgr_ppre2{0x40023808u, 0x0000E000u, 13};
 constexpr Field<Access::RW, rcc::Ppre> rcc_cfgr_ppre1{0x40023808u, 0x00001C00u, 10};
-constexpr Field<Access::RO, uint32_t, true> rcc_cfgr_sws1{0x40023808u, 0x00000008u, 3};
-constexpr Field<Access::RO, uint32_t, true> rcc_cfgr_sws0{0x40023808u, 0x00000004u, 2};
-constexpr Field<Access::RW, uint32_t, true> rcc_cfgr_sw1{0x40023808u, 0x00000002u, 1};
-constexpr Field<Access::RW, uint32_t, true> rcc_cfgr_sw0{0x40023808u, 0x00000001u, 0};
 constexpr Field<Access::WO, rcc::Cssc> rcc_cir_cssc{0x4002380Cu, 0x00800000u, 23};
 constexpr Field<Access::WO, rcc::Rdyc> rcc_cir_plli2srdyc{0x4002380Cu, 0x00200000u, 21};
 constexpr Field<Access::WO, rcc::Rdyc> rcc_cir_pllrdyc{0x4002380Cu, 0x00100000u, 20};
@@ -656,11 +631,10 @@ constexpr Field<Access::RW, rcc::Lpen, true> rcc_apb2lpenr_tim10lpen{0x40023864u
 constexpr Field<Access::RW, rcc::Lpen, true> rcc_apb2lpenr_tim11lpen{0x40023864u, 0x00040000u, 18};
 constexpr Field<Access::RW, rcc::Bdrst, true> rcc_bdcr_bdrst{0x40023870u, 0x00010000u, 16};
 constexpr Field<Access::RW, rcc::Rtcen, true> rcc_bdcr_rtcen{0x40023870u, 0x00008000u, 15};
+constexpr Field<Access::RW, rcc::Rtcsel> rcc_bdcr_rtcsel{0x40023870u, 0x00000300u, 8};
 constexpr Field<Access::RW, rcc::Lsebyp, true> rcc_bdcr_lsebyp{0x40023870u, 0x00000004u, 2};
 constexpr Field<Access::RO, rcc::Lserdy, true> rcc_bdcr_lserdy{0x40023870u, 0x00000002u, 1};
 constexpr Field<Access::RW, rcc::Lseon, true> rcc_bdcr_lseon{0x40023870u, 0x00000001u, 0};
-constexpr Field<Access::RW, uint32_t, true> rcc_bdcr_rtcsel1{0x40023870u, 0x00000200u, 9};
-constexpr Field<Access::RW, uint32_t, true> rcc_bdcr_rtcsel0{0x40023870u, 0x00000100u, 8};
 constexpr Field<Access::RW, rcc::Rstf, true> rcc_csr_lpwrrstf{0x40023874u, 0x80000000u, 31};
 constexpr Field<Access::RW, rcc::Rstf, true> rcc_csr_wwdgrstf{0x40023874u, 0x40000000u, 30};
 constexpr Field<Access::RW, rcc::Rstf, true> rcc_csr_wdgrstf{0x40023874u, 0x20000000u, 29};

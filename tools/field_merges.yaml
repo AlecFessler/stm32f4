@@ -1,0 +1,26 @@
+# Fields the SVD splits into one entry per bit, where RM0090 documents one.
+#
+# Left alone, a split family with four or more contiguous members becomes an
+# array of independent bits: rcc_pllcfgr_pllm[6] rather than a 6-bit PLLM. That
+# costs a store per bit, gives the index no meaning, and leaves the field's
+# enum with nothing to attach to. Fewer than four members and they stay loose
+# scalars, which is the same problem without the array.
+#
+# The vendored enums carry _merge directives of their own and svdgen reads
+# those first. This file is what that subset misses: stm32-rs keeps the RCC
+# merges in patches/rcc/, and only enums/fields/ was vendored.
+#
+# peripheral glob -> register glob -> merged name -> field globs
+#
+# Page numbers are RM0090 Rev 19, chapter 7, the STM32F42xxx/F43xxx RCC.
+
+RCC:
+  CFGR:
+    SW: [SW0, SW1]                # p.228, SW[1:0]: 00 HSI, 01 HSE, 10 PLL
+    SWS: [SWS0, SWS1]             # p.228, SWS[1:0], same encoding, read back
+  BDCR:
+    RTCSEL: [RTCSEL0, RTCSEL1]    # p.259, RTCSEL[1:0]
+
+I2C*:
+  OAR1:
+    ADD: [ADD0, ADD7, ADD10]      # p.864, ADD[9:0] in three uneven pieces
