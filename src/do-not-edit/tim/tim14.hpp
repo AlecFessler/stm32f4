@@ -137,27 +137,27 @@ enum class Urs : uint32_t {
 
 // Tim14Regs omitted: overlapping registers
 constexpr Field<Access::RW, tim14::Ckd> tim14_cr1_ckd{0x40002000u, 0x00000300u, 8};
-constexpr Field<Access::RW, tim14::Arpe> tim14_cr1_arpe{0x40002000u, 0x00000080u, 7};
-constexpr Field<Access::RW, tim14::Urs> tim14_cr1_urs{0x40002000u, 0x00000004u, 2};
-constexpr Field<Access::RW, tim14::Udis> tim14_cr1_udis{0x40002000u, 0x00000002u, 1};
-constexpr Field<Access::RW, tim14::Cen> tim14_cr1_cen{0x40002000u, 0x00000001u, 0};
-constexpr Field<Access::RW, tim14::Ccie> tim14_dier_cc1ie{0x4000200Cu, 0x00000002u, 1};
-constexpr Field<Access::RW, tim14::Uie> tim14_dier_uie{0x4000200Cu, 0x00000001u, 0};
+constexpr Field<Access::RW, tim14::Arpe, true, true> tim14_cr1_arpe{0x40002000u, 0x00000080u, 7};
+constexpr Field<Access::RW, tim14::Urs, true, true> tim14_cr1_urs{0x40002000u, 0x00000004u, 2};
+constexpr Field<Access::RW, tim14::Udis, true, true> tim14_cr1_udis{0x40002000u, 0x00000002u, 1};
+constexpr Field<Access::RW, tim14::Cen, true, true> tim14_cr1_cen{0x40002000u, 0x00000001u, 0};
+constexpr Field<Access::RW, tim14::Ccie, true, true> tim14_dier_cc1ie{0x4000200Cu, 0x00000002u, 1};
+constexpr Field<Access::RW, tim14::Uie, true, true> tim14_dier_uie{0x4000200Cu, 0x00000001u, 0};
 constexpr Field<Access::RC_W0, tim14::Ccof, false> tim14_sr_cc1of{0x40002010u, 0x00000200u, 9, 0x00000000u, 0x00000203u};
 constexpr Field<Access::RC_W0, tim14::Ccif, false> tim14_sr_cc1if{0x40002010u, 0x00000002u, 1, 0x00000000u, 0x00000203u};
 constexpr Field<Access::RC_W0, tim14::Uif, false> tim14_sr_uif{0x40002010u, 0x00000001u, 0, 0x00000000u, 0x00000203u};
 constexpr Field<Access::WO, tim14::Ccg> tim14_egr_cc1g{0x40002014u, 0x00000002u, 1};
 constexpr Field<Access::WO, tim14::Ug> tim14_egr_ug{0x40002014u, 0x00000001u, 0};
 constexpr Field<Access::RW, tim14::Ocm> tim14_ccmr1_output_oc1m{0x40002018u, 0x00000070u, 4};
-constexpr Field<Access::RW, tim14::Ocpe> tim14_ccmr1_output_oc1pe{0x40002018u, 0x00000008u, 3};
-constexpr Field<Access::RW, tim14::Ocfe> tim14_ccmr1_output_oc1fe{0x40002018u, 0x00000004u, 2};
+constexpr Field<Access::RW, tim14::Ocpe, true, true> tim14_ccmr1_output_oc1pe{0x40002018u, 0x00000008u, 3};
+constexpr Field<Access::RW, tim14::Ocfe, true, true> tim14_ccmr1_output_oc1fe{0x40002018u, 0x00000004u, 2};
 constexpr Field<Access::RW, tim14::Ccs> tim14_ccmr1_output_cc1s{0x40002018u, 0x00000003u, 0};
 constexpr Field<Access::RW, tim14::Icfilter> tim14_ccmr1_input_ic1f{0x40002018u, 0x000000F0u, 4};
 constexpr Field<Access::RW> tim14_ccmr1_input_icpcs{0x40002018u, 0x0000000Cu, 2};
 constexpr Field<Access::RW, tim14::Cc1s> tim14_ccmr1_input_cc1s{0x40002018u, 0x00000003u, 0};
-constexpr Field<Access::RW> tim14_ccer_cc1np{0x40002020u, 0x00000008u, 3};
-constexpr Field<Access::RW, tim14::Ccp> tim14_ccer_cc1p{0x40002020u, 0x00000002u, 1};
-constexpr Field<Access::RW, tim14::Cce> tim14_ccer_cc1e{0x40002020u, 0x00000001u, 0};
+constexpr Field<Access::RW, uint32_t, true, true> tim14_ccer_cc1np{0x40002020u, 0x00000008u, 3};
+constexpr Field<Access::RW, tim14::Ccp, true, true> tim14_ccer_cc1p{0x40002020u, 0x00000002u, 1};
+constexpr Field<Access::RW, tim14::Cce, true, true> tim14_ccer_cc1e{0x40002020u, 0x00000001u, 0};
 constexpr Field<Access::RW, uint32_t, false> tim14_cnt_cnt{0x40002024u, 0x0000FFFFu, 0};
 constexpr Field<Access::RW, uint32_t, false> tim14_psc_psc{0x40002028u, 0x0000FFFFu, 0};
 constexpr Field<Access::RW, uint32_t, false> tim14_arr_arr{0x4000202Cu, 0x0000FFFFu, 0};

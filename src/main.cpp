@@ -5,7 +5,7 @@
 #include "startup.hpp"
 
 int main() {
-    rcc_ahb1enr_gpioben.rmw(rcc::En::enabled);
+    rcc_ahb1enr_gpioben.write(rcc::En::enabled);
 
     gpiob_moder_moder[board::led_green].rmw(gpio::Mode::output);
     gpiob_bsrr_bs[board::led_green].write(gpio::Bs::set);

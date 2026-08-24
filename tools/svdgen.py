@@ -453,7 +453,30 @@ def register_overrides(table, peripheral_name, register):
     force_zero = masks["rc_w1"] | masks["rs"]
     # rc_w0 wants a 1 to stay quiet; a reserved bit wants its reset value back
     force_one = masks["rc_w0"] | reserved_set_bits(register)
-    return directions, force_zero, force_one, rw_mask
+    return directions, force_zero, force_one, rw_mask, masks["rc_w1"]
+
+
+# PM0214 2.2.5: the peripheral bit-band region, whose alias starts at 0x42000000
+BIT_BAND_REGION = range(0x40000000, 0x40100000)
+
+
+def bit_band_ok(register_base, field, access, rw_neighbors, rc_w1_mask):
+    """Whether a store to this field's alias word is both legal and worth it.
+
+    The alias reaches one bit, and the hardware writes back what it read for
+    the rest. That is safe beside rw, rc_w0 and reserved bits, and unsafe
+    beside another rc_w1 flag, which the echoed 1 would acknowledge. Read-only
+    and write-only fields never want it, and neither does a field with no rw
+    neighbors, whose direct store is a bit cheaper.
+    """
+    mask, bit = field_mask(field)
+    return (
+        rw_neighbors
+        and access in ("read-write", "rs", "rc_w1", "rc_w0")
+        and mask == 1 << bit
+        and register_base in BIT_BAND_REGION
+        and not (rc_w1_mask & ~mask)
+    )
 
 
 def matching_enum(enum_globs, register_name, field_name):
@@ -544,13 +567,16 @@ def resolve_open_encodings(values, widths):
     return resolved
 
 
-def field_type(access, enum, rw_neighbors):
-    """Field<Access::X>, Field<Access::X, gpio::Mode>, and rw_neighbors only
-    when it is false, since true is both the common case and the safe default.
-    It is the third parameter, so an untyped field has to name uint32_t to
-    reach it. None means the accessors this field has never consult it."""
+def field_type(access, enum, rw_neighbors, bit_band):
+    """Field<Access::X>, Field<Access::X, gpio::Mode>, and the two flags only
+    when they differ from their defaults. They are positional, so an untyped
+    field has to name uint32_t to reach them, and bit_band has to spell out the
+    rw_neighbors it implies. None means this field's accessors never consult
+    it."""
     arguments = [access_str_map[access]]
-    if rw_neighbors is False:
+    if bit_band:
+        arguments += [enum or "uint32_t", "true", "true"]
+    elif rw_neighbors is False:
         arguments += [enum or "uint32_t", "false"]
     elif enum:
         arguments.append(enum)
@@ -582,7 +608,13 @@ def field_lines(
     overrides=None,
 ):
     """constexpr Field definitions: arrays for families, scalars for the rest."""
-    directions, force_zero, force_one, rw_mask = overrides or ({}, 0, 0, 0)
+    directions, force_zero, force_one, rw_mask, rc_w1_mask = overrides or (
+        {},
+        0,
+        0,
+        0,
+        0,
+    )
     lines = []
 
     # write() consults rw_neighbors, and so do set() and clear(); read() and a
@@ -598,8 +630,11 @@ def field_lines(
         # a read-only field never stores, so the masks would be dead weight
         stores = access != "read-only"
         rw_neighbors = bool(rw_mask & ~mask) if access in CONSULTS else None
+        bit_band = bit_band_ok(
+            register_base, field, access, rw_neighbors, rc_w1_mask
+        )
         return (
-            field_type(access, enum, rw_neighbors),
+            field_type(access, enum, rw_neighbors, bit_band),
             initializer(
                 register_base,
                 field,

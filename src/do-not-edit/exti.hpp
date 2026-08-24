@@ -59,7 +59,7 @@ static_assert(offsetof(ExtiRegs, ftsr) == 12);
 static_assert(offsetof(ExtiRegs, swier) == 16);
 static_assert(offsetof(ExtiRegs, pr) == 20);
 
-constexpr Field<Access::RW, exti::Interruptmask> exti_imr_mr[23] = {
+constexpr Field<Access::RW, exti::Interruptmask, true, true> exti_imr_mr[23] = {
     {0x40013C00u, 0x00000001u, 0},
     {0x40013C00u, 0x00000002u, 1},
     {0x40013C00u, 0x00000004u, 2},
@@ -84,7 +84,7 @@ constexpr Field<Access::RW, exti::Interruptmask> exti_imr_mr[23] = {
     {0x40013C00u, 0x00200000u, 21},
     {0x40013C00u, 0x00400000u, 22},
 };
-constexpr Field<Access::RW, exti::Eventmask> exti_emr_mr[23] = {
+constexpr Field<Access::RW, exti::Eventmask, true, true> exti_emr_mr[23] = {
     {0x40013C04u, 0x00000001u, 0},
     {0x40013C04u, 0x00000002u, 1},
     {0x40013C04u, 0x00000004u, 2},
@@ -109,7 +109,7 @@ constexpr Field<Access::RW, exti::Eventmask> exti_emr_mr[23] = {
     {0x40013C04u, 0x00200000u, 21},
     {0x40013C04u, 0x00400000u, 22},
 };
-constexpr Field<Access::RW, exti::Risingtrigger> exti_rtsr_tr[23] = {
+constexpr Field<Access::RW, exti::Risingtrigger, true, true> exti_rtsr_tr[23] = {
     {0x40013C08u, 0x00000001u, 0},
     {0x40013C08u, 0x00000002u, 1},
     {0x40013C08u, 0x00000004u, 2},
@@ -134,7 +134,7 @@ constexpr Field<Access::RW, exti::Risingtrigger> exti_rtsr_tr[23] = {
     {0x40013C08u, 0x00200000u, 21},
     {0x40013C08u, 0x00400000u, 22},
 };
-constexpr Field<Access::RW, exti::Fallingtrigger> exti_ftsr_tr[23] = {
+constexpr Field<Access::RW, exti::Fallingtrigger, true, true> exti_ftsr_tr[23] = {
     {0x40013C0Cu, 0x00000001u, 0},
     {0x40013C0Cu, 0x00000002u, 1},
     {0x40013C0Cu, 0x00000004u, 2},
@@ -159,7 +159,7 @@ constexpr Field<Access::RW, exti::Fallingtrigger> exti_ftsr_tr[23] = {
     {0x40013C0Cu, 0x00200000u, 21},
     {0x40013C0Cu, 0x00400000u, 22},
 };
-constexpr Field<Access::RW, exti::Swier> exti_swier_swier[23] = {
+constexpr Field<Access::RW, exti::Swier, true, true> exti_swier_swier[23] = {
     {0x40013C10u, 0x00000001u, 0},
     {0x40013C10u, 0x00000002u, 1},
     {0x40013C10u, 0x00000004u, 2},

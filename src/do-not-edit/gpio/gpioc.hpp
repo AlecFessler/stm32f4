@@ -54,7 +54,7 @@ constexpr Field<Access::RW, gpio::Mode> gpioc_moder_moder[16] = {
     {0x40020800u, 0x30000000u, 28},
     {0x40020800u, 0xC0000000u, 30},
 };
-constexpr Field<Access::RW, gpio::Outputtype> gpioc_otyper_ot[16] = {
+constexpr Field<Access::RW, gpio::Outputtype, true, true> gpioc_otyper_ot[16] = {
     {0x40020804u, 0x00000001u, 0},
     {0x40020804u, 0x00000002u, 1},
     {0x40020804u, 0x00000004u, 2},
@@ -126,7 +126,7 @@ constexpr Field<Access::RO, gpio::Inputdata> gpioc_idr_idr[16] = {
     {0x40020810u, 0x00004000u, 14},
     {0x40020810u, 0x00008000u, 15},
 };
-constexpr Field<Access::RW, gpio::Outputdata> gpioc_odr_odr[16] = {
+constexpr Field<Access::RW, gpio::Outputdata, true, true> gpioc_odr_odr[16] = {
     {0x40020814u, 0x00000001u, 0},
     {0x40020814u, 0x00000002u, 1},
     {0x40020814u, 0x00000004u, 2},
@@ -180,7 +180,7 @@ constexpr Field<Access::WO, gpio::Bs> gpioc_bsrr_bs[16] = {
     {0x40020818u, 0x00004000u, 14},
     {0x40020818u, 0x00008000u, 15},
 };
-constexpr Field<Access::RW, gpio::Lock> gpioc_lckr_lck[16] = {
+constexpr Field<Access::RW, gpio::Lock, true, true> gpioc_lckr_lck[16] = {
     {0x4002081Cu, 0x00000001u, 0},
     {0x4002081Cu, 0x00000002u, 1},
     {0x4002081Cu, 0x00000004u, 2},
@@ -198,7 +198,7 @@ constexpr Field<Access::RW, gpio::Lock> gpioc_lckr_lck[16] = {
     {0x4002081Cu, 0x00004000u, 14},
     {0x4002081Cu, 0x00008000u, 15},
 };
-constexpr Field<Access::RW, gpio::Lockkey> gpioc_lckr_lckk{0x4002081Cu, 0x00010000u, 16};
+constexpr Field<Access::RW, gpio::Lockkey, true, true> gpioc_lckr_lckk{0x4002081Cu, 0x00010000u, 16};
 constexpr Field<Access::RW, gpio::Alternatefunction> gpioc_afrl_afrl[8] = {
     {0x40020820u, 0x0000000Fu, 0},
     {0x40020820u, 0x000000F0u, 4},

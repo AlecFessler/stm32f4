@@ -36,7 +36,15 @@ enum class Access {RW, RO, WO, RS, RC_W1, RC_W0};
 // then guarded rather than trusted. It is a template parameter rather than a
 // member because it gates a volatile read, and a member would leave that read
 // in the binary at -O0.
-template <Access acc, class Value = uint32_t, bool rw_neighbors = true>
+//
+// bit_band says this field has a peripheral bit-band alias: a whole word that
+// maps to this one bit, where the hardware does the read-modify-write and no
+// interrupt can land inside it. The generator sets it only where the alias is
+// safe, which needs the field to be one bit, the register to live below
+// 0x40100000, and no other rc_w1 flag to share the register, since the
+// hardware writes back what it read and a 1 there would acknowledge it.
+template <Access acc, class Value = uint32_t, bool rw_neighbors = true,
+          bool bit_band = false>
 struct Field {
     uintptr_t addr;
     uint32_t field_mask;
@@ -46,47 +54,96 @@ struct Field {
 
     volatile uint32_t& reg() const {return *reinterpret_cast<volatile uint32_t*>(addr);}
 
-    __attribute__((always_inline)) Value read() const {
-        static_assert(acc != Access::WO, "read: field is write-only");
-        const uint32_t field_bits = reg() & field_mask;
-        const uint32_t encoding = field_bits >> shift;
-        return static_cast<Value>(encoding);
+    // The alias word for this field's bit, where a store reaches that bit and
+    // nothing else.
+    //
+    // PM0214 2.2.5: bit_word_addr = alias_base + byte_offset * 32 + bit * 4.
+    // Both operands are constants of a constexpr Field, so this folds to an
+    // immediate the same way the masks do.
+    volatile uint32_t& alias() const {
+        return *reinterpret_cast<volatile uint32_t*>(
+            0x42000000u + (addr - 0x40000000u) * 32u + shift * 4u);
     }
 
-    // Every bit outside field_mask gets a 0 from the store, which is already
-    // what force_zero_mask wants. Only force_one_mask has to be put back.
+    // The field's current value.
+    __attribute__((always_inline)) Value read() const {
+        static_assert(acc != Access::WO, "read: field is write-only");
+        if constexpr (bit_band) {
+            return static_cast<Value>(alias());
+        } else {
+            const uint32_t field_bits = reg() & field_mask;
+            const uint32_t encoding = field_bits >> shift;
+            return static_cast<Value>(encoding);
+        }
+    }
+
+    // Assign the field and disturb nothing else in the register.
+    //
+    // One store, so no interrupt can land between a read and a write. Three
+    // cases allow that: a write-only register, whose neighbors ignore a 0; a
+    // field sharing its register with nothing writable; or a field with a
+    // bit-band alias, which reaches one bit. Anything else has to read first,
+    // which is rmw.
+    //
+    // Outside the alias, every bit beyond field_mask gets a 0 from the store,
+    // which is already what force_zero_mask wants. Only force_one_mask has to
+    // be put back.
     __attribute__((always_inline)) void write(Value val) const {
         static_assert(acc == Access::RW || acc == Access::WO,
                       "write: field is read-only, or sets or clears on write");
-        static_assert(acc == Access::WO || !rw_neighbors,
+        static_assert(acc == Access::WO || !rw_neighbors || bit_band,
                       "write: would zero the rw bits beside this field; rmw");
         const uint32_t encoding = static_cast<uint32_t>(val);
-        const uint32_t field_bits = (encoding << shift) & field_mask;
-        reg() = field_bits | force_one_mask;
+        if constexpr (bit_band) {
+            alias() = encoding;
+        } else {
+            const uint32_t field_bits = (encoding << shift) & field_mask;
+            reg() = field_bits | force_one_mask;
+        }
     }
 
+    // Set the bit. There is no unset to pair with it: rs hardware ignores a
+    // written 0, so only the hardware clears it again.
+    //
     // rw bits are the one kind a store cannot satisfy, so without them the
-    // stored word is a constant.
+    // stored word is a constant. clear() below has the same shape.
     __attribute__((always_inline)) void set() const {
         static_assert(acc == Access::RS, "set: field does not set on write");
-        const uint32_t kept = rw_neighbors ? (reg() & ~force_zero_mask) : 0;
-        reg() = kept | force_one_mask | field_mask;
+        if constexpr (bit_band) {
+            alias() = 1;
+        } else {
+            const uint32_t kept = rw_neighbors ? (reg() & ~force_zero_mask) : 0;
+            reg() = kept | force_one_mask | field_mask;
+        }
     }
 
+    // Acknowledge this flag and leave every other one standing. Which write
+    // does the acknowledging is the only difference between the two
+    // clear-on-write accesses: rc_w1 takes a 1, rc_w0 takes a 0.
     __attribute__((always_inline)) void clear() const {
         static_assert(acc == Access::RC_W1 || acc == Access::RC_W0,
                       "clear: field does not clear on write");
-        const uint32_t kept = rw_neighbors ? (reg() & ~force_zero_mask) : 0;
-        const uint32_t neighbors = kept | force_one_mask;
-        reg() = (acc == Access::RC_W1) ? (neighbors | field_mask)
-                                       : (neighbors & ~field_mask);
+        if constexpr (bit_band) {
+            alias() = (acc == Access::RC_W1) ? 1 : 0;
+        } else {
+            const uint32_t kept = rw_neighbors ? (reg() & ~force_zero_mask) : 0;
+            const uint32_t neighbors = kept | force_one_mask;
+            reg() = (acc == Access::RC_W1) ? (neighbors | field_mask)
+                                           : (neighbors & ~field_mask);
+        }
     }
 
+    // Assign the field, reading the register first so the rest of it survives.
+    // Not atomic: an interrupt landing between the read and the write loses
+    // whatever that interrupt changed.
+    //
     // A set force_zero_mask bit reads back as 1, and storing that 1 is what
     // clears it, so it goes out as 0 alongside field_mask. force_one_mask is
     // the mirror: a stored 0 would clear it, so it goes back as a 1.
     __attribute__((always_inline)) void rmw(Value val) const {
         static_assert(acc == Access::RW, "rmw: field is not read-write");
+        static_assert(!bit_band,
+                      "rmw: field has a bit-band alias; write() is one store");
         const uint32_t encoding = static_cast<uint32_t>(val);
         const uint32_t field_bits = (encoding << shift) & field_mask;
         const uint32_t zeroed = field_mask | force_zero_mask;

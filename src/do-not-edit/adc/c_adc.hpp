@@ -104,11 +104,11 @@ constexpr Field<Access::RO, c_adc::Eoc> c_adc_csr_eoc1{0x40012300u, 0x00000002u,
 constexpr Field<Access::RO, c_adc::Awd> c_adc_csr_awd3{0x40012300u, 0x00010000u, 16};
 constexpr Field<Access::RO, c_adc::Awd> c_adc_csr_awd2{0x40012300u, 0x00000100u, 8};
 constexpr Field<Access::RO, c_adc::Awd> c_adc_csr_awd1{0x40012300u, 0x00000001u, 0};
-constexpr Field<Access::RW, c_adc::Tsvrefe> c_adc_ccr_tsvrefe{0x40012304u, 0x00800000u, 23};
-constexpr Field<Access::RW, c_adc::Vbate> c_adc_ccr_vbate{0x40012304u, 0x00400000u, 22};
+constexpr Field<Access::RW, c_adc::Tsvrefe, true, true> c_adc_ccr_tsvrefe{0x40012304u, 0x00800000u, 23};
+constexpr Field<Access::RW, c_adc::Vbate, true, true> c_adc_ccr_vbate{0x40012304u, 0x00400000u, 22};
 constexpr Field<Access::RW, c_adc::Adcpre> c_adc_ccr_adcpre{0x40012304u, 0x00030000u, 16};
 constexpr Field<Access::RW, c_adc::Dma> c_adc_ccr_dma{0x40012304u, 0x0000C000u, 14};
-constexpr Field<Access::RW, c_adc::Dds> c_adc_ccr_dds{0x40012304u, 0x00002000u, 13};
+constexpr Field<Access::RW, c_adc::Dds, true, true> c_adc_ccr_dds{0x40012304u, 0x00002000u, 13};
 constexpr Field<Access::RW> c_adc_ccr_delay{0x40012304u, 0x00000F00u, 8};
 constexpr Field<Access::RW> c_adc_ccr_mult{0x40012304u, 0x0000001Fu, 0};
 constexpr Field<Access::RO> c_adc_cdr_data2{0x40012308u, 0xFFFF0000u, 16};

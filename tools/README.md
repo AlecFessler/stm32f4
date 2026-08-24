@@ -185,10 +185,9 @@ and it answers two questions at once:
 - `set` and `clear` need no read when it is false, so the stored word is a
   compile-time constant and they are a single instruction. That covers 621 of
   641 `clear` declarations and 10 of 116 `set` ones.
-- `write` is barred when it is true, because it would zero those bits.
-  `pwr_cr_vos.write()` used to compile and take `DBP`, `PLS`, `PDDS` and the
-  rest with it. 403 of 4925 read-write fields still allow `write`, the ones
-  that share their register with nothing writable, `USART_DR` among them.
+- `write` is barred when it is true, because it would zero those bits, unless
+  the field has a bit-band alias. `pwr_cr_vos.write()` used to compile and take
+  `DBP`, `PLS`, `PDDS` and the rest with it.
 
 Nothing hand-writes it. It is whatever the SVD still calls read-write once the
 lists above have had their say, which is why the `ro` entries earn their place:
@@ -200,6 +199,44 @@ The constant a single store writes leaves everything outside the two masks at
 0, which is why it is safe: writes to read-only bits are ignored, and 0 is what
 remains of a reserved bit once `force_one_mask` has claimed the ones that reset
 to 1.
+
+### Bit-banding
+
+`0x40000000-0x400FFFFF` is mirrored at `0x42000000`, one alias word per bit, so
+a store there reaches a single bit and the hardware does the read-modify-write
+with no window an interrupt can land in. `bit_band` says a field has one, and
+`write`, `set`, `clear` and `read` take that path when it does. 2510
+declarations: 2432 `RW`, 69 `RS`, 8 `RC_W0`, 1 `RC_W1`.
+
+Four conditions, all of them necessary:
+
+- **One bit wide.** An alias word maps to one bit and nothing else.
+- **Register below `0x40100000`.** USB OTG at `0x5...`, FMC at `0xA...` and the
+  core blocks at `0xE...` have no alias.
+- **No other `rc_w1` bit in the register.** PM0214 2.2.5: *"A write operation
+  is performed as read-modify-write."* The hardware writes back what it read,
+  so a set `rc_w1` flag would get its 1 echoed and be acknowledged. `rw`,
+  `rc_w0` and reserved bits all survive being echoed; that one does not, and
+  `force_zero_mask` cannot reach inside a hardware RMW to stop it.
+- **`rw_neighbors` is true.** Otherwise the direct store is already one
+  instruction and needs no read at all, which is cheaper.
+
+`rmw` is a compile error on these, because it is strictly worse there: four
+instructions and a window, against one store that cannot be interrupted. That
+makes the guarantees line up per accessor rather than per field — `write`,
+`set` and `clear` are always a single store, and `rmw` never is.
+
+The alias address is computed from `addr` and `shift`, not stored:
+`0x42000000 + (addr - 0x40000000) * 32 + shift * 4`, which folds to an
+immediate. Note the alias word is a different shape, not just a different
+address: the value sits in bit 0 with no neighbors, so `field_mask` and `shift`
+mean nothing against it and `read` skips its mask entirely.
+
+Atomic here means against interrupts on this core, which is the race worth
+closing. It is not a bus-locked transaction, so it is no guarantee against
+another master such as DMA touching the same register.
+
+### Gaps
 
 Eight of the 167 globs match nothing, because the SVD omits fields RM0090
 documents: `FLASH_SR.RDERR`, `DIEPINT.INEPNM` / `.AHBERR`, and `DOEPINT.NAK` /
@@ -213,22 +250,24 @@ Hand-written, not generated. Holds `Access`, `Field`, and the `read` / `write`
 
 | | read | write | set | clear | rmw |
 |---|---|---|---|---|---|
-| `RW` | y | y | . | . | y |
+| `RW` | y | y | . | . | y* |
 | `RO` | y | . | . | . | . |
 | `WO` | . | y | . | . | . |
 | `RS` | y | . | y | . | . |
 | `RC_W1` | y | . | . | y | . |
 | `RC_W0` | y | . | . | y | . |
 
-Every `.` is a `static_assert`. `RS`, `RC_W1` and `RC_W0` bits hold no value,
+Every `.` is a `static_assert`, and `y*` is barred when the field has a
+bit-band alias. `RS`, `RC_W1` and `RC_W0` bits hold no value,
 so `write` and `rmw` have nothing to store into them: a written 1 or 0 is a
 command, which is why `set` and `clear` take no argument.
 
-Three template parameters:
+Four template parameters:
 
 - `acc` — the row above.
 - `Value` — the enum type this field accepts, defaulting to `uint32_t`. `read`
   returns it; `write` and `rmw` take it.
+- `bit_band` — whether this field has a bit-band alias, per Bit-banding below.
 - `rw_neighbors` — whether the register holds `rw` bits other than this field,
   which decides whether `set` and `clear` need a read and whether `write` is
   allowed at all. It defaults to `true`, so a hand-written `Field` is guarded
